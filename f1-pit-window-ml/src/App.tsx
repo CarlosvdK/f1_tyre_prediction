@@ -26,7 +26,7 @@ const DEBUG_STORAGE_KEY = 'f1_dashboard_debug_open';
 export default function App() {
   const [theme, setTheme] = useState<ThemeMode>(() => {
     const saved = localStorage.getItem(THEME_STORAGE_KEY);
-    return saved === 'dark' ? 'dark' : 'light';
+    return saved === 'light' ? 'light' : 'dark';
   });
 
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -231,117 +231,94 @@ export default function App() {
 
   return (
     <main className={`app-root theme-${theme}`}>
-      <div className="broadcast-frame">
-        <header className="f1-topbar">
-          <div className="f1-logo-wrap">
-            <span className="f1-logo">F1</span>
-            <span className="f1-series">Race Series</span>
-          </div>
-          <div className="f1-top-links">
-            <span>AUTHENTICS</span>
-            <span>STORE</span>
-            <span>TICKETS</span>
-            <span>HOSPITALITY</span>
-            <button type="button" className="tiny-btn">Sign In</button>
-            <button type="button" className="tiny-btn accent">Subscribe</button>
-          </div>
-        </header>
-
-        <nav className="f1-main-nav">
-          {['Schedule', 'Results', 'News', 'Drivers', 'Teams', 'Fantasy & Gaming', "Members' Area"].map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </nav>
-
-        <section className="f1-race-ribbon">
-          <div>
-            <p>{selectedTrack?.name ?? 'Circuit'}</p>
-            <strong>FP1 Session • Tyre Intel Feed</strong>
-          </div>
-          <div className="ribbon-right">
-            <span>MY TIME 19:40</span>
-            <span>TRACK TIME 05:40</span>
-          </div>
-        </section>
-
+      <div className="dashboard-shell">
         <header className="app-header">
+          <div className="header-mark" />
           <div>
-            <p className="eyebrow">Race Engineering Dashboard</p>
-            <h1>Tyre Degradation Intelligence</h1>
+            <p className="eyebrow">Prediction Console</p>
+            <h1>F1 Tyre Degradation Prediction Dashboard</h1>
             <p className="subtitle">
-              Studio-grade car rendering, race telemetry overlays, and model-driven pit-window strategy signals.
+              Model-driven tyre wear, pit-window forecasting, and telemetry overlays for race strategy decisions.
             </p>
           </div>
         </header>
 
-        <div className="dashboard-grid">
-          <section className="main-column">
-            <ControlsBar
-              tracks={tracks}
-              drivers={drivers}
-              laps={laps}
-              track={track}
-              driver={driver}
-              compound={compound}
-              conditions={conditions}
-              feature={feature}
-              lap={lap}
-              isPlaying={isPlaying}
-              theme={theme}
-              onTrackChange={setTrack}
-              onDriverChange={setDriver}
-              onCompoundChange={setCompound}
-              onConditionsChange={setConditions}
-              onFeatureChange={setFeature}
-              onLapChange={setLap}
-              onPlayToggle={() => setIsPlaying((value) => !value)}
-              onThemeToggle={() => setTheme((current) => (current === 'light' ? 'dark' : 'light'))}
-              onSettingsToggle={() => setSettingsOpen((value) => !value)}
-            />
+        <ControlsBar
+          tracks={tracks}
+          drivers={drivers}
+          laps={laps}
+          track={track}
+          driver={driver}
+          compound={compound}
+          conditions={conditions}
+          feature={feature}
+          lap={lap}
+          isPlaying={isPlaying}
+          theme={theme}
+          onTrackChange={setTrack}
+          onDriverChange={setDriver}
+          onCompoundChange={setCompound}
+          onConditionsChange={setConditions}
+          onFeatureChange={setFeature}
+          onLapChange={setLap}
+          onPlayToggle={() => setIsPlaying((value) => !value)}
+          onThemeToggle={() => setTheme((current) => (current === 'light' ? 'dark' : 'light'))}
+          onSettingsToggle={() => setSettingsOpen((value) => !value)}
+        />
 
-            <KpiPanel prediction={prediction} />
+        <KpiPanel prediction={prediction} />
 
-            <CarViewer
-              compound={compound}
-              wear={{
-                wear_FL: prediction?.wear_FL,
-                wear_FR: prediction?.wear_FR,
-                wear_RL: prediction?.wear_RL,
-                wear_RR: prediction?.wear_RR,
-              }}
-              theme={theme}
-              onModelMetaChange={setModelMeta}
-            />
+        <section className="viewer-telemetry-grid">
+          <CarViewer
+            compound={compound}
+            wear={{
+              wear_FL: prediction?.wear_FL,
+              wear_FR: prediction?.wear_FR,
+              wear_RL: prediction?.wear_RL,
+              wear_RR: prediction?.wear_RR,
+            }}
+            theme={theme}
+            onModelMetaChange={setModelMeta}
+          />
 
-            <TrackMap
-              outline={selectedTrack?.outline ?? []}
-              telemetry={telemetry}
-              baselineTelemetry={baselineTelemetry}
-              feature={feature}
-              theme={theme}
-            />
-          </section>
-
-          <aside className="panel side-column">
-            <h3>Strategy Feed</h3>
-            <article className="news-card">
-              <p className="news-tag">LIVE</p>
-              <p>Front-left wear trending above baseline in sectors 2 and 3.</p>
+          <aside className="panel prediction-focus-panel">
+            <h3>Prediction Focus</h3>
+            <article className="focus-item">
+              <span>Track</span>
+              <strong>{selectedTrack?.name ?? '-'}</strong>
             </article>
-            <article className="news-card">
-              <p className="news-tag">PACE</p>
-              <p>Predicted pace drop crosses threshold near lap {prediction?.pit_window_start ?? lap + 3}.</p>
+            <article className="focus-item">
+              <span>Driver</span>
+              <strong>{driver || '-'}</strong>
             </article>
-            <article className="news-card">
-              <p className="news-tag">RISK</p>
-              <p>Brake thermal stress rises in high-load corners under hot-track conditions.</p>
+            <article className="focus-item">
+              <span>Current lap</span>
+              <strong>{lap}</strong>
             </article>
-            <article className="news-card">
-              <p className="news-tag">CALL</p>
-              <p>Recommended undercut window: laps {prediction?.pit_window_start ?? 0}-{prediction?.pit_window_end ?? 0}.</p>
+            <article className="focus-item">
+              <span>Recommended stop</span>
+              <strong>
+                L{prediction?.pit_window_start ?? '-'}-L{prediction?.pit_window_end ?? '-'}
+              </strong>
+            </article>
+            <article className="focus-item">
+              <span>Tyre life model</span>
+              <strong>{prediction ? `${prediction.tyre_life_pct.toFixed(1)}%` : '-'}</strong>
+            </article>
+            <article className="focus-item">
+              <span>Pace degradation</span>
+              <strong>{prediction ? `${prediction.sec_per_lap_increase.toFixed(3)} s/lap` : '-'}</strong>
             </article>
           </aside>
-        </div>
+        </section>
+
+        <TrackMap
+          outline={selectedTrack?.outline ?? []}
+          telemetry={telemetry}
+          baselineTelemetry={baselineTelemetry}
+          feature={feature}
+          theme={theme}
+        />
       </div>
 
       <aside className={`settings-drawer ${settingsOpen ? 'open' : ''}`}>
