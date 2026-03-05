@@ -85,12 +85,14 @@ export PYTHONPATH=src
 
 python -m f1pit.data.download_kaggle
 python -m f1pit.data.fetch_ergast --year 2019
-python -m f1pit.data.build_tables --years 2018 2019 --use_ergast 1 --small 1
-python -m f1pit.models.train --k_pit 3 --mode groupkfold --small 1
+python -m f1pit.data.fetch_ergast --year 2020
+python -m f1pit.data.build_tables --years 2018 2019 2020 --use_ergast 1 --small 1
+python -m f1pit.models.train --k_pit 3 --mode groupkfold --holdout_year 2020 --small 1
 python -m f1pit.models.evaluate --artifact_dir artifacts/latest
 ```
 
-For better final-model accuracy, run the same commands with `--small 0` and include more years.
+For better final-model accuracy, run the same commands with `--small 0`.  
+This Kaggle dataset version covers seasons through 2020.
 
 End-to-end helper:
 ```bash
