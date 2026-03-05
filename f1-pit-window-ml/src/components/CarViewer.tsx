@@ -1,4 +1,4 @@
-import { ContactShadows, Environment, OrbitControls } from '@react-three/drei';
+import { ContactShadows, OrbitControls } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -197,10 +197,19 @@ function StudioEnvironment() {
   const { scene } = useGLTF('/models/studio_v1_for_car.glb');
   useEffect(() => {
     scene.traverse((child) => {
-      if (child instanceof Mesh) {
-        child.receiveShadow = true;
-        child.castShadow = false;
-      }
+      if (!(child instanceof Mesh)) return;
+      child.receiveShadow = true;
+      child.castShadow = false;
+      // Kill all light reflections on studio floor / walls
+      const mats = Array.isArray(child.material) ? child.material : [child.material];
+      mats.forEach((m) => {
+        if (m instanceof MeshStandardMaterial) {
+          m.roughness = 1.0;
+          m.metalness = 0.0;
+          m.envMapIntensity = 0.0;
+          m.needsUpdate = true;
+        }
+      });
     });
   }, [scene]);
   return <primitive object={scene} />;
@@ -359,7 +368,7 @@ export default function CarViewer({ compound, wear, onModelMetaChange }: CarView
 
       <Canvas
         shadows="soft"
-        camera={{ position: [0, 0.75, 3.0], fov: 62, near: 0.05, far: 200 }}
+        camera={{ position: [0, 0.35, 2.4], fov: 62, near: 0.05, far: 200 }}
         gl={{ antialias: true }}
       >
         <RendererSetup />
@@ -367,11 +376,6 @@ export default function CarViewer({ compound, wear, onModelMetaChange }: CarView
         {/* Fog fades the back wall to near-black — tunnel depth illusion */}
         <fog attach="fog" args={['#07080f', 7, 18]} />
 
-        {/*
-          HDRI environment — gives the car realistic reflections and fill.
-          background={false} keeps our studio GLB as the visible scene.
-        */}
-        <Environment preset="studio" background={false} />
 
         <Suspense fallback={null}>
           {/* Studio background geometry */}
@@ -424,13 +428,13 @@ export default function CarViewer({ compound, wear, onModelMetaChange }: CarView
           enableDamping
           dampingFactor={0.07}
           rotateSpeed={0.48}
-          minDistance={3.0}
-          maxDistance={3.0}
-          minPolarAngle={0.22}
-          maxPolarAngle={1.30}
+          minDistance={2.4}
+          maxDistance={2.4}
+          minPolarAngle={1.42}
+          maxPolarAngle={1.42}
           minAzimuthAngle={-1.57}
-          maxAzimuthAngle={1.57}
-          target={[0, 0.55, 0]}
+          maxAzimuthAngle={0.90}
+          target={[0, 0.28, 0]}
         />
       </Canvas>
 
