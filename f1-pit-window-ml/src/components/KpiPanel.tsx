@@ -5,7 +5,7 @@ interface KpiPanelProps {
   prediction: Prediction | null;
 }
 
-function useAnimatedValue(value: number, durationMs = 280): number {
+function useAnimatedValue(value: number, durationMs = 320): number {
   const [animated, setAnimated] = useState(value);
 
   useEffect(() => {
@@ -32,9 +32,7 @@ function useAnimatedValue(value: number, durationMs = 280): number {
 
 function Sparkline({ values }: { values: number[] }) {
   const points = useMemo(() => {
-    if (values.length === 0) {
-      return '';
-    }
+    if (values.length === 0) return '';
     const lo = Math.min(...values);
     const hi = Math.max(...values);
     const span = Math.max(hi - lo, 0.0001);
@@ -63,12 +61,11 @@ export default function KpiPanel({ prediction }: KpiPanelProps) {
 
   if (!prediction) {
     return (
-      <section className="kpi-panel">
-        <article className="kpi-card">
-          <h3>Predictions</h3>
-          <p>Waiting for telemetry...</p>
-        </article>
-      </section>
+      <div className="kpi-strip">
+        <div className="kpi-loading">
+          <span className="kpi-loading-text">Awaiting telemetry data…</span>
+        </div>
+      </div>
     );
   }
 
@@ -77,32 +74,32 @@ export default function KpiPanel({ prediction }: KpiPanelProps) {
   const pitSpark = [pitMid - 4, pitMid - 2, pitMid, pitMid + 1, pitMid + 3];
 
   return (
-    <section className="kpi-panel">
-      <article className="kpi-card">
-        <h3>Pace Loss Per Lap</h3>
-        <p>
+    <div className="kpi-strip">
+      <div className="kpi-card">
+        <div className="kpi-label">Pace Loss / Lap</div>
+        <div className="kpi-value">
           {pace.toFixed(3)}
-          <small>s/lap</small>
-        </p>
+          <span className="kpi-unit">s/lap</span>
+        </div>
         <Sparkline values={paceSpark} />
-      </article>
+      </div>
 
-      <article className="kpi-card">
-        <h3>Optimum Pit Window</h3>
-        <p>
-          L{Math.round(prediction.pit_window_start)}-L{Math.round(prediction.pit_window_end)}
-        </p>
+      <div className="kpi-card">
+        <div className="kpi-label">Optimum Pit Window</div>
+        <div className="kpi-value">
+          L{Math.round(prediction.pit_window_start)}–L{Math.round(prediction.pit_window_end)}
+        </div>
         <Sparkline values={pitSpark} />
-      </article>
+      </div>
 
-      <article className="kpi-card">
-        <h3>Tyre Life Remaining</h3>
-        <p>
+      <div className="kpi-card">
+        <div className="kpi-label">Tyre Life Remaining</div>
+        <div className="kpi-value">
           {life.toFixed(1)}
-          <small>%</small>
-        </p>
+          <span className="kpi-unit">%</span>
+        </div>
         <Sparkline values={lifeSpark} />
-      </article>
-    </section>
+      </div>
+    </div>
   );
 }

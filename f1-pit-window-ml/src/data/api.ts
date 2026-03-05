@@ -3,7 +3,6 @@ import telemetryMonza from './mock/telemetry_monza.json';
 import telemetrySilverstone from './mock/telemetry_silverstone.json';
 import tracksData from './mock/tracks.json';
 
-export type ThemeMode = 'light' | 'dark';
 export type Compound = 'soft' | 'medium' | 'hard' | 'inter' | 'wet';
 export type TrackCondition = 'dry' | 'hot' | 'cool' | 'damp' | 'wet';
 export type FeatureKey =

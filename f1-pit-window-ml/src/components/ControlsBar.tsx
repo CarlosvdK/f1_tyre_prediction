@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import type { Compound, FeatureKey, Track, TrackCondition } from '../data/api';
 
 interface ControlsBarProps {
@@ -12,7 +11,6 @@ interface ControlsBarProps {
   feature: FeatureKey;
   lap: number;
   isPlaying: boolean;
-  theme: 'light' | 'dark';
   onTrackChange: (track: string) => void;
   onDriverChange: (driver: string) => void;
   onCompoundChange: (compound: Compound) => void;
@@ -20,39 +18,25 @@ interface ControlsBarProps {
   onFeatureChange: (feature: FeatureKey) => void;
   onLapChange: (lap: number) => void;
   onPlayToggle: () => void;
-  onThemeToggle: () => void;
-  onSettingsToggle: () => void;
 }
 
 const compounds: Compound[] = ['soft', 'medium', 'hard', 'inter', 'wet'];
-const conditions: TrackCondition[] = ['dry', 'hot', 'cool', 'damp', 'wet'];
+const conditionsList: TrackCondition[] = ['dry', 'hot', 'cool', 'damp', 'wet'];
 
 const featureLabels: Record<FeatureKey, string> = {
-  braking_earlier_delta: 'Braking earlier delta',
-  lower_corner_speed_delta: 'Lower corner speed delta',
-  throttle_delay_delta: 'Throttle delay delta',
-  degradation_intensity_proxy: 'Degradation intensity proxy',
+  braking_earlier_delta: 'Braking Earlier',
+  lower_corner_speed_delta: 'Corner Speed Delta',
+  throttle_delay_delta: 'Throttle Delay',
+  degradation_intensity_proxy: 'Degradation Proxy',
 };
 
-function RailControl({
-  icon,
-  label,
-  children,
-}: {
-  icon: string;
-  label: string;
-  children: ReactNode;
-}) {
-  return (
-    <label className="rail-control">
-      <span className="rail-label">
-        <span className="rail-icon">{icon}</span>
-        {label}
-      </span>
-      {children}
-    </label>
-  );
-}
+const compoundColors: Record<Compound, string> = {
+  soft: '#e10600',
+  medium: '#f5a623',
+  hard: '#f0f0f0',
+  inter: '#27ae60',
+  wet: '#2980b9',
+};
 
 export default function ControlsBar({
   tracks,
@@ -61,11 +45,10 @@ export default function ControlsBar({
   track,
   driver,
   compound,
-  conditions: condition,
+  conditions,
   feature,
   lap,
   isPlaying,
-  theme,
   onTrackChange,
   onDriverChange,
   onCompoundChange,
@@ -73,100 +56,117 @@ export default function ControlsBar({
   onFeatureChange,
   onLapChange,
   onPlayToggle,
-  onThemeToggle,
-  onSettingsToggle,
 }: ControlsBarProps) {
   const minLap = laps[0] ?? 1;
   const maxLap = laps[laps.length - 1] ?? 1;
 
   return (
-    <section className="panel control-rail">
-      <div className="controls-grid">
-        <RailControl icon="TR" label="Track">
-          <select value={track} onChange={(event) => onTrackChange(event.target.value)}>
+    <div className="controls-subbar">
+      <div className="controls-row">
+        {/* Track */}
+        <div className="ctrl-group">
+          <span className="ctrl-label">Circuit</span>
+          <select
+            className="ctrl-select"
+            value={track}
+            onChange={(e) => onTrackChange(e.target.value)}
+          >
             {tracks.map((item) => (
-              <option key={item.id} value={item.id}>
-                {item.name}
-              </option>
+              <option key={item.id} value={item.id}>{item.name}</option>
             ))}
           </select>
-        </RailControl>
+        </div>
 
-        <RailControl icon="DR" label="Driver">
-          <select value={driver} onChange={(event) => onDriverChange(event.target.value)}>
+        {/* Driver */}
+        <div className="ctrl-group">
+          <span className="ctrl-label">Driver</span>
+          <select
+            className="ctrl-select"
+            value={driver}
+            onChange={(e) => onDriverChange(e.target.value)}
+          >
             {drivers.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
+              <option key={item} value={item}>{item}</option>
             ))}
           </select>
-        </RailControl>
+        </div>
 
-        <RailControl icon="TC" label="Tyre">
-          <select value={compound} onChange={(event) => onCompoundChange(event.target.value as Compound)}>
+        {/* Compound */}
+        <div className="ctrl-group">
+          <span className="ctrl-label">Tyre</span>
+          <select
+            className="ctrl-select"
+            value={compound}
+            onChange={(e) => onCompoundChange(e.target.value as Compound)}
+            style={{ color: compoundColors[compound] }}
+          >
             {compounds.map((item) => (
-              <option key={item} value={item}>
+              <option key={item} value={item} style={{ color: compoundColors[item] }}>
                 {item.toUpperCase()}
               </option>
             ))}
           </select>
-        </RailControl>
+        </div>
 
-        <RailControl icon="WX" label="Condition">
+        {/* Conditions */}
+        <div className="ctrl-group">
+          <span className="ctrl-label">Conditions</span>
           <select
-            value={condition}
-            onChange={(event) => onConditionsChange(event.target.value as TrackCondition)}
+            className="ctrl-select"
+            value={conditions}
+            onChange={(e) => onConditionsChange(e.target.value as TrackCondition)}
           >
-            {conditions.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
+            {conditionsList.map((item) => (
+              <option key={item} value={item}>{item.toUpperCase()}</option>
             ))}
           </select>
-        </RailControl>
+        </div>
 
-        <RailControl icon="HM" label="Heatmap">
-          <select value={feature} onChange={(event) => onFeatureChange(event.target.value as FeatureKey)}>
+        {/* Feature */}
+        <div className="ctrl-group">
+          <span className="ctrl-label">Heatmap</span>
+          <select
+            className="ctrl-select"
+            value={feature}
+            onChange={(e) => onFeatureChange(e.target.value as FeatureKey)}
+          >
             {Object.entries(featureLabels).map(([key, label]) => (
-              <option key={key} value={key}>
-                {label}
-              </option>
+              <option key={key} value={key}>{label}</option>
             ))}
           </select>
-        </RailControl>
+        </div>
 
-        <div className="rail-actions">
-          <button type="button" className="rail-btn rail-btn-soft" onClick={onSettingsToggle}>
-            Settings
-          </button>
-          <button type="button" className="rail-btn rail-btn-accent" onClick={onThemeToggle}>
-            {theme === 'dark' ? 'Light' : 'Dark'}
-          </button>
+        <div className="ctrl-divider" />
+
+        {/* Lap timeline */}
+        <div className="lap-group">
+          <div className="lap-header">
+            <span className="ctrl-label">Lap Timeline</span>
+            <span className="lap-value">
+              Lap {lap} / {maxLap}
+            </span>
+          </div>
+          <div className="lap-slider-row">
+            <button
+              type="button"
+              className="play-btn"
+              onClick={onPlayToggle}
+              disabled={laps.length < 2}
+            >
+              {isPlaying ? '⏸ Pause' : '▶ Play'}
+            </button>
+            <input
+              type="range"
+              min={minLap}
+              max={maxLap}
+              step={1}
+              value={lap}
+              onChange={(e) => onLapChange(Number(e.target.value))}
+              disabled={laps.length === 0}
+            />
+          </div>
         </div>
       </div>
-
-      <div className="lap-control">
-        <div className="lap-head">
-          <p>Lap timeline</p>
-          <strong>
-            Lap {lap} / {maxLap}
-          </strong>
-        </div>
-        <div className="lap-row">
-          <button type="button" className="play-btn" onClick={onPlayToggle} disabled={laps.length < 2}>
-            {isPlaying ? 'Pause' : 'Play'}
-          </button>
-          <input
-            type="range"
-            min={minLap}
-            max={maxLap}
-            step={1}
-            value={lap}
-            onChange={(event) => onLapChange(Number(event.target.value))}
-            disabled={laps.length === 0}
-          />
-        </div>
-      </div>
-    </section>
+    </div>
   );
 }
