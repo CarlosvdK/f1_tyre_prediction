@@ -1,73 +1,47 @@
 /**
- * OpenF1 API integration — fetches real car position + telemetry data.
- * Docs: https://openf1.org/
+ * OpenF1 API integration — fetches EXACTLY one clean lap of position data.
  *
- * Key endpoints used:
- *  - /v1/location   → x, y, z (metres) car coordinates — the real track shape
- *  - /v1/car_data   → speed, throttle, brake per timestamp
- *  - /v1/laps       → lap timestamps to isolate a single clean lap
+ * ROOT CAUSE OF PREVIOUS FAILURE:
+ * We were fetching ALL location points for the entire race session
+ * (53 laps × ~300 pts/lap = ~16,000 records per endpoint → timeout/OOM).
+ *
+ * FIX: Use OpenF1's date range filtering to request only the time window
+ * of a single clean lap:
+ *   /v1/location?session_key=...&driver_number=...&date>=ISO&date<=ISO
+ * This returns ~250-400 points — exactly what we need.
  */
 
 const BASE = 'https://api.openf1.org/v1';
 
 export interface OpenF1Point {
-    x: number;
-    y: number;
-    z: number;           // elevation in metres
-    speed: number;
-    throttle: number;    // 0–100
+    x: number;        // metres, OpenF1 horizontal
+    y: number;        // metres, OpenF1 horizontal (perpendicular)
+    z: number;        // metres, elevation
+    speed: number;    // km/h
+    throttle: number; // 0–100
     brake: boolean;
+    drs: boolean;
     date: string;
 }
 
-export interface OpenF1Session {
-    session_key: number;
-    circuit_short_name: string;
-    location: string;
-    country_name: string;
-    session_name: string;
-    year: number;
-}
-
-/** Map our track IDs to OpenF1 session keys (2024 Race sessions) */
+/** Map track IDs → OpenF1 2024 Race session keys */
 export const TRACK_SESSION_MAP: Record<string, number> = {
     monza: 9590,  // 2024 Italian GP
     silverstone: 9558,  // 2024 British GP
-    // Extend when more tracks are added
 };
 
-/**
- * Returns an OpenF1 session key for a given track id.
- * Falls back to Monza if unknown.
- */
-function resolveSessionKey(trackId: string): number {
-    return TRACK_SESSION_MAP[trackId.toLowerCase()] ?? 9590;
-}
+/** Preferred driver number per session (for clean representative laps) */
+const SESSION_DRIVER: Record<number, number> = {
+    9590: 1,   // Monza → Verstappen
+    9558: 44,  // Silverstone → Hamilton
+};
 
-async function openf1Get<T>(path: string): Promise<T> {
-    const res = await fetch(`${BASE}${path}`);
-    if (!res.ok) throw new Error(`OpenF1 ${path}: ${res.status}`);
-    return res.json() as Promise<T>;
-}
-
-interface RawLocation {
-    date: string;
-    driver_number: number;
-    session_key: number;
-    x: number;
-    y: number;
-    z: number;
-}
-
-interface RawCarData {
-    date: string;
-    driver_number: number;
-    session_key: number;
-    speed: number;
-    throttle: number;
-    brake: number;
-    n_gear: number;
-    drs: number;
+async function ofGet<T>(path: string): Promise<T> {
+    const url = `${BASE}${path}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`OpenF1 ${res.status}: ${path.split('?')[0]}`);
+    const data = await res.json();
+    return data as T;
 }
 
 interface RawLap {
@@ -78,91 +52,100 @@ interface RawLap {
     session_key: number;
 }
 
-/**
- * Pick the default "hero" driver for a session.
- * Uses driver_number=1 (Verstappen) for 2024 sessions,
- * or falls back to the first driver number present in the data.
- */
-const TRACK_DRIVER_MAP: Record<number, number> = {
-    9590: 1,   // Monza 2024  → Verstappen
-    9558: 44,  // Silverstone → Hamilton
-};
+interface RawLocation {
+    date: string;
+    x: number;
+    y: number;
+    z: number;
+}
+
+interface RawCarData {
+    date: string;
+    speed: number;
+    throttle: number;
+    brake: number;
+    drs: number;
+}
 
 /**
- * Fetch one complete clean lap of 3D track data from OpenF1.
+ * Fetch one clean median lap of 3D position + telemetry data.
  *
- * Strategy:
- *  1. Get all laps for the driver and find the fastest complete lap
- *  2. Filter location points to that lap's time window
- *  3. Join car_data for speed/throttle/brake
+ * Steps:
+ *  1. GET /v1/laps → pick a clean median lap (not first, not outlier)
+ *  2. GET /v1/location with date range for that lap only (~300 pts)
+ *  3. GET /v1/car_data with same date range (~300 pts)
+ *  4. Merge by nearest timestamp
  */
 export async function fetchTrack3D(trackId: string): Promise<OpenF1Point[]> {
-    const sessionKey = resolveSessionKey(trackId);
-    const driverNumber = TRACK_DRIVER_MAP[sessionKey] ?? 1;
+    const sessionKey = TRACK_SESSION_MAP[trackId.toLowerCase()] ?? 9590;
+    const driverNumber = SESSION_DRIVER[sessionKey] ?? 1;
 
-    // 1. Get laps to find a complete lap window
-    const laps = await openf1Get<RawLap[]>(
+    // ── Step 1: find a clean lap ────────────────────────────────────
+    const laps = await ofGet<RawLap[]>(
         `/v1/laps?session_key=${sessionKey}&driver_number=${driverNumber}`
     );
 
-    // Pick the lap that has a valid duration and is representative
-    // (skip first lap — usually messy, pick a mid-race lap)
-    const validLaps = laps.filter(
-        (l) => l.lap_duration !== null && l.lap_number > 2 && l.lap_duration < 180
+    // Only keep laps with a real duration and reasonable length
+    // (skip lap 1 which has formation lap oddities, skip >120s safety-car laps)
+    const valid = laps.filter(
+        (l) => l.lap_duration !== null
+            && l.lap_number > 2
+            && l.lap_duration > 55
+            && l.lap_duration < 130
     );
-    if (validLaps.length === 0) throw new Error('No valid laps found');
 
-    // Use the median lap duration lap for stability
-    validLaps.sort((a, b) => (a.lap_duration ?? 999) - (b.lap_duration ?? 999));
-    const targetLap = validLaps[Math.floor(validLaps.length * 0.45)];
-    const lapStart = new Date(targetLap.date_start).getTime();
-    const lapEnd = lapStart + (targetLap.lap_duration ?? 90) * 1000;
-
-    // 2. Fetch location data for the whole session
-    // OpenF1 gives ~3.7Hz so each second ≈ 4 points → full lap ≈ 300–400 points
-    const [locations, carData] = await Promise.all([
-        openf1Get<RawLocation[]>(
-            `/v1/location?session_key=${sessionKey}&driver_number=${driverNumber}`
-        ),
-        openf1Get<RawCarData[]>(
-            `/v1/car_data?session_key=${sessionKey}&driver_number=${driverNumber}`
-        ),
-    ]);
-
-    // 3. Filter to the target lap window
-    const lapLocations = locations.filter((loc) => {
-        const t = new Date(loc.date).getTime();
-        return t >= lapStart && t <= lapEnd;
-    });
-
-    if (lapLocations.length < 20) {
-        throw new Error(`Too few points for lap (got ${lapLocations.length})`);
+    if (valid.length === 0) {
+        throw new Error('No clean laps found in session (all laps filtered)');
     }
 
-    // 4. Build a timestamp-sorted car data map for fast lookup
-    const carMap = new Map<number, RawCarData>();
+    // Sort by duration and take the 40th-percentile lap (representative pace)
+    valid.sort((a, b) => (a.lap_duration ?? 999) - (b.lap_duration ?? 999));
+    const lap = valid[Math.floor(valid.length * 0.40)];
+
+    // ── Step 2 & 3: fetch position + telemetry for that lap only ────
+    const lapStart = new Date(lap.date_start);
+    const lapEnd = new Date(lapStart.getTime() + (lap.lap_duration ?? 90) * 1000);
+
+    // OpenF1 date filter: date>ISO&date<ISO
+    const dGte = encodeURIComponent(lapStart.toISOString());
+    const dLte = encodeURIComponent(lapEnd.toISOString());
+    const base = `session_key=${sessionKey}&driver_number=${driverNumber}`;
+
+    const [locations, carData] = await Promise.all([
+        ofGet<RawLocation[]>(`/v1/location?${base}&date>=${dGte}&date<=${dLte}`),
+        ofGet<RawCarData[]>(`/v1/car_data?${base}&date>=${dGte}&date<=${dLte}`),
+    ]);
+
+    if (locations.length < 30) {
+        throw new Error(
+            `Too few position points (${locations.length}) for lap ${lap.lap_number} `
+            + `— OpenF1 may not have data for this session`
+        );
+    }
+
+    // ── Step 4: merge by nearest timestamp ─────────────────────────
+    // Build car-data index bucketed to 250ms
+    const carIndex = new Map<number, RawCarData>();
     carData.forEach((cd) => {
-        const t = Math.round(new Date(cd.date).getTime() / 250) * 250; // bucket to 250ms
-        carMap.set(t, cd);
+        const bucket = Math.round(new Date(cd.date).getTime() / 250) * 250;
+        carIndex.set(bucket, cd);
     });
 
-    // 5. Merge location + telemetry
-    const merged: OpenF1Point[] = lapLocations.map((loc) => {
+    const merged: OpenF1Point[] = locations.map((loc) => {
         const t = Math.round(new Date(loc.date).getTime() / 250) * 250;
-        // Find nearest car data point (within ±500ms)
-        const cd =
-            carMap.get(t) ??
-            carMap.get(t - 250) ??
-            carMap.get(t + 250) ??
-            carMap.get(t - 500) ??
-            carMap.get(t + 500);
+        const cd = carIndex.get(t)
+            ?? carIndex.get(t - 250)
+            ?? carIndex.get(t + 250)
+            ?? carIndex.get(t - 500)
+            ?? carIndex.get(t + 500);
         return {
             x: loc.x,
             y: loc.y,
             z: loc.z,
-            speed: cd?.speed ?? 100,
+            speed: cd?.speed ?? 120,
             throttle: cd?.throttle ?? 50,
             brake: (cd?.brake ?? 0) > 20,
+            drs: (cd?.drs ?? 0) > 9,   // DRS active: value 10 or 12
             date: loc.date,
         };
     });

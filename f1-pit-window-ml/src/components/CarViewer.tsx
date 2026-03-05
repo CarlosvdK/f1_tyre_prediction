@@ -122,10 +122,14 @@ function RendererSetup() {
 }
 
 /**
- * Dynamic overhead garage lights — ceiling beam spotlights.
- * useFrame shifts the key and fill positions in response to camera angle,
- * giving a cinematic "lights track the subject" feel as you orbit.
- * Ambient is very dark so the rear of the garage falls off naturally.
+ * Camera-relative garage lighting.
+ *
+ * The key and fill spotlights are repositioned every frame so they always sit
+ * at a fixed angular offset FROM THE CAMERA — exactly like a "beauty dish" or
+ * "ring light" setup. No matter which way you orbit, the face of the car
+ * toward the viewer is always brightly lit, giving consistent visibility.
+ *
+ * A fixed cool rim light stays at the rear-left to provide separation.
  */
 function DynamicGarageLights() {
   const keyRef = useRef<SpotLight>(null);
@@ -133,32 +137,46 @@ function DynamicGarageLights() {
   const { camera } = useThree();
 
   useFrame(() => {
-    const cx = camera.position.x * 0.35;
-    const cz = Math.max(camera.position.z * 0.18, 0.4);
-    if (keyRef.current) {
-      keyRef.current.position.set(cx + 1.5, 5.5, cz + 1.0);
-      keyRef.current.target.position.set(0, 0.4, 1.2);
+    // Vector from origin to camera (normalised horizontal direction)
+    const camDir = new Vector3(camera.position.x, 0, camera.position.z).normalize();
+    // Right vector (perpendicular to camDir, in the horizontal plane)
+    const right = new Vector3().crossVectors(camDir, new Vector3(0, 1, 0)).normalize();
+
+    // Key: above and slightly to the right of wherever the camera is
+    const keyPos = camDir.clone()
+      .multiplyScalar(2.0)        // push toward camera
+      .addScaledVector(right, 1.4) // slightly right from viewer's POV
+      .setY(5.5);                 // always from ceiling height
+    keyRef.current?.position.copy(keyPos);
+    if (keyRef.current?.target) {
+      keyRef.current.target.position.set(0, 0.4, 0);
       keyRef.current.target.updateMatrixWorld();
     }
-    if (fillRef.current) {
-      fillRef.current.position.set(cx - 2.0, 5.0, cz + 0.6);
-      fillRef.current.target.position.set(0, 0.4, 1.2);
+
+    // Fill: same horizontal orbit, offset left and slightly dimmer
+    const fillPos = camDir.clone()
+      .multiplyScalar(1.4)
+      .addScaledVector(right, -2.0)
+      .setY(4.8);
+    fillRef.current?.position.copy(fillPos);
+    if (fillRef.current?.target) {
+      fillRef.current.target.position.set(0, 0.4, 0);
       fillRef.current.target.updateMatrixWorld();
     }
   });
 
   return (
     <>
-      {/* Garage-dark ambient — barely visible, forces eye towards the lit car */}
-      <ambientLight intensity={0.16} color="#1a1e2a" />
+      {/* Slightly raised ambient — car is never totally black on any face */}
+      <ambientLight intensity={0.28} color="#1e2334" />
 
-      {/* Primary ceiling beam — warm tungsten */}
+      {/* Primary key beam — warm tungsten from ceiling */}
       <spotLight
         ref={keyRef}
-        position={[1.5, 5.5, 2.0]}
-        angle={0.38}
-        intensity={24}
-        penumbra={0.62}
+        position={[2, 5.5, 2]}
+        angle={0.42}
+        intensity={28}
+        penumbra={0.60}
         color="#ffeac0"
         castShadow
         shadow-mapSize-width={2048}
@@ -166,31 +184,32 @@ function DynamicGarageLights() {
         shadow-bias={-0.0001}
         shadow-camera-near={0.5}
         shadow-camera-far={18}
-        decay={1.8}
-        distance={14}
+        decay={1.6}
+        distance={15}
       />
 
-      {/* Secondary ceiling fill — cooler opposite beam */}
+      {/* Fill — cooler, half intensity, opposite side of key */}
       <spotLight
         ref={fillRef}
-        position={[-2.0, 5.0, 1.8]}
-        angle={0.44}
-        intensity={9}
+        position={[-2, 4.8, 2]}
+        angle={0.46}
+        intensity={14}
         penumbra={0.78}
-        color="#c8daff"
+        color="#c0d4ff"
         castShadow={false}
         decay={2.0}
-        distance={12}
+        distance={13}
       />
 
-      {/* Cool rim from back-left to outline silhouette */}
-      <directionalLight position={[-5, 3.5, -6]} intensity={2.0} color="#4870c0" />
+      {/* Fixed rim / separation — stays at rear left regardless of camera */}
+      <directionalLight position={[-5, 4, -7]} intensity={2.2} color="#4070c8" />
 
-      {/* Very faint back-of-tunnel fill — just enough to see the walls */}
-      <pointLight position={[0, 3.5, -7]} intensity={0.8} color="#1a2035" distance={10} decay={2} />
+      {/* Faint deep-tunnel backfill so rear walls aren't totally void */}
+      <pointLight position={[0, 3, -7]} intensity={0.9} color="#1a2040" distance={10} decay={2} />
     </>
   );
 }
+
 
 /* ── Studio GLB environment ─────────────────────────────────────── */
 function StudioEnvironment() {
