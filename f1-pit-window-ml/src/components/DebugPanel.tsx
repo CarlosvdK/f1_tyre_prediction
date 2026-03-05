@@ -31,8 +31,7 @@ export default function DebugPanel({
   wear,
 }: DebugPanelProps) {
   return (
-    <section className="panel debug-panel">
-      <h3>Debug</h3>
+    <section className="debug-panel">
       <div className="debug-grid">
         <span>Track</span>
         <span>{track}</span>

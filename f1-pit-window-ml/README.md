@@ -91,3 +91,36 @@ Tyre meshes are detected by name heuristics (`tire/tyre/wheel/pirelli/sidewall/s
 - `src/three/modelLoader.ts`
 - `src/three/tireStyling.ts`
 - `scripts/generate_manifest.mjs`
+
+## UI Refinement Update
+
+The dashboard has been refactored to a product-style presentation:
+
+- Premium design system with CSS tokens (light/dark), unified spacing, compact control rail, and polished KPI cards.
+- Cinematic 3D viewer:
+  - fixed action camera framing
+  - orbit rotation only (`enableZoom=false`, `enablePan=false`, locked distance)
+  - pit-lane styled light mode and garage styled dark mode set dressing
+  - contact shadows, improved exposure/tone mapping, premium loading skeleton
+- Tyre visuals:
+  - more realistic compound colors
+  - stronger wear-driven roughness and subtle dust tint
+  - hover highlight via material lighting (no scale pop)
+- Track map quality:
+  - telemetry distance-based interpolation to high-density points
+  - smoothing and normalized/aspect-correct rendering
+  - cleaner diverging heat scale and transition fade
+  - sector fallback visualization when XY quality is insufficient
+- Advanced settings drawer:
+  - hidden debug by default
+  - collapsible debug panel and model metadata.
+
+## Screenshot Instructions
+
+1. Start backend and frontend (`npm run dev` + backend command above).
+2. Open the app in browser.
+3. Take screenshots for:
+   - light mode car scene (pit-lane look)
+   - dark mode car scene (garage look)
+   - track heatmap view
+   - settings drawer opened with debug panel expanded.

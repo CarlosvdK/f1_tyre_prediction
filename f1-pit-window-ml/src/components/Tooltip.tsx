@@ -1,24 +1,24 @@
 interface TooltipProps {
   visible: boolean;
-  x: number;
-  y: number;
-  label: string;
+  tireId?: string;
+  wearPct?: number;
+  tempProxyC?: number;
 }
 
-export default function Tooltip({ visible, x, y, label }: TooltipProps) {
-  if (!visible) {
+export default function Tooltip({ visible, tireId, wearPct, tempProxyC }: TooltipProps) {
+  if (!visible || !tireId) {
     return null;
   }
 
   return (
-    <div
-      className="hover-tooltip"
-      style={{
-        left: `${x}px`,
-        top: `${y}px`,
-      }}
-    >
-      {label}
-    </div>
+    <aside className="hover-tooltip-card">
+      <header>{tireId} tyre detail</header>
+      <div className="hover-tooltip-grid">
+        <span>Wear</span>
+        <strong>{(wearPct ?? 0).toFixed(1)}%</strong>
+        <span>Temp proxy</span>
+        <strong>{tempProxyC ?? 0} C</strong>
+      </div>
+    </aside>
   );
 }

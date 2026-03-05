@@ -1,22 +1,35 @@
 import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Mesh, Vector3 } from 'three';
+import { Mesh, MeshStandardMaterial } from 'three';
 import type { TireMeshEntry, TireWearMap } from './tireStyling';
 
 export interface TireHoverState {
   tireId: string;
   wear: number;
-  x: number;
-  y: number;
+  tempProxyC: number;
 }
 
-const lerpTarget = new Vector3();
-
-function ensureBaseScale(mesh: Mesh): Vector3 {
-  if (!mesh.userData.__base_scale) {
-    mesh.userData.__base_scale = mesh.scale.clone();
+function setMaterialHighlight(material: MeshStandardMaterial, highlighted: boolean): void {
+  if (!material.userData.__hover_defaults) {
+    material.userData.__hover_defaults = {
+      emissive: material.emissive.clone(),
+      emissiveIntensity: material.emissiveIntensity,
+    };
   }
-  return mesh.userData.__base_scale as Vector3;
+
+  const defaults = material.userData.__hover_defaults as {
+    emissive: MeshStandardMaterial['emissive'];
+    emissiveIntensity: number;
+  };
+
+  if (highlighted) {
+    material.emissive.setRGB(0.24, 0.25, 0.28);
+    material.emissiveIntensity = Math.max(defaults.emissiveIntensity, 0.16);
+  } else {
+    material.emissive.copy(defaults.emissive);
+    material.emissiveIntensity = defaults.emissiveIntensity;
+  }
+  material.needsUpdate = true;
 }
 
 export function useTireRaycastHover(
@@ -35,7 +48,7 @@ export function useTireRaycastHover(
 
   useEffect(() => {
     tires.forEach((tire) => {
-      ensureBaseScale(tire.mesh);
+      tire.allMaterials.forEach((material) => setMaterialHighlight(material, false));
     });
   }, [tires]);
 
@@ -50,14 +63,14 @@ export function useTireRaycastHover(
     const hoveredMesh = hit?.object instanceof Mesh ? hit.object : null;
     const hoveredUuid = hoveredMesh?.uuid ?? null;
 
-    tires.forEach((tire) => {
-      const baseScale = ensureBaseScale(tire.mesh);
-      const multiplier = tire.mesh.uuid === hoveredUuid ? 1.15 : 1;
-      lerpTarget.copy(baseScale).multiplyScalar(multiplier);
-      tire.mesh.scale.lerp(lerpTarget, 0.18);
-    });
+    if (hoveredUuid !== currentHoverId.current) {
+      tires.forEach((tire) => {
+        const highlighted = tire.mesh.uuid === hoveredUuid;
+        tire.allMaterials.forEach((material) => setMaterialHighlight(material, highlighted));
+      });
+    }
 
-    if (!hoveredMesh || !hit) {
+    if (!hoveredMesh) {
       if (currentHoverId.current !== null) {
         currentHoverId.current = null;
         setState(null);
@@ -70,16 +83,18 @@ export function useTireRaycastHover(
       return;
     }
 
-    const projected = hit.point.clone().project(frameState.camera);
-    const x = (projected.x * 0.5 + 0.5) * frameState.size.width;
-    const y = (-projected.y * 0.5 + 0.5) * frameState.size.height;
-
     currentHoverId.current = hoveredUuid;
-    setState({
-      tireId: tire.id,
-      wear: wearByWheel[tire.id as keyof TireWearMap] ?? 0,
-      x,
-      y,
+    const wear = wearByWheel[tire.id as keyof TireWearMap] ?? 0;
+    const tempProxyC = Math.round(84 + wear * 76);
+    setState((prev) => {
+      if (prev?.tireId === tire.id && Math.abs(prev.wear - wear) < 0.002) {
+        return prev;
+      }
+      return {
+        tireId: tire.id,
+        wear,
+        tempProxyC,
+      };
     });
   });
 

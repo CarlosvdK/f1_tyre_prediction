@@ -22,11 +22,11 @@ export interface TireWearMap {
 }
 
 const compoundColorHex: Record<Compound, string> = {
-  soft: '#ff2d2d',
-  medium: '#ffd83d',
-  hard: '#f5f5f5',
-  inter: '#2dd24f',
-  wet: '#2f66ff',
+  soft: '#d7322f',
+  medium: '#f0c533',
+  hard: '#f2f2ee',
+  inter: '#2f8c3a',
+  wet: '#2a4fc7',
 };
 
 const fallbackOrder: WheelId[] = ['FL', 'FR', 'RL', 'RR'];
@@ -134,6 +134,7 @@ export function applyCompoundAndWear(
   wearByWheel: Partial<TireWearMap>,
 ): void {
   const compoundColor = new Color(compoundColorHex[compound]);
+  const dustColor = new Color('#6b625a');
 
   tires.forEach((tire) => {
     const wear =
@@ -156,13 +157,14 @@ export function applyCompoundAndWear(
 
       const hasSeparateAccent = tire.accentMaterials.length > 0;
       const baseColor = hasSeparateAccent ? defaults.color.clone() : compoundColor.clone();
-      baseColor.multiplyScalar(1 - wear * 0.25);
+      baseColor.multiplyScalar(1 - wear * 0.18);
+      baseColor.lerp(dustColor, wear * 0.22);
 
       if (!hasSeparateAccent || !tire.accentMaterials.includes(material)) {
         material.color.copy(baseColor);
       }
 
-      material.roughness = lerp(Math.max(defaults.roughness, 0.35), 0.95, wear);
+      material.roughness = lerp(Math.max(defaults.roughness, 0.36), 0.97, wear);
       material.needsUpdate = true;
     });
   });

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import type { Compound, FeatureKey, Track, TrackCondition } from '../data/api';
 
 interface ControlsBarProps {
@@ -10,6 +11,7 @@ interface ControlsBarProps {
   conditions: TrackCondition;
   feature: FeatureKey;
   lap: number;
+  isPlaying: boolean;
   theme: 'light' | 'dark';
   onTrackChange: (track: string) => void;
   onDriverChange: (driver: string) => void;
@@ -17,7 +19,9 @@ interface ControlsBarProps {
   onConditionsChange: (conditions: TrackCondition) => void;
   onFeatureChange: (feature: FeatureKey) => void;
   onLapChange: (lap: number) => void;
+  onPlayToggle: () => void;
   onThemeToggle: () => void;
+  onSettingsToggle: () => void;
 }
 
 const compounds: Compound[] = ['soft', 'medium', 'hard', 'inter', 'wet'];
@@ -30,6 +34,26 @@ const featureLabels: Record<FeatureKey, string> = {
   degradation_intensity_proxy: 'Degradation intensity proxy',
 };
 
+function RailControl({
+  icon,
+  label,
+  children,
+}: {
+  icon: string;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <label className="rail-control">
+      <span className="rail-label">
+        <span className="rail-icon">{icon}</span>
+        {label}
+      </span>
+      {children}
+    </label>
+  );
+}
+
 export default function ControlsBar({
   tracks,
   drivers,
@@ -40,6 +64,7 @@ export default function ControlsBar({
   conditions: condition,
   feature,
   lap,
+  isPlaying,
   theme,
   onTrackChange,
   onDriverChange,
@@ -47,16 +72,17 @@ export default function ControlsBar({
   onConditionsChange,
   onFeatureChange,
   onLapChange,
+  onPlayToggle,
   onThemeToggle,
+  onSettingsToggle,
 }: ControlsBarProps) {
   const minLap = laps[0] ?? 1;
   const maxLap = laps[laps.length - 1] ?? 1;
 
   return (
-    <section className="panel controls-bar">
+    <section className="panel control-rail">
       <div className="controls-grid">
-        <label>
-          Track
+        <RailControl icon="TR" label="Track">
           <select value={track} onChange={(event) => onTrackChange(event.target.value)}>
             {tracks.map((item) => (
               <option key={item.id} value={item.id}>
@@ -64,10 +90,9 @@ export default function ControlsBar({
               </option>
             ))}
           </select>
-        </label>
+        </RailControl>
 
-        <label>
-          Driver
+        <RailControl icon="DR" label="Driver">
           <select value={driver} onChange={(event) => onDriverChange(event.target.value)}>
             {drivers.map((item) => (
               <option key={item} value={item}>
@@ -75,10 +100,9 @@ export default function ControlsBar({
               </option>
             ))}
           </select>
-        </label>
+        </RailControl>
 
-        <label>
-          Tyre Compound
+        <RailControl icon="TC" label="Tyre">
           <select value={compound} onChange={(event) => onCompoundChange(event.target.value as Compound)}>
             {compounds.map((item) => (
               <option key={item} value={item}>
@@ -86,10 +110,9 @@ export default function ControlsBar({
               </option>
             ))}
           </select>
-        </label>
+        </RailControl>
 
-        <label>
-          Track Conditions
+        <RailControl icon="WX" label="Condition">
           <select
             value={condition}
             onChange={(event) => onConditionsChange(event.target.value as TrackCondition)}
@@ -100,10 +123,9 @@ export default function ControlsBar({
               </option>
             ))}
           </select>
-        </label>
+        </RailControl>
 
-        <label>
-          Heatmap Feature
+        <RailControl icon="HM" label="Heatmap">
           <select value={feature} onChange={(event) => onFeatureChange(event.target.value as FeatureKey)}>
             {Object.entries(featureLabels).map(([key, label]) => (
               <option key={key} value={key}>
@@ -111,27 +133,39 @@ export default function ControlsBar({
               </option>
             ))}
           </select>
-        </label>
+        </RailControl>
 
-        <button type="button" className="theme-toggle" onClick={onThemeToggle}>
-          {theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-        </button>
+        <div className="rail-actions">
+          <button type="button" className="rail-btn rail-btn-soft" onClick={onSettingsToggle}>
+            Settings
+          </button>
+          <button type="button" className="rail-btn rail-btn-accent" onClick={onThemeToggle}>
+            {theme === 'dark' ? 'Light' : 'Dark'}
+          </button>
+        </div>
       </div>
 
-      <div className="lap-slider-wrap">
-        <div className="lap-slider-labels">
-          <span>Lap</span>
-          <strong>{lap}</strong>
+      <div className="lap-control">
+        <div className="lap-head">
+          <p>Lap timeline</p>
+          <strong>
+            Lap {lap} / {maxLap}
+          </strong>
         </div>
-        <input
-          type="range"
-          min={minLap}
-          max={maxLap}
-          step={1}
-          value={lap}
-          onChange={(event) => onLapChange(Number(event.target.value))}
-          disabled={laps.length === 0}
-        />
+        <div className="lap-row">
+          <button type="button" className="play-btn" onClick={onPlayToggle} disabled={laps.length < 2}>
+            {isPlaying ? 'Pause' : 'Play'}
+          </button>
+          <input
+            type="range"
+            min={minLap}
+            max={maxLap}
+            step={1}
+            value={lap}
+            onChange={(event) => onLapChange(Number(event.target.value))}
+            disabled={laps.length === 0}
+          />
+        </div>
       </div>
     </section>
   );
