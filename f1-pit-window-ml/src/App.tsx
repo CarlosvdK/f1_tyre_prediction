@@ -210,7 +210,7 @@ export default function App() {
           <h1>F1 Tyre Degradation Prediction Dashboard</h1>
         </div>
         <p className="subtitle">
-          Mock telemetry + prediction stack with model-ready API adapters for real OpenF1/FastF1 data.
+          Real trained pit-window model + latest-season race data with dense telemetry overlays for UI exploration.
         </p>
       </header>
 

@@ -5,7 +5,7 @@ import type { Object3D } from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
-import { SkeletonUtils } from 'three/examples/jsm/utils/SkeletonUtils.js';
+import { clone } from 'three/examples/jsm/utils/SkeletonUtils.js';
 
 export type ModelType = 'glb' | 'gltf' | 'fbx' | 'obj';
 
@@ -14,6 +14,7 @@ export interface ModelManifest {
   modelType?: ModelType;
   mtlPath?: string;
   texturePath?: string;
+  placeholder?: boolean;
 }
 
 export interface ModelManifestState {
@@ -23,6 +24,10 @@ export interface ModelManifestState {
 }
 
 function detectModelType(modelPath: string): ModelType {
+  if (!modelPath) {
+    throw new Error('Model path is empty');
+  }
+
   const lower = modelPath.toLowerCase();
   if (lower.endsWith('.glb')) {
     return 'glb';
@@ -41,7 +46,7 @@ function detectModelType(modelPath: string): ModelType {
 }
 
 function cloneModel<T extends Object3D>(object: T): T {
-  return SkeletonUtils.clone(object) as T;
+  return clone(object) as T;
 }
 
 export function useModelManifest(): ModelManifestState {
@@ -68,7 +73,11 @@ export function useModelManifest(): ModelManifestState {
           modelType,
         };
 
-        if (modelType === 'glb' || modelType === 'gltf') {
+        if (
+          !manifest.placeholder &&
+          manifest.modelPath &&
+          (modelType === 'glb' || modelType === 'gltf')
+        ) {
           useGLTF.preload(manifest.modelPath);
         }
 
@@ -123,7 +132,6 @@ export function useOBJModelWithMTL(
 ): Object3D {
   const materials = useLoader(MTLLoader, mtlPath, (loader) => {
     if (texturePath) {
-      loader.setTexturePath(texturePath);
       loader.setResourcePath(texturePath);
     }
   });

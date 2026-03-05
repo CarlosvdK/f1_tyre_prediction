@@ -54,7 +54,7 @@ interface PredictionsData {
   };
 }
 
-const USE_BACKEND = import.meta.env.VITE_USE_BACKEND === 'true';
+const USE_BACKEND = import.meta.env.VITE_USE_BACKEND !== 'false';
 
 const telemetryByTrack: Record<string, TelemetryData> = {
   monza: telemetryMonza as TelemetryData,

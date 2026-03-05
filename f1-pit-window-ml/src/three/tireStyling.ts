@@ -136,7 +136,10 @@ export function applyCompoundAndWear(
   const compoundColor = new Color(compoundColorHex[compound]);
 
   tires.forEach((tire) => {
-    const wear = clamp01(wearByWheel[tire.id] ?? 0.2);
+    const wear =
+      tire.id === 'UNKNOWN'
+        ? 0.2
+        : clamp01(wearByWheel[tire.id as keyof TireWearMap] ?? 0.2);
     const targetMaterials = tire.accentMaterials.length > 0 ? tire.accentMaterials : tire.baseMaterials;
 
     targetMaterials.forEach((material) => {

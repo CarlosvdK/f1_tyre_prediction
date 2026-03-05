@@ -1,7 +1,7 @@
 import { OrbitControls } from '@react-three/drei';
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useMemo, useState } from 'react';
-import { Box3, Mesh, Object3D, Vector3 } from 'three';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Box3, Group, Mesh, Object3D, Vector3 } from 'three';
 import type { Compound, ThemeMode } from '../data/api';
 import {
   useFBXModel,
@@ -15,6 +15,7 @@ import {
   applyCompoundAndWear,
   findTireMeshes,
   normalizeWearMap,
+  type TireMeshEntry,
   type TireWearMap,
 } from '../three/tireStyling';
 import type { TireHoverState } from '../three/raycastHover';
@@ -177,6 +178,96 @@ function SceneLights({ theme }: { theme: ThemeMode }) {
   );
 }
 
+function PlaceholderWheel({
+  id,
+  position,
+}: {
+  id: 'FL' | 'FR' | 'RL' | 'RR';
+  position: [number, number, number];
+}) {
+  return (
+    <group position={position}>
+      <mesh name={`tire_${id.toLowerCase()}`} rotation={[Math.PI / 2, 0, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.36, 0.36, 0.28, 28]} />
+        <meshStandardMaterial name={`sidewall_${id}`} color="#1f2125" roughness={0.45} metalness={0.04} />
+      </mesh>
+      <mesh name={`hub_${id}`} rotation={[Math.PI / 2, 0, 0]} castShadow>
+        <cylinderGeometry args={[0.17, 0.17, 0.29, 20]} />
+        <meshStandardMaterial color="#6d727d" roughness={0.5} metalness={0.45} />
+      </mesh>
+    </group>
+  );
+}
+
+function PlaceholderModel({
+  compound,
+  wear,
+  onTireCountChange,
+  onHoverChange,
+}: {
+  compound: Compound;
+  wear: TireWearMap;
+  onTireCountChange: (count: number) => void;
+  onHoverChange: (state: TireHoverState | null) => void;
+}) {
+  const groupRef = useRef<Group>(null);
+  const [tires, setTires] = useState<TireMeshEntry[]>([]);
+  const hoverState = useTireRaycastHover(tires, wear);
+
+  useEffect(() => {
+    if (!groupRef.current) {
+      return;
+    }
+
+    configureMeshShadows(groupRef.current);
+    const found = findTireMeshes(groupRef.current);
+    setTires(found);
+    onTireCountChange(found.length);
+  }, [onTireCountChange]);
+
+  useEffect(() => {
+    applyCompoundAndWear(tires, compound, wear);
+  }, [tires, compound, wear]);
+
+  useEffect(() => {
+    onHoverChange(hoverState);
+  }, [hoverState, onHoverChange]);
+
+  return (
+    <group ref={groupRef} position={[0, 0.38, 0]}>
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[4.7, 0.35, 1.9]} />
+        <meshStandardMaterial color="#13243b" roughness={0.35} metalness={0.35} />
+      </mesh>
+
+      <mesh position={[0.5, 0.38, 0]} castShadow>
+        <boxGeometry args={[2.45, 0.55, 1.25]} />
+        <meshStandardMaterial color="#1d354f" roughness={0.32} metalness={0.3} />
+      </mesh>
+
+      <mesh position={[1.76, 0.42, 0]} castShadow>
+        <boxGeometry args={[0.8, 0.23, 1.35]} />
+        <meshStandardMaterial color="#0f1824" roughness={0.48} metalness={0.15} />
+      </mesh>
+
+      <mesh position={[-2.22, 0.22, 0]} castShadow>
+        <boxGeometry args={[0.95, 0.18, 2.25]} />
+        <meshStandardMaterial color="#101824" roughness={0.44} metalness={0.15} />
+      </mesh>
+
+      <mesh position={[0.2, 0.75, 0]} castShadow>
+        <boxGeometry args={[0.85, 0.16, 0.9]} />
+        <meshStandardMaterial color="#2f4865" roughness={0.3} metalness={0.24} />
+      </mesh>
+
+      <PlaceholderWheel id="FL" position={[1.22, -0.12, 1.07]} />
+      <PlaceholderWheel id="FR" position={[1.22, -0.12, -1.07]} />
+      <PlaceholderWheel id="RL" position={[-1.52, -0.12, 1.07]} />
+      <PlaceholderWheel id="RR" position={[-1.52, -0.12, -1.07]} />
+    </group>
+  );
+}
+
 function Floor({ theme }: { theme: ThemeMode }) {
   const isDark = theme === 'dark';
 
@@ -244,11 +335,12 @@ export default function CarViewer({ compound, wear, theme, onModelMetaChange }: 
   const [hover, setHover] = useState<TireHoverState | null>(null);
 
   const wearMap = useMemo(() => normalizeWearMap(wear), [wear]);
+  const usePlaceholder = !loading && (!!error || !manifest || manifest.placeholder || !manifest.modelPath);
 
   useEffect(() => {
     onModelMetaChange?.({
-      modelPath: manifest?.modelPath,
-      modelType: manifest?.modelType,
+      modelPath: manifest?.modelPath || undefined,
+      modelType: manifest?.placeholder ? 'placeholder' : manifest?.modelType,
       tireCount,
       error: error ?? undefined,
     });
@@ -257,6 +349,7 @@ export default function CarViewer({ compound, wear, theme, onModelMetaChange }: 
   return (
     <section className={`panel car-viewer ${theme === 'dark' ? 'viewer-dark' : 'viewer-light'}`}>
       {loading && <div className="viewer-message">Loading model manifest...</div>}
+      {!loading && usePlaceholder && <div className="viewer-message">Using placeholder car model</div>}
       {error && !loading && <div className="viewer-message error">{error}</div>}
 
       <Canvas shadows camera={{ position: [5.2, 2.8, 6.2], fov: 42 }}>
@@ -265,12 +358,20 @@ export default function CarViewer({ compound, wear, theme, onModelMetaChange }: 
         <Floor theme={theme} />
 
         <Suspense fallback={null}>
-          {manifest && (
+          {!usePlaceholder && manifest && (
             <ResolvedModel
               modelPath={manifest.modelPath}
               modelType={manifest.modelType ?? 'glb'}
               mtlPath={manifest.mtlPath}
               texturePath={manifest.texturePath}
+              compound={compound}
+              wear={wearMap}
+              onTireCountChange={setTireCount}
+              onHoverChange={setHover}
+            />
+          )}
+          {usePlaceholder && (
+            <PlaceholderModel
               compound={compound}
               wear={wearMap}
               onTireCountChange={setTireCount}

@@ -34,10 +34,7 @@ function pickMtlFile(files, modelFile) {
 }
 
 if (!fs.existsSync(sourceDir)) {
-  throw new Error(
-    `Model source directory not found: ${sourceDir}\n` +
-      'Expected extracted assets under public/models/redbull-rb19-oracle-wwwvecarzcom/source',
-  );
+  fs.mkdirSync(sourceDir, { recursive: true });
 }
 
 const files = fs.readdirSync(sourceDir).filter((file) =>
@@ -47,9 +44,21 @@ const files = fs.readdirSync(sourceDir).filter((file) =>
 const modelFile = pickModelFile(files);
 
 if (!modelFile) {
-  throw new Error(
-    `No supported model found in ${sourceDir}. Add one of: ${priority.join(', ')}`,
+  const placeholderManifest = {
+    modelPath: '',
+    modelType: 'glb',
+    texturePath: textureDirWeb,
+    placeholder: true,
+  };
+
+  fs.mkdirSync(path.dirname(manifestPath), { recursive: true });
+  fs.writeFileSync(manifestPath, `${JSON.stringify(placeholderManifest, null, 2)}\n`, 'utf8');
+
+  console.warn(
+    `No supported model found in ${sourceDir}. Wrote placeholder manifest so UI can still run.`,
   );
+  console.log(JSON.stringify(placeholderManifest, null, 2));
+  process.exit(0);
 }
 
 const extension = fileExt(modelFile);
