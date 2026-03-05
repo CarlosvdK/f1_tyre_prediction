@@ -1,0 +1,184 @@
+import { Color, Mesh, MeshStandardMaterial, Object3D } from 'three';
+import type { Compound } from '../data/api';
+
+const tireKeywords = ['tire', 'tyre', 'wheel', 'pirelli', 'sidewall', 'stripe', 'rim'];
+const accentKeywords = ['stripe', 'logo', 'pirelli', 'sidewall', 'marking', 'line'];
+
+export type WheelId = 'FL' | 'FR' | 'RL' | 'RR' | 'UNKNOWN';
+
+export interface TireMeshEntry {
+  id: WheelId;
+  mesh: Mesh;
+  allMaterials: MeshStandardMaterial[];
+  accentMaterials: MeshStandardMaterial[];
+  baseMaterials: MeshStandardMaterial[];
+}
+
+export interface TireWearMap {
+  FL: number;
+  FR: number;
+  RL: number;
+  RR: number;
+}
+
+const compoundColorHex: Record<Compound, string> = {
+  soft: '#ff2d2d',
+  medium: '#ffd83d',
+  hard: '#f5f5f5',
+  inter: '#2dd24f',
+  wet: '#2f66ff',
+};
+
+const fallbackOrder: WheelId[] = ['FL', 'FR', 'RL', 'RR'];
+
+function toMaterialArray(material: unknown): MeshStandardMaterial[] {
+  const list = Array.isArray(material) ? material : [material];
+  return list.filter(
+    (item): item is MeshStandardMaterial =>
+      Boolean(item) && item instanceof MeshStandardMaterial,
+  );
+}
+
+function captureMaterialDefaults(material: MeshStandardMaterial): void {
+  if (material.userData.__tire_defaults) {
+    return;
+  }
+
+  material.userData.__tire_defaults = {
+    color: material.color.clone(),
+    roughness: material.roughness,
+  };
+}
+
+function getWheelId(name: string, fallbackIndex: number): WheelId {
+  const n = name.toLowerCase();
+
+  const isFront =
+    n.includes('front') || n.includes('f_') || n.includes('_f') || n.includes('fwd');
+  const isRear = n.includes('rear') || n.includes('r_') || n.includes('_r') || n.includes('back');
+  const isLeft = n.includes('left') || n.includes('_l') || n.startsWith('l_') || n.includes(' lf');
+  const isRight = n.includes('right') || n.includes('_r') || n.startsWith('r_') || n.includes(' rf');
+
+  if (n.includes('fl') || (isFront && isLeft)) {
+    return 'FL';
+  }
+  if (n.includes('fr') || (isFront && isRight)) {
+    return 'FR';
+  }
+  if (n.includes('rl') || (isRear && isLeft)) {
+    return 'RL';
+  }
+  if (n.includes('rr') || (isRear && isRight)) {
+    return 'RR';
+  }
+
+  return fallbackOrder[fallbackIndex % fallbackOrder.length] ?? 'UNKNOWN';
+}
+
+function clamp01(value: number): number {
+  return Math.min(1, Math.max(0, value));
+}
+
+function lerp(start: number, end: number, t: number): number {
+  return start + (end - start) * t;
+}
+
+export function findTireMeshes(root: Object3D): TireMeshEntry[] {
+  const found: TireMeshEntry[] = [];
+  const used = new Set<string>();
+
+  root.traverse((child) => {
+    if (!(child instanceof Mesh)) {
+      return;
+    }
+
+    const materials = toMaterialArray(child.material);
+    if (materials.length === 0) {
+      return;
+    }
+
+    const bundleName = `${child.name} ${materials.map((mat) => mat.name).join(' ')}`.toLowerCase();
+    const matchesTire = tireKeywords.some((key) => bundleName.includes(key));
+    if (!matchesTire) {
+      return;
+    }
+
+    const uniqueKey = `${child.uuid}:${bundleName}`;
+    if (used.has(uniqueKey)) {
+      return;
+    }
+    used.add(uniqueKey);
+
+    const accentMaterials = materials.filter((mat) => {
+      const matName = `${mat.name} ${child.name}`.toLowerCase();
+      return accentKeywords.some((key) => matName.includes(key));
+    });
+
+    materials.forEach(captureMaterialDefaults);
+
+    found.push({
+      id: getWheelId(bundleName, found.length),
+      mesh: child,
+      allMaterials: materials,
+      accentMaterials,
+      baseMaterials: materials,
+    });
+  });
+
+  return found;
+}
+
+export function applyCompoundAndWear(
+  tires: TireMeshEntry[],
+  compound: Compound,
+  wearByWheel: Partial<TireWearMap>,
+): void {
+  const compoundColor = new Color(compoundColorHex[compound]);
+
+  tires.forEach((tire) => {
+    const wear = clamp01(wearByWheel[tire.id] ?? 0.2);
+    const targetMaterials = tire.accentMaterials.length > 0 ? tire.accentMaterials : tire.baseMaterials;
+
+    targetMaterials.forEach((material) => {
+      material.color.copy(compoundColor);
+    });
+
+    tire.baseMaterials.forEach((material) => {
+      const defaults = material.userData.__tire_defaults as
+        | { color: Color; roughness: number }
+        | undefined;
+      if (!defaults) {
+        return;
+      }
+
+      const hasSeparateAccent = tire.accentMaterials.length > 0;
+      const baseColor = hasSeparateAccent ? defaults.color.clone() : compoundColor.clone();
+      baseColor.multiplyScalar(1 - wear * 0.25);
+
+      if (!hasSeparateAccent || !tire.accentMaterials.includes(material)) {
+        material.color.copy(baseColor);
+      }
+
+      material.roughness = lerp(Math.max(defaults.roughness, 0.35), 0.95, wear);
+      material.needsUpdate = true;
+    });
+  });
+}
+
+export function normalizeWearMap(values: {
+  wear_FL?: number;
+  wear_FR?: number;
+  wear_RL?: number;
+  wear_RR?: number;
+}): TireWearMap {
+  return {
+    FL: clamp01(values.wear_FL ?? 0.2),
+    FR: clamp01(values.wear_FR ?? 0.2),
+    RL: clamp01(values.wear_RL ?? 0.2),
+    RR: clamp01(values.wear_RR ?? 0.2),
+  };
+}
+
+export function getCompoundColor(compound: Compound): string {
+  return compoundColorHex[compound];
+}

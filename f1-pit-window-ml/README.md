@@ -1,109 +1,145 @@
-# Predicting Pit Stop Timing / Stint End in Formula 1
+# F1 Tyre Degradation Prediction Dashboard
 
-Supervised ML final project repository for **Artificial Intelligence II**.
+## Run (Quick Start)
 
-## Course Context
-- Course: Artificial Intelligence II final project (supervised learning).
-- Deliverables: 3-page report, 5-minute presentation + Q&A, reproducible code.
-- Rubric alignment: problem formulation clarity, data/model appropriateness, rigorous evaluation, metric justification to objective, critical reflection depth, organization.
-
-## Problem Definition
-Decision supported: **pit window planning** in race strategy.
-
-Primary task (implemented): binary classification `PIT_SOON` predicting whether a driver will pit within the next `K` laps (`K=3` default).
-
-Business framing: this acts like a buy-now vs wait decision for pit calls where teams trade track position against tyre performance decline.
-
-## Data Identification
-1. Kaggle historical F1 dataset (downloaded with `kagglehub`):
-   - `lap_times`, `pit_stops`, `races`, `results`, `constructors`, `drivers`, `circuits`
-2. Ergast-compatible Jolpica API (optional, cached):
-   - Supplemental race schedule/circuit metadata cached in `data/raw/ergast_cache/*.json`
-   - Toggle via `--use_ergast 1/0`
-
-Pipeline runs with Kaggle + Ergast only. FastF1 is **not required**.
-
-## Label Construction
-For each `(race_id, driver_id, lap_number)`:
-- `PIT_SOON=1` if there exists a pit stop lap `L_pit` such that
-  `lap_number <= L_pit <= lap_number + K`
-- Else `0`
-
-For decision relevance, laps after the final pit in a race-driver sequence are excluded from training/evaluation.
-
-## Feature Engineering
-See detailed rationale: [reports/feature_rationale.md](reports/feature_rationale.md).
-
-Implemented feature groups:
-- Stint context proxies: `laps_since_last_pit`, `last_pit_lap`, `stint_number`
-- Pace/degradation proxies: raw lap time, rolling means/std, delta from stint-best lap (past laps only), rolling slope (pseudo-telemetry trend)
-- Added robustness features: lap-time delta vs previous lap, delta vs recent rolling mean, laps remaining, and within-lap pace percentile proxy
-- Race context: lap number, normalized lap number, year/circuit/country, optional Ergast location fields
-- Competition proxy: official lap `track_position` if available; fallback proxy `lap_time_rank_in_lap`
-
-Excluded features:
-- Final race outcomes (`positionOrder`, points, final position)
-- Any future-derived signals (e.g., full-stint averages)
-- Direct next-pit information not available at decision time
-
-## Validation and Leakage Avoidance
-- Default: `GroupKFold` on grouped unit `(race_id, driver_id)`.
-- Alternative: season holdout (`train <= N-1`, test `== N`) to assess temporal shift.
-- Leakage checks enforce banned feature patterns and split keys.
-
-## Models
-- Baseline: `LogisticRegression` with class balancing and preprocessing pipeline.
-- Stronger models: `RandomForestClassifier` and `GradientBoostingClassifier`.
-- Training compares candidates and auto-selects the best model by PR-AUC (tie-breaker: strategy precision@top3).
-- Interpretability: permutation importance plot.
-
-## Evaluation
-Primary: **PR-AUC**.
-Also reported: ROC-AUC, F1, precision, recall, confusion matrix, Brier score.
-Strategy-oriented metric: precision@top3 predicted laps per race-driver (did top alerts capture true pit timing windows?).
-
-Error analysis slices:
-- circuit
-- year and era (`pre_2010` vs `post_2010`)
-- `stint_number`
-- `laps_since_last_pit` buckets
-
-## Critical Reflection
-Construct validity limits and confounding are explicitly addressed:
-- Pit timing is not pure tyre degradation (undercut/overcut, damage, race control events).
-- Missing variables (compound, fuel, setup, telemetry) limit causal interpretation.
-- Distribution shift across regulations/eras impacts generalization.
-- Leakage risks mitigated with grouped/temporal splits and feature policy.
-
-## Quickstart
 ```bash
-cd f1-pit-window-ml
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-export PYTHONPATH=src
-
-python -m f1pit.data.download_kaggle
-python -m f1pit.data.fetch_ergast --year 2019
-python -m f1pit.data.fetch_ergast --year 2020
-python -m f1pit.data.build_tables --years 2018 2019 2020 --use_ergast 1 --small 1
-python -m f1pit.models.train --k_pit 3 --mode groupkfold --holdout_year 2020 --small 1
-python -m f1pit.models.evaluate --artifact_dir artifacts/latest
+npm install
+npm run prepare:model
+npm run dev
 ```
 
-For better final-model accuracy, run the same commands with `--small 0`.  
-This Kaggle dataset version covers seasons through 2020.
+Open the URL printed by Vite (usually `http://localhost:5173`).
 
-End-to-end helper:
-```bash
-bash scripts/run_end_to_end.sh
+## 3D Model Placement
+
+Place your extracted asset pack here:
+
+```text
+public/models/redbull-rb19-oracle-wwwvecarzcom/
+  source/
+  texture/
 ```
 
-## Artifacts
-Each training run writes to `artifacts/<timestamp>/`:
-- `model.joblib`
-- `metrics.json`
-- `predictions.parquet`
-- `plots/*.png`
+- Put the main model file in `source/` (`.glb`, `.gltf`, `.fbx`, or `.obj`).
+- Put texture images in `texture/`.
+- If OBJ uses an `.mtl`, keep that `.mtl` in `source/`.
 
-`artifacts/latest` is updated to the newest run.
+Then run:
+
+```bash
+npm run prepare:model
+```
+
+This runs [`scripts/generate_manifest.mjs`](scripts/generate_manifest.mjs), which scans `source/`, picks the first model in this priority:
+
+1. `.glb`
+2. `.gltf`
+3. `.fbx`
+4. `.obj`
+
+and writes `public/models/model_manifest.json` used by the dashboard at runtime.
+
+## Stack
+
+- React + TypeScript + Vite
+- Three.js via `@react-three/fiber` + `@react-three/drei`
+- Plotly via `react-plotly.js` + `plotly.js-basic-dist`
+
+## Implemented Features
+
+- Top controls for driver, track, tyre compound, conditions, heatmap feature, lap slider, and light/dark mode.
+- KPI panel with:
+  - predicted lap time increase per lap
+  - optimum pit window range
+  - predicted tyre life remaining
+- Center 3D viewer with orbit controls.
+- Bottom 2D track map from XY traces + feature delta heat overlay.
+- Theme persistence in `localStorage` and synchronized UI + Three.js lighting presets.
+
+## Tyre Recoloring + Wear (Demo Logic)
+
+Tyre meshes/materials are detected by name heuristics:
+
+- `tire`, `tyre`, `wheel`, `pirelli`, `sidewall`, `stripe`, `rim`
+
+Compound colors:
+
+- soft = red
+- medium = yellow
+- hard = white
+- inter = green
+- wet = blue
+
+Behavior:
+
+- If stripe/logo appears as separate material, only that material is recolored.
+- If not separable, the entire detected tyre mesh material is recolored (fallback).
+- Wear effect (`0..1`) increases roughness and darkens rubber.
+- Hover uses raycasting, scales tyre to `1.15x`, and displays wear tooltip.
+
+Limitations:
+
+- No custom shader noise overlay is applied in this version.
+- Detection is heuristic-based and depends on mesh/material naming in your model.
+
+## Track Map Computation
+
+- Track outline is rendered from `tracks.json` XY polylines.
+- Lap telemetry points are rendered as a colored overlay.
+- Feature deltas are computed point-by-point versus a baseline lap telemetry trace:
+  - braking earlier delta
+  - lower corner speed delta
+  - throttle delay delta
+  - degradation intensity proxy
+
+## Data Layout
+
+Mock data lives in `src/data/mock/`:
+
+- `tracks.json`
+- `telemetry_monza.json`
+- `telemetry_silverstone.json`
+- `predictions.json`
+
+Data access layer: `src/data/api.ts`
+
+- `listTracks()`
+- `listDrivers(track)`
+- `listLaps(track, driver)`
+- `getTelemetry(track, driver, lap)`
+- `getPredictions(track, driver, lap, compound, conditions)`
+
+## Backend Mode
+
+Set:
+
+```bash
+VITE_USE_BACKEND=true
+```
+
+When enabled, `src/data/api.ts` switches from local JSON to HTTP fetch calls under `/api/...`.
+
+This means you can plug real OpenF1/FastF1 telemetry and ML prediction services behind:
+
+- `/api/tracks`
+- `/api/drivers?track=...`
+- `/api/laps?track=...&driver=...`
+- `/api/telemetry?track=...&driver=...&lap=...`
+- `/api/predictions?track=...&driver=...&lap=...&compound=...&conditions=...`
+
+without changing UI components.
+
+## Important Files
+
+- `src/App.tsx`
+- `src/components/ControlsBar.tsx`
+- `src/components/KpiPanel.tsx`
+- `src/components/CarViewer.tsx`
+- `src/components/TrackMap.tsx`
+- `src/components/Tooltip.tsx`
+- `src/components/DebugPanel.tsx`
+- `src/three/modelLoader.ts`
+- `src/three/tireStyling.ts`
+- `src/three/raycastHover.ts`
+- `src/data/api.ts`
+- `scripts/generate_manifest.mjs`

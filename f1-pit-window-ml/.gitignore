@@ -26,3 +26,14 @@ artifacts/*
 
 # OS
 .DS_Store
+
+# Node / Vite
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local 3D assets
+public/models/redbull-rb19-oracle-wwwvecarzcom/source/*
+!public/models/redbull-rb19-oracle-wwwvecarzcom/source/.gitkeep
+public/models/redbull-rb19-oracle-wwwvecarzcom/texture/*
+!public/models/redbull-rb19-oracle-wwwvecarzcom/texture/.gitkeep

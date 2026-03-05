@@ -8,7 +8,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import GradientBoostingClassifier, RandomForestClassifier
+from sklearn.ensemble import AdaBoostClassifier, GradientBoostingClassifier, RandomForestClassifier
 from sklearn.base import clone
 from sklearn.impute import SimpleImputer
 from sklearn.inspection import permutation_importance
@@ -24,8 +24,10 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.model_selection import GroupKFold
+from sklearn.naive_bayes import GaussianNB
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils.class_weight import compute_sample_weight
 
 from f1pit.config import PATHS, RANDOM_SEED
@@ -138,6 +140,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--mode", type=str, default="groupkfold", choices=["groupkfold", "season_holdout"])
     parser.add_argument("--holdout_year", type=int, default=2019)
     parser.add_argument("--small", type=int, default=0, choices=[0, 1])
+    parser.add_argument(
+        "--safe_models",
+        type=int,
+        default=0,
+        choices=[0, 1],
+        help="Use OpenMP-safe estimators (AdaBoost/DecisionTree/GaussianNB).",
+    )
     parser.add_argument("--output_dir", type=str, default="")
     return parser.parse_args()
 
@@ -167,58 +176,108 @@ def main() -> None:
         [c for c in categorical_cols if c in feature_cols],
     )
 
-    logit = Pipeline(
-        steps=[
-            ("prep", preprocessor),
-            (
-                "model",
-                LogisticRegression(
-                    max_iter=1000,
-                    class_weight="balanced",
-                    random_state=RANDOM_SEED,
+    weighted_models: set[str] = set()
+    if bool(args.safe_models):
+        tree = Pipeline(
+            steps=[
+                ("prep", preprocessor),
+                (
+                    "model",
+                    DecisionTreeClassifier(
+                        max_depth=8,
+                        min_samples_leaf=25,
+                        class_weight="balanced",
+                        random_state=RANDOM_SEED,
+                    ),
                 ),
-            ),
-        ]
-    )
+            ]
+        )
 
-    rf = Pipeline(
-        steps=[
-            ("prep", preprocessor),
-            (
-                "model",
-                RandomForestClassifier(
-                    n_estimators=300,
-                    min_samples_leaf=2,
-                    class_weight="balanced_subsample",
-                    random_state=RANDOM_SEED,
-                    n_jobs=-1,
+        ada = Pipeline(
+            steps=[
+                ("prep", preprocessor),
+                (
+                    "model",
+                    AdaBoostClassifier(
+                        estimator=DecisionTreeClassifier(
+                            max_depth=2,
+                            min_samples_leaf=25,
+                            random_state=RANDOM_SEED,
+                        ),
+                        n_estimators=250,
+                        learning_rate=0.05,
+                        random_state=RANDOM_SEED,
+                    ),
                 ),
-            ),
-        ]
-    )
+            ]
+        )
 
-    gb = Pipeline(
-        steps=[
-            ("prep", preprocessor),
-            (
-                "model",
-                GradientBoostingClassifier(
-                    n_estimators=300,
-                    learning_rate=0.05,
-                    max_depth=3,
-                    min_samples_leaf=20,
-                    subsample=0.8,
-                    random_state=RANDOM_SEED,
+        gnb = Pipeline(
+            steps=[
+                ("prep", preprocessor),
+                ("model", GaussianNB()),
+            ]
+        )
+        model_candidates = {
+            "adaboost": ada,
+            "decision_tree": tree,
+            "gaussian_nb": gnb,
+        }
+        weighted_models = {"adaboost"}
+    else:
+        logit = Pipeline(
+            steps=[
+                ("prep", preprocessor),
+                (
+                    "model",
+                    LogisticRegression(
+                        max_iter=1000,
+                        class_weight="balanced",
+                        random_state=RANDOM_SEED,
+                    ),
                 ),
-            ),
-        ]
-    )
+            ]
+        )
 
-    model_candidates: dict[str, Pipeline] = {
-        "logistic_regression": logit,
-        "random_forest": rf,
-        "gradient_boosting": gb,
-    }
+        rf = Pipeline(
+            steps=[
+                ("prep", preprocessor),
+                (
+                    "model",
+                    RandomForestClassifier(
+                        n_estimators=300,
+                        min_samples_leaf=2,
+                        class_weight="balanced_subsample",
+                        random_state=RANDOM_SEED,
+                        n_jobs=-1,
+                    ),
+                ),
+            ]
+        )
+
+        gb = Pipeline(
+            steps=[
+                ("prep", preprocessor),
+                (
+                    "model",
+                    GradientBoostingClassifier(
+                        n_estimators=300,
+                        learning_rate=0.05,
+                        max_depth=3,
+                        min_samples_leaf=20,
+                        subsample=0.8,
+                        random_state=RANDOM_SEED,
+                    ),
+                ),
+            ]
+        )
+
+        model_candidates = {
+            "logistic_regression": logit,
+            "random_forest": rf,
+            "gradient_boosting": gb,
+        }
+        weighted_models = {"gradient_boosting"}
 
     if args.mode == "groupkfold":
         groups = df["race_id"].astype(str) + "_" + df["driver_id"].astype(str)
@@ -241,7 +300,7 @@ def main() -> None:
     oof_by_model: dict[str, np.ndarray] = {}
     metrics_by_model: dict[str, dict[str, float]] = {}
     for name, pipeline in model_candidates.items():
-        weight_vec = sample_weight if name == "gradient_boosting" else None
+        weight_vec = sample_weight if name in weighted_models else None
         oof = _oof_predict(pipeline, X, y, splits, sample_weight=weight_vec)
         oof_by_model[name] = oof
 
@@ -265,7 +324,7 @@ def main() -> None:
     selected_probs = oof_by_model[selected_name]
     selected_threshold = metrics_by_model[selected_name]["best_f1_threshold"]
 
-    final_weight_vec = sample_weight if selected_name == "gradient_boosting" else None
+    final_weight_vec = sample_weight if selected_name in weighted_models else None
     if final_weight_vec is not None:
         try:
             selected_pipeline.fit(X, y, model__sample_weight=final_weight_vec)
@@ -291,12 +350,12 @@ def main() -> None:
     metrics = {
         "mode": split_name,
         "k_pit": int(args.k_pit),
+        "safe_models": int(args.safe_models),
         "selected_model": selected_name,
         "selected_threshold": float(selected_threshold),
-        "logistic_regression": metrics_by_model["logistic_regression"],
-        "random_forest": metrics_by_model["random_forest"],
-        "gradient_boosting": metrics_by_model["gradient_boosting"],
+        "model_metrics": metrics_by_model,
     }
+    metrics.update(metrics_by_model)
     write_json(metrics, artifact_dir / "metrics.json")
 
     joblib.dump(
