@@ -1,4 +1,4 @@
-import { ContactShadows, OrbitControls } from '@react-three/drei';
+import { ContactShadows, OrbitControls, Html } from '@react-three/drei';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -248,7 +248,18 @@ function ModelInstance({
   const tires = useMemo(() => findTireMeshes(normalized), [normalized]);
   const hoverState = useTireRaycastHover(tires, wear);
 
-  useEffect(() => { onTireCountChange(tires.length); onReady(); }, [onTireCountChange, onReady, tires.length]);
+  // Filter down to EXACTLY 4 main wheels by taking the first mesh matched per WheelId (FL, FR, RL, RR)
+  const uniqueTires = useMemo(() => {
+    const map = new Map<string, TireMeshEntry>();
+    for (const t of tires) {
+      if (t.id !== 'UNKNOWN' && !map.has(t.id)) {
+        map.set(t.id, t);
+      }
+    }
+    return Array.from(map.values());
+  }, [tires]);
+
+  useEffect(() => { onTireCountChange(uniqueTires.length); onReady(); }, [onTireCountChange, onReady, uniqueTires.length]);
   useEffect(() => { applyCompoundAndWear(tires, compound, wear); }, [tires, compound, wear]);
   useEffect(() => { onHoverChange(hoverState); }, [hoverState, onHoverChange]);
 
@@ -257,7 +268,84 @@ function ModelInstance({
     holderRef.current.position.y = Math.sin(clock.getElapsedTime() * 0.55) * 0.005;
   });
 
-  return <group ref={holderRef}><primitive object={normalized} /></group>;
+  return (
+    <group ref={holderRef}>
+      <primitive object={normalized} />
+      {uniqueTires.map((t) => {
+        const w = wear[t.id as keyof TireWearMap] ?? 0.2;
+        const lifePct = Math.max(0, Math.round((1 - w) * 100));
+
+        // Calculate dynamic color from green (100) to red (0)
+        const r = lifePct < 50 ? 255 : Math.round(255 - (lifePct - 50) * 5.1);
+        const g = lifePct > 50 ? 255 : Math.round(lifePct * 5.1);
+        const color = `rgb(${r}, ${g}, 0)`;
+
+        t.mesh.updateMatrixWorld();
+        const bbox = new Box3().setFromObject(t.mesh);
+        const center = new Vector3();
+        bbox.getCenter(center);
+
+        // Measure bounding box to see which axis is narrowest (that's the axle)
+        const size = bbox.getSize(new Vector3());
+
+        normalized.worldToLocal(center);
+
+        let tx = center.x;
+        let tz = center.z;
+        let lineX = center.x;
+        let lineZ = center.z;
+        let cylinderRot: [number, number, number] = [0, 0, 0];
+
+        const isLeft = t.id.includes('L');
+        const stemLength = 0.6;
+
+        // If X axis is the thinnest, the axle points along X (Left/Right)
+        if (size.x < size.z) {
+          const dir = center.x > 0 ? 1 : -1;
+          tx = center.x + (stemLength * dir);
+          lineX = center.x + ((stemLength / 2) * dir);
+          cylinderRot = [0, 0, Math.PI / 2];
+        } else {
+          // Z axis is the axle
+          const dir = center.z > 0 ? 1 : -1;
+          tz = center.z + (stemLength * dir);
+          lineZ = center.z + ((stemLength / 2) * dir);
+          cylinderRot = [Math.PI / 2, 0, 0];
+        }
+
+        const isHovered = hoverState?.tireId === t.id;
+        const opacity = isHovered ? 1 : 0;
+
+        return (
+          <group key={`ui-${t.id}`}>
+            {/* Physical 3D Leader Line stemming exactly from the axle */}
+            <mesh position={[lineX, center.y, lineZ]} rotation={cylinderRot}>
+              <cylinderGeometry args={[0.008, 0.008, stemLength, 8]} />
+              <meshBasicMaterial color={color} transparent opacity={opacity} />
+            </mesh>
+
+            {/* The Text Label itself. occlude automatically hides it behind the car */}
+            <Html
+              position={[tx, center.y, tz]}
+              center
+              occlude="blending"
+              style={{
+                pointerEvents: 'none',
+                transition: 'opacity 0.2s ease-in-out',
+                opacity: opacity
+              }}
+            >
+              <div className={`tyre-life-container ${isLeft ? 'left-side' : 'right-side'}`}>
+                <div className="tyre-life-label" style={{ color }}>
+                  {lifePct}%
+                </div>
+              </div>
+            </Html>
+          </group>
+        );
+      })}
+    </group>
+  );
 }
 
 function GLTFAsset(props: ModelAssetProps) {

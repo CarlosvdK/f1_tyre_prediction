@@ -596,6 +596,60 @@ input[type='range']::-webkit-slider-thumb:hover {
   color: #4090e0 !important;
 }
 
+/* Strategy Bar Visualization */
+.strategy-visual {
+  flex: 1.5;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.strategy-bar {
+  display: flex;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.strat-stint {
+  height: 100%;
+  transition: flex var(--t-med) var(--ease);
+}
+
+.bg-soft {
+  background: #e10600;
+}
+
+.bg-medium {
+  background: #ffd400;
+}
+
+.bg-hard {
+  background: #f5f5f7;
+}
+
+.bg-inter {
+  background: #00a442;
+}
+
+.bg-wet {
+  background: #0077c8;
+}
+
+.strategy-labels {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  font-family: var(--ff-display);
+  font-size: var(--fs-body);
+  color: var(--white);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
 /* Loading state */
 .telem-value.loading {
   opacity: 0.25;
@@ -897,4 +951,20 @@ input[type='range']::-webkit-slider-thumb:hover {
   .controls-overlay {
     overflow-x: auto;
   }
+}
+
+/* Floating Tyre Life Labels in 3D Space */
+.tyre-life-label {
+  font-family: var(--ff-display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+  background: rgba(10, 10, 14, 0.55);
+  padding: 8px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.9);
+  user-select: none;
 }

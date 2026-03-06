@@ -34,11 +34,11 @@ import { getCircuitPath, type CircuitWaypoint } from '../data/circuitCoords';
    ─────────────────────────────────────────────────────────────────── */
 function speedColor(speed: number, lo: number, hi: number): Color {
     const t = Math.max(0, Math.min(1, (speed - lo) / Math.max(hi - lo, 1)));
+    const slowColor = new Color('#e10600'); // F1 Red
+    const fastColor = new Color('#f5f5f7'); // F1 White
+
     const c = new Color();
-    if (t < 0.25) c.setRGB(0.05 + t * 0.5, 0.20 + t * 1.6, 0.90);
-    else if (t < 0.50) c.setRGB(0.18 - (t - 0.25) * 0.4, 0.60 + (t - 0.25) * 1.2, 0.90 - (t - 0.25) * 2.4);
-    else if (t < 0.75) c.setRGB(0.08 + (t - 0.50) * 3.6, 0.90 - (t - 0.50) * 1.0, 0.30 - (t - 0.50) * 1.0);
-    else c.setRGB(0.98, 0.90 - (t - 0.75) * 1.2, 0.08 + (t - 0.75) * 0.4);
+    c.lerpColors(slowColor, fastColor, t);
     return c;
 }
 
@@ -121,8 +121,8 @@ function BrakeZones({ pts }: { pts: ExpandedPoint[] }) {
                 <mesh key={i} position={[p.pos.x, p.pos.y + 0.38, p.pos.z]} rotation={[0, 0, 0]}>
                     <cylinderGeometry args={[0.2, 0.2, 0.07, 10]} />
                     <meshStandardMaterial
-                        color="#ff2810"
-                        emissive="#cc1c00"
+                        color="#e10600"
+                        emissive="#ab0500"
                         emissiveIntensity={1.0}
                         roughness={0.4}
                         envMapIntensity={0}

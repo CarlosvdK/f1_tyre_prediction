@@ -37,6 +37,14 @@ export interface Prediction {
   wear_FR: number;
   wear_RL: number;
   wear_RR: number;
+  strategy_optimal_pit_lap?: number;
+  strategy_time_saved?: number;
+  strategy_type?: string;
+  strategy_time_saved_fmt?: string;
+  strategy_stint1_laps?: number;
+  strategy_stint2_laps?: number;
+  strategy_stint1_compound?: Compound;
+  strategy_stint2_compound?: Compound;
 }
 
 interface TelemetryData {
@@ -137,6 +145,12 @@ function adjustPrediction(
     wear_FR: Number(clamp(base.wear_FR + deltaWear, 0, 1).toFixed(3)),
     wear_RL: Number(clamp(base.wear_RL + deltaWear, 0, 1).toFixed(3)),
     wear_RR: Number(clamp(base.wear_RR + deltaWear, 0, 1).toFixed(3)),
+    strategy_optimal_pit_lap: 25,
+    strategy_time_saved_fmt: "-12.5s",
+    strategy_stint1_laps: 25,
+    strategy_stint2_laps: 28,
+    strategy_stint1_compound: compound,
+    strategy_stint2_compound: compound === 'hard' ? 'medium' : 'hard',
   };
 }
 

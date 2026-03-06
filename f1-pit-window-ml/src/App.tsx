@@ -59,9 +59,8 @@ export default function App() {
     [tracks, track],
   );
 
-  /* ── Animated metric values ─────────────────────────────────── */
+  /* ── Animated metric values ───────────────────────── */
   const animPace = useAnimatedValue(prediction?.sec_per_lap_increase ?? 0);
-  const animLife = useAnimatedValue(prediction?.tyre_life_pct ?? 0);
 
   /* ── Data loading ──────────────────────────────────────────── */
   useEffect(() => {
@@ -130,10 +129,7 @@ export default function App() {
     return () => window.clearInterval(id);
   }, [isPlaying, laps]);
 
-  /* ── Derived ────────────────────────────────────────────────── */
-  const pitWindowText = prediction
-    ? `L${prediction.pit_window_start}–L${prediction.pit_window_end}`
-    : '—';
+
   const maxLap = laps[laps.length - 1] ?? 1;
   const minLap = laps[0] ?? 1;
 
@@ -248,6 +244,22 @@ export default function App() {
           </div>
         </div>
 
+        {/* Track map — glass overlay, top-right of the scene */}
+        <div style={{
+          position: 'absolute', top: 80, right: 24,
+          width: 420, height: 280,
+          borderRadius: 12,
+          overflow: 'hidden',
+          border: '1px solid rgba(255,255,255,0.10)',
+          background: 'rgba(10,10,22,0.72)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
+          zIndex: 25,
+          boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
+        }}>
+          <TrackMap3D trackId={track} />
+        </div>
+
         {/* Floating corner meta */}
         <div className="scene-label">
           <span className="scene-eyebrow">Drag to rotate · Full 360°</span>
@@ -270,23 +282,49 @@ export default function App() {
         </div>
 
         <div className="telem-item highlight">
-          <div className="telem-label">Pit Window</div>
+          <div className="telem-label">Optimal Pit</div>
           <div className={`telem-value${!prediction ? ' loading' : ''}`}>
-            {pitWindowText}
+            {prediction ? `Lap ${prediction.strategy_optimal_pit_lap}` : '—'}
+            {prediction && <span className="telem-unit">({prediction.strategy_stint1_laps}+{prediction.strategy_stint2_laps})</span>}
           </div>
         </div>
 
         <div className="telem-item">
-          <div className="telem-label">Tyre Life</div>
+          <div className="telem-label">Time Saved</div>
           <div className={`telem-value${!prediction ? ' loading' : ''}`}>
-            {prediction ? animLife.toFixed(1) : '—'}
-            <span className="telem-unit">%</span>
+            {prediction ? prediction.strategy_time_saved_fmt : '—'}
           </div>
         </div>
 
-        <div className="telem-item">
-          <div className="telem-label">Compound</div>
-          <div className={`telem-value v-${compound}`}>{compound.toUpperCase()}</div>
+        <div className="telem-item strategy-visual">
+          <div className="telem-label">Race Strategy</div>
+          <div className={`strategy-bar${!prediction ? ' loading' : ''}`}>
+            {prediction ? (
+              <>
+                <div
+                  className={`strat-stint bg-${prediction.strategy_stint1_compound}`}
+                  style={{ flex: prediction.strategy_stint1_laps }}
+                  title={`${prediction.strategy_stint1_compound} (${prediction.strategy_stint1_laps} Laps)`}
+                ></div>
+                <div
+                  className={`strat-stint bg-${prediction.strategy_stint2_compound}`}
+                  style={{ flex: prediction.strategy_stint2_laps }}
+                  title={`${prediction.strategy_stint2_compound} (${prediction.strategy_stint2_laps} Laps)`}
+                ></div>
+              </>
+            ) : <div className="strat-stint empty"></div>}
+          </div>
+          <div className="strategy-labels">
+            {prediction ? (
+              <>
+                <span>{prediction.strategy_stint1_compound?.toUpperCase()}</span>
+                <span>→</span>
+                <span>{prediction.strategy_stint2_compound?.toUpperCase()}</span>
+              </>
+            ) : (
+              <span>—</span>
+            )}
+          </div>
         </div>
 
         <div className="telem-item">
@@ -302,34 +340,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── Circuit telemetry map ─────────────────────────────── */}
-      <section className="track-section">
-        <div className="track-section-head">
-          <div>
-            <div className="track-section-title">Circuit Telemetry Map</div>
-            <div className="track-section-sub">
-              {selectedTrack?.name ?? '—'} · {feature.replace(/_/g, ' ')} · Lap {lap}
-            </div>
-          </div>
-          <div className="track-feature-legend">
-            <div className="feature-legend-item">
-              <span className="feature-legend-dot" style={{ background: '#1e56c8' }} />Low stress
-            </div>
-            <div className="feature-legend-item">
-              <span className="feature-legend-dot" style={{ background: 'rgba(200,215,240,0.6)' }} />Neutral
-            </div>
-            <div className="feature-legend-item">
-              <span className="feature-legend-dot" style={{ background: '#cf2020' }} />High stress
-            </div>
-            <div className="feature-legend-item">
-              <span className="feature-legend-dot" style={{ background: 'rgba(255,100,80,0.9)' }} />Braking zone
-            </div>
-          </div>
-        </div>
-        <div className="track-map-wrap">
-          <TrackMap3D trackId={track} />
-        </div>
-      </section>
 
       {(loading || error) && (
         <div className="status-strip">

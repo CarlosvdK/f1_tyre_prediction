@@ -145,6 +145,47 @@ export function applyCompoundAndWear(
 
     targetMaterials.forEach((material) => {
       material.color.copy(compoundColor);
+
+      // Desaturate and remap the underlying painted texture so we can cleanly tint it 
+      // with our F1 compound color without muddying into orange or brown.
+      material.onBeforeCompile = (shader) => {
+        const replaceMap = `
+#ifdef USE_MAP
+  vec4 texelColor = texture2D( map, vMapUv );
+  texelColor = mapTexelToLinear( texelColor );
+  
+  // Calculate relative luminance to isolate painted areas.
+  float lum = dot(texelColor.rgb, vec3(0.299, 0.587, 0.114));
+  
+  // Dark rubber is usually < 0.2 luminance. Painted rings/logos are > 0.3.
+  float decalMask = smoothstep(0.15, 0.4, lum);
+  
+  // The dark rubber stays grayscale.
+  vec3 rubberBase = vec3(lum * 0.8);
+  
+  // The painted compound area is tinted by our material.color (diffuseColor).
+  // We boost brightness slightly to make the F1 neon colors pop.
+  vec3 paintedCompound = diffuseColor.rgb * (lum * 1.5);
+  
+  // Mix them using the mask
+  vec3 finalColor = mix(rubberBase, paintedCompound, decalMask);
+  
+  texelColor.rgb = finalColor;
+  
+  // Reset diffuseColor to white so Three.js doesn't double-multiply.
+  diffuseColor = vec4(1.0);
+  
+  diffuseColor *= texelColor;
+#endif
+`;
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <map_fragment>',
+          replaceMap
+        );
+      };
+
+      material.customProgramCacheKey = () => 'desaturate_painted_tyre';
+      material.needsUpdate = true;
     });
 
     tire.baseMaterials.forEach((material) => {
