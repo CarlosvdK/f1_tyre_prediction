@@ -23,7 +23,7 @@ Trains 5 separate ML models comparing **Random Forest** vs **Gradient Boosting**
 
 ### 1. Train all models
 ```bash
-cd model
+cd f1_strategy
 make strategy-train
 
 # Or with custom years:
@@ -34,7 +34,7 @@ PYTHONPATH=. python -m f1pit.models.strategy_models \
 ```
 
 ### 2. Check output artifacts
-After training, `model/artifacts/strategy_<timestamp>/` contains:
+After training, `f1_strategy/artifacts/strategy_<timestamp>/` contains:
 - `lap_time_model.joblib` – best lap time model pipeline
 - `pitstop_model.joblib` – best pit stop model pipeline
 - `inlap_model.joblib` – best inlap model pipeline
@@ -42,7 +42,7 @@ After training, `model/artifacts/strategy_<timestamp>/` contains:
 - `safety_car_model.joblib` – best safety car model pipeline
 - `strategy_metrics.json` – all model metrics
 
-A symlink `model/artifacts/strategy_latest` → latest run.
+A symlink `f1_strategy/artifacts/strategy_latest` → latest run.
 
 ### 3. Verify model quality
 Check `strategy_metrics.json`:

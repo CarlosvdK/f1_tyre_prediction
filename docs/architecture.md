@@ -11,7 +11,7 @@ An F1 tyre strategy prediction system that uses **FastF1** race data to train **
 ```
 f1_tyre_prediction/
 ├── .agents/skills/         # Claude skill files (ML pipeline guides)
-├── model/                  # Python ML backend
+├── f1_strategy/                  # Python ML backend
 │   ├── f1pit/              # Python package (PYTHONPATH = model/)
 │   │   ├── api/            # FastAPI endpoints (server.py)
 │   │   ├── data/           # Data extraction & table building

@@ -78,11 +78,11 @@ function tuneVehicleMaterials(root: Object3D): void {
       if (tireMaterialPattern.test(id)) {
         mat.roughness = MathUtils.clamp(mat.roughness * 1.05, 0.5, 0.96);
         mat.metalness = MathUtils.clamp(mat.metalness * 0.5, 0, 0.1);
-        mat.envMapIntensity = 0.6;
+        mat.envMapIntensity = 0.2;
       } else {
-        mat.roughness = MathUtils.clamp(mat.roughness * 0.72, 0.03, 0.58);
-        mat.metalness = MathUtils.clamp(Math.max(mat.metalness, 0.28), 0.12, 0.95);
-        mat.envMapIntensity = 1.8; // strong reflection for HDRI
+        mat.roughness = MathUtils.clamp(mat.roughness * 0.60, 0.05, 0.45);
+        mat.metalness = MathUtils.clamp(Math.max(mat.metalness, 0.35), 0.2, 0.95);
+        mat.envMapIntensity = 0.5; // low reflection since no HDRI is present
       }
       if ('clearcoat' in mat) {
         (mat as MeshStandardMaterial & { clearcoat?: number; clearcoatRoughness?: number }).clearcoat = 1.0;
@@ -167,16 +167,16 @@ function DynamicGarageLights() {
 
   return (
     <>
-      {/* Slightly raised ambient — car is never totally black on any face */}
-      <ambientLight intensity={0.28} color="#1e2334" />
+      {/* Low ambient so the floor stays mostly black */}
+      <ambientLight intensity={0.5} color="#1e2334" />
 
-      {/* Primary key beam — warm tungsten from ceiling */}
+      {/* Primary key beam — warm tungsten hitting the car from above/right */}
       <spotLight
         ref={keyRef}
         position={[2, 5.5, 2]}
-        angle={0.42}
-        intensity={28}
-        penumbra={0.60}
+        angle={0.65}
+        intensity={350}
+        penumbra={0.3}
         color="#ffeac0"
         castShadow
         shadow-mapSize-width={2048}
@@ -188,24 +188,24 @@ function DynamicGarageLights() {
         distance={15}
       />
 
-      {/* Fill — cooler, half intensity, opposite side of key */}
+      {/* Fill — cooler, blasting the left side of the car */}
       <spotLight
         ref={fillRef}
         position={[-2, 4.8, 2]}
-        angle={0.46}
-        intensity={14}
-        penumbra={0.78}
+        angle={0.7}
+        intensity={200}
+        penumbra={0.5}
         color="#c0d4ff"
         castShadow={false}
-        decay={2.0}
+        decay={1.8}
         distance={13}
       />
 
       {/* Fixed rim / separation — stays at rear left regardless of camera */}
-      <directionalLight position={[-5, 4, -7]} intensity={2.2} color="#4070c8" />
+      <directionalLight position={[-5, 4, -7]} intensity={4.0} color="#4070c8" />
 
       {/* Faint deep-tunnel backfill so rear walls aren't totally void */}
-      <pointLight position={[0, 3, -7]} intensity={0.9} color="#1a2040" distance={10} decay={2} />
+      <pointLight position={[0, 3, -7]} intensity={1.5} color="#1a2040" distance={10} decay={2} />
     </>
   );
 }

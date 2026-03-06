@@ -13,7 +13,7 @@ The application has two servers:
 
 ### Terminal 1: Backend API
 ```bash
-cd model
+cd f1_strategy
 make serve
 # Or: PYTHONPATH=. uvicorn f1pit.api.server:app --host 127.0.0.1 --port 8000
 ```
@@ -31,8 +31,8 @@ The Vite dev server proxies `/api/*` requests to the backend at `http://127.0.0.
 ## Prerequisites
 
 ### Backend
-- Python 3.10+ with dependencies: `pip install -r model/requirements.txt`
-- Trained models in `model/artifacts/latest/` (legacy) or `model/artifacts/strategy_latest/` (strategy)
+- Python 3.10+ with dependencies: `pip install -r f1_strategy/requirements.txt`
+- Trained models in `f1_strategy/artifacts/latest/` (legacy) or `f1_strategy/artifacts/strategy_latest/` (strategy)
 - Processed data in `data/processed/` (lap_level.parquet for legacy, CSVs for strategy)
 
 ### Frontend
@@ -71,5 +71,5 @@ npm run preview # Preview production build
 ## Troubleshooting
 - **CORS errors**: Backend has `allow_origins=["*"]` — should work for local dev.
 - **502 proxy error**: Backend not running. Start it first.
-- **"Model not found"**: Run model training: `cd model && make strategy-train`
+- **"Model not found"**: Run model training: `cd f1_strategy && make strategy-train`
 - **3D model not loading**: Ensure `ui/public/models/` contains the car `.glb` file.

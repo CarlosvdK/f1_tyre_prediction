@@ -16,7 +16,7 @@ Extracts F1 race data (2019-2024) using the FastF1 library and generates 8 CSV f
 
 ### 1. Install dependencies
 ```bash
-cd model
+cd f1_strategy
 pip install -r requirements.txt
 ```
 

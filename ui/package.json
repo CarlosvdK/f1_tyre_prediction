@@ -8,7 +8,7 @@
     "build": "tsc -p tsconfig.json && tsc -p tsconfig.node.json --noEmit && vite build",
     "preview": "vite preview",
     "prepare:model": "node scripts/generate_manifest.mjs",
-    "backend": "cd ../model && PYTHONPATH=. uvicorn f1pit.api.server:app --host 127.0.0.1 --port 8000"
+    "backend": "cd ../f1_strategy && PYTHONPATH=. uvicorn f1pit.api.server:app --host 127.0.0.1 --port 8000"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

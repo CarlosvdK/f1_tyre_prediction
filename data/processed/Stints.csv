@@ -1,0 +1,2442 @@
+Driver,Stint,Compound,GP,Year,StintLength
+GAS,1,MEDIUM,Australian Grand Prix,2019,37
+GAS,2,SOFT,Australian Grand Prix,2019,20
+PER,1,SOFT,Australian Grand Prix,2019,13
+PER,2,HARD,Australian Grand Prix,2019,44
+LEC,1,SOFT,Australian Grand Prix,2019,28
+LEC,2,HARD,Australian Grand Prix,2019,30
+STR,1,MEDIUM,Australian Grand Prix,2019,27
+STR,2,HARD,Australian Grand Prix,2019,30
+MAG,1,SOFT,Australian Grand Prix,2019,14
+MAG,2,MEDIUM,Australian Grand Prix,2019,44
+ALB,1,SOFT,Australian Grand Prix,2019,14
+ALB,2,MEDIUM,Australian Grand Prix,2019,43
+KVY,1,MEDIUM,Australian Grand Prix,2019,26
+KVY,2,HARD,Australian Grand Prix,2019,31
+HUL,1,SOFT,Australian Grand Prix,2019,13
+HUL,2,HARD,Australian Grand Prix,2019,44
+RIC,1,SOFT,Australian Grand Prix,2019,1
+RIC,2,HARD,Australian Grand Prix,2019,28
+VER,1,SOFT,Australian Grand Prix,2019,25
+VER,2,MEDIUM,Australian Grand Prix,2019,33
+NOR,1,SOFT,Australian Grand Prix,2019,15
+NOR,2,HARD,Australian Grand Prix,2019,42
+HAM,1,SOFT,Australian Grand Prix,2019,15
+HAM,2,MEDIUM,Australian Grand Prix,2019,43
+VET,1,SOFT,Australian Grand Prix,2019,14
+VET,2,MEDIUM,Australian Grand Prix,2019,44
+SAI,1,SOFT,Australian Grand Prix,2019,10
+RUS,1,MEDIUM,Australian Grand Prix,2019,26
+RUS,2,SOFT,Australian Grand Prix,2019,16
+RUS,3,HARD,Australian Grand Prix,2019,14
+RAI,1,SOFT,Australian Grand Prix,2019,12
+RAI,2,MEDIUM,Australian Grand Prix,2019,45
+BOT,1,SOFT,Australian Grand Prix,2019,23
+BOT,2,MEDIUM,Australian Grand Prix,2019,35
+GRO,1,SOFT,Australian Grand Prix,2019,15
+GRO,2,MEDIUM,Australian Grand Prix,2019,15
+KUB,1,HARD,Australian Grand Prix,2019,1
+KUB,2,MEDIUM,Australian Grand Prix,2019,27
+KUB,3,SOFT,Australian Grand Prix,2019,16
+KUB,4,SOFT,Australian Grand Prix,2019,11
+GIO,1,MEDIUM,Australian Grand Prix,2019,27
+GIO,2,SOFT,Australian Grand Prix,2019,30
+GAS,1,SOFT,Bahrain Grand Prix,2019,9
+GAS,2,SOFT,Bahrain Grand Prix,2019,30
+GAS,3,MEDIUM,Bahrain Grand Prix,2019,18
+PER,1,SOFT,Bahrain Grand Prix,2019,8
+PER,2,MEDIUM,Bahrain Grand Prix,2019,25
+PER,3,MEDIUM,Bahrain Grand Prix,2019,24
+LEC,1,SOFT,Bahrain Grand Prix,2019,13
+LEC,2,MEDIUM,Bahrain Grand Prix,2019,23
+LEC,3,MEDIUM,Bahrain Grand Prix,2019,21
+STR,1,SOFT,Bahrain Grand Prix,2019,1
+STR,2,MEDIUM,Bahrain Grand Prix,2019,22
+STR,3,MEDIUM,Bahrain Grand Prix,2019,33
+MAG,1,SOFT,Bahrain Grand Prix,2019,10
+MAG,2,MEDIUM,Bahrain Grand Prix,2019,28
+MAG,3,SOFT,Bahrain Grand Prix,2019,18
+ALB,1,SOFT,Bahrain Grand Prix,2019,9
+ALB,2,SOFT,Bahrain Grand Prix,2019,16
+ALB,3,MEDIUM,Bahrain Grand Prix,2019,32
+KVY,1,SOFT,Bahrain Grand Prix,2019,12
+KVY,2,MEDIUM,Bahrain Grand Prix,2019,26
+KVY,3,SOFT,Bahrain Grand Prix,2019,18
+HUL,1,SOFT,Bahrain Grand Prix,2019,12
+HUL,2,SOFT,Bahrain Grand Prix,2019,20
+HUL,3,MEDIUM,Bahrain Grand Prix,2019,22
+RIC,1,SOFT,Bahrain Grand Prix,2019,24
+RIC,2,MEDIUM,Bahrain Grand Prix,2019,30
+VER,1,SOFT,Bahrain Grand Prix,2019,11
+VER,2,MEDIUM,Bahrain Grand Prix,2019,21
+VER,3,MEDIUM,Bahrain Grand Prix,2019,25
+NOR,1,SOFT,Bahrain Grand Prix,2019,10
+NOR,2,MEDIUM,Bahrain Grand Prix,2019,24
+NOR,3,SOFT,Bahrain Grand Prix,2019,23
+HAM,1,SOFT,Bahrain Grand Prix,2019,13
+HAM,2,SOFT,Bahrain Grand Prix,2019,21
+HAM,3,MEDIUM,Bahrain Grand Prix,2019,23
+VET,1,SOFT,Bahrain Grand Prix,2019,14
+VET,2,MEDIUM,Bahrain Grand Prix,2019,21
+VET,3,MEDIUM,Bahrain Grand Prix,2019,3
+VET,4,SOFT,Bahrain Grand Prix,2019,19
+SAI,1,SOFT,Bahrain Grand Prix,2019,4
+SAI,2,MEDIUM,Bahrain Grand Prix,2019,20
+SAI,3,HARD,Bahrain Grand Prix,2019,16
+SAI,4,SOFT,Bahrain Grand Prix,2019,13
+RUS,1,SOFT,Bahrain Grand Prix,2019,12
+RUS,2,MEDIUM,Bahrain Grand Prix,2019,14
+RUS,3,MEDIUM,Bahrain Grand Prix,2019,30
+RAI,1,SOFT,Bahrain Grand Prix,2019,9
+RAI,2,MEDIUM,Bahrain Grand Prix,2019,24
+RAI,3,SOFT,Bahrain Grand Prix,2019,24
+BOT,1,SOFT,Bahrain Grand Prix,2019,12
+BOT,2,MEDIUM,Bahrain Grand Prix,2019,27
+BOT,3,SOFT,Bahrain Grand Prix,2019,18
+GRO,1,SOFT,Bahrain Grand Prix,2019,1
+GRO,2,MEDIUM,Bahrain Grand Prix,2019,15
+KUB,1,MEDIUM,Bahrain Grand Prix,2019,11
+KUB,2,SOFT,Bahrain Grand Prix,2019,16
+KUB,3,MEDIUM,Bahrain Grand Prix,2019,28
+GIO,1,SOFT,Bahrain Grand Prix,2019,16
+GIO,2,MEDIUM,Bahrain Grand Prix,2019,25
+GIO,3,SOFT,Bahrain Grand Prix,2019,16
+HAM,1,MEDIUM,Chinese Grand Prix,2019,22
+HAM,2,HARD,Chinese Grand Prix,2019,14
+HAM,3,MEDIUM,Chinese Grand Prix,2019,20
+BOT,1,MEDIUM,Chinese Grand Prix,2019,21
+BOT,2,HARD,Chinese Grand Prix,2019,15
+BOT,3,MEDIUM,Chinese Grand Prix,2019,20
+VET,1,MEDIUM,Chinese Grand Prix,2019,18
+VET,2,HARD,Chinese Grand Prix,2019,17
+VET,3,MEDIUM,Chinese Grand Prix,2019,21
+VER,1,MEDIUM,Chinese Grand Prix,2019,17
+VER,2,HARD,Chinese Grand Prix,2019,17
+VER,3,MEDIUM,Chinese Grand Prix,2019,22
+LEC,1,MEDIUM,Chinese Grand Prix,2019,22
+LEC,2,HARD,Chinese Grand Prix,2019,20
+LEC,3,MEDIUM,Chinese Grand Prix,2019,14
+GAS,1,SOFT,Chinese Grand Prix,2019,19
+GAS,2,HARD,Chinese Grand Prix,2019,20
+GAS,3,MEDIUM,Chinese Grand Prix,2019,14
+GAS,4,SOFT,Chinese Grand Prix,2019,3
+RIC,1,SOFT,Chinese Grand Prix,2019,18
+RIC,2,HARD,Chinese Grand Prix,2019,37
+PER,1,MEDIUM,Chinese Grand Prix,2019,20
+PER,2,HARD,Chinese Grand Prix,2019,35
+RAI,1,MEDIUM,Chinese Grand Prix,2019,25
+RAI,2,HARD,Chinese Grand Prix,2019,30
+ALB,1,SOFT,Chinese Grand Prix,2019,19
+ALB,2,HARD,Chinese Grand Prix,2019,36
+GRO,1,SOFT,Chinese Grand Prix,2019,8
+GRO,2,HARD,Chinese Grand Prix,2019,27
+GRO,3,MEDIUM,Chinese Grand Prix,2019,20
+STR,1,MEDIUM,Chinese Grand Prix,2019,20
+STR,2,HARD,Chinese Grand Prix,2019,24
+STR,3,SOFT,Chinese Grand Prix,2019,11
+MAG,1,SOFT,Chinese Grand Prix,2019,9
+MAG,2,HARD,Chinese Grand Prix,2019,24
+MAG,3,MEDIUM,Chinese Grand Prix,2019,22
+SAI,1,MEDIUM,Chinese Grand Prix,2019,1
+SAI,2,HARD,Chinese Grand Prix,2019,35
+SAI,3,SOFT,Chinese Grand Prix,2019,19
+GIO,1,SOFT,Chinese Grand Prix,2019,7
+GIO,2,MEDIUM,Chinese Grand Prix,2019,23
+GIO,3,MEDIUM,Chinese Grand Prix,2019,25
+RUS,1,MEDIUM,Chinese Grand Prix,2019,22
+RUS,2,HARD,Chinese Grand Prix,2019,27
+RUS,3,SOFT,Chinese Grand Prix,2019,5
+KUB,1,MEDIUM,Chinese Grand Prix,2019,26
+KUB,2,HARD,Chinese Grand Prix,2019,28
+NOR,1,MEDIUM,Chinese Grand Prix,2019,1
+NOR,2,HARD,Chinese Grand Prix,2019,16
+NOR,3,MEDIUM,Chinese Grand Prix,2019,17
+NOR,4,SOFT,Chinese Grand Prix,2019,16
+KVY,1,MEDIUM,Chinese Grand Prix,2019,7
+KVY,2,MEDIUM,Chinese Grand Prix,2019,18
+KVY,3,HARD,Chinese Grand Prix,2019,5
+KVY,4,SOFT,Chinese Grand Prix,2019,11
+HUL,1,SOFT,Chinese Grand Prix,2019,11
+HUL,2,HARD,Chinese Grand Prix,2019,5
+GAS,1,MEDIUM,Azerbaijan Grand Prix,2019,39
+PER,1,SOFT,Azerbaijan Grand Prix,2019,10
+PER,2,MEDIUM,Azerbaijan Grand Prix,2019,41
+LEC,1,MEDIUM,Azerbaijan Grand Prix,2019,34
+LEC,2,SOFT,Azerbaijan Grand Prix,2019,13
+LEC,3,SOFT,Azerbaijan Grand Prix,2019,4
+STR,1,SOFT,Azerbaijan Grand Prix,2019,10
+STR,2,MEDIUM,Azerbaijan Grand Prix,2019,41
+MAG,1,SOFT,Azerbaijan Grand Prix,2019,7
+MAG,2,MEDIUM,Azerbaijan Grand Prix,2019,32
+MAG,3,SOFT,Azerbaijan Grand Prix,2019,11
+ALB,1,SOFT,Azerbaijan Grand Prix,2019,12
+ALB,2,MEDIUM,Azerbaijan Grand Prix,2019,38
+KVY,1,SOFT,Azerbaijan Grand Prix,2019,5
+KVY,2,MEDIUM,Azerbaijan Grand Prix,2019,28
+HUL,1,SOFT,Azerbaijan Grand Prix,2019,8
+HUL,2,MEDIUM,Azerbaijan Grand Prix,2019,26
+HUL,3,SOFT,Azerbaijan Grand Prix,2019,16
+RIC,1,SOFT,Azerbaijan Grand Prix,2019,10
+RIC,2,MEDIUM,Azerbaijan Grand Prix,2019,21
+VER,1,SOFT,Azerbaijan Grand Prix,2019,14
+VER,2,MEDIUM,Azerbaijan Grand Prix,2019,37
+NOR,1,SOFT,Azerbaijan Grand Prix,2019,9
+NOR,2,MEDIUM,Azerbaijan Grand Prix,2019,30
+NOR,3,SOFT,Azerbaijan Grand Prix,2019,12
+HAM,1,SOFT,Azerbaijan Grand Prix,2019,13
+HAM,2,MEDIUM,Azerbaijan Grand Prix,2019,38
+VET,1,SOFT,Azerbaijan Grand Prix,2019,11
+VET,2,MEDIUM,Azerbaijan Grand Prix,2019,40
+SAI,1,SOFT,Azerbaijan Grand Prix,2019,12
+SAI,2,MEDIUM,Azerbaijan Grand Prix,2019,39
+RUS,1,MEDIUM,Azerbaijan Grand Prix,2019,25
+RUS,2,MEDIUM,Azerbaijan Grand Prix,2019,13
+RUS,3,SOFT,Azerbaijan Grand Prix,2019,11
+RAI,1,SOFT,Azerbaijan Grand Prix,2019,6
+RAI,2,MEDIUM,Azerbaijan Grand Prix,2019,44
+BOT,1,SOFT,Azerbaijan Grand Prix,2019,12
+BOT,2,MEDIUM,Azerbaijan Grand Prix,2019,39
+GRO,1,MEDIUM,Azerbaijan Grand Prix,2019,34
+GRO,2,SOFT,Azerbaijan Grand Prix,2019,4
+KUB,1,MEDIUM,Azerbaijan Grand Prix,2019,14
+KUB,2,MEDIUM,Azerbaijan Grand Prix,2019,9
+KUB,3,MEDIUM,Azerbaijan Grand Prix,2019,19
+KUB,4,SOFT,Azerbaijan Grand Prix,2019,7
+GIO,1,SOFT,Azerbaijan Grand Prix,2019,7
+GIO,2,MEDIUM,Azerbaijan Grand Prix,2019,43
+GAS,1,SOFT,Spanish Grand Prix,2019,22
+GAS,2,MEDIUM,Spanish Grand Prix,2019,24
+GAS,3,SOFT,Spanish Grand Prix,2019,20
+PER,1,SOFT,Spanish Grand Prix,2019,24
+PER,2,MEDIUM,Spanish Grand Prix,2019,21
+PER,3,SOFT,Spanish Grand Prix,2019,21
+LEC,1,SOFT,Spanish Grand Prix,2019,25
+LEC,2,HARD,Spanish Grand Prix,2019,21
+LEC,3,MEDIUM,Spanish Grand Prix,2019,20
+STR,1,MEDIUM,Spanish Grand Prix,2019,22
+STR,2,SOFT,Spanish Grand Prix,2019,23
+MAG,1,SOFT,Spanish Grand Prix,2019,23
+MAG,2,MEDIUM,Spanish Grand Prix,2019,22
+MAG,3,SOFT,Spanish Grand Prix,2019,21
+ALB,1,SOFT,Spanish Grand Prix,2019,25
+ALB,2,MEDIUM,Spanish Grand Prix,2019,20
+ALB,3,MEDIUM,Spanish Grand Prix,2019,21
+KVY,1,SOFT,Spanish Grand Prix,2019,21
+KVY,2,MEDIUM,Spanish Grand Prix,2019,24
+KVY,3,MEDIUM,Spanish Grand Prix,2019,21
+HUL,1,MEDIUM,Spanish Grand Prix,2019,35
+HUL,2,SOFT,Spanish Grand Prix,2019,31
+RIC,1,SOFT,Spanish Grand Prix,2019,24
+RIC,2,HARD,Spanish Grand Prix,2019,21
+RIC,3,MEDIUM,Spanish Grand Prix,2019,21
+VER,1,SOFT,Spanish Grand Prix,2019,20
+VER,2,SOFT,Spanish Grand Prix,2019,23
+VER,3,MEDIUM,Spanish Grand Prix,2019,23
+NOR,1,SOFT,Spanish Grand Prix,2019,26
+NOR,2,MEDIUM,Spanish Grand Prix,2019,19
+HAM,1,SOFT,Spanish Grand Prix,2019,27
+HAM,2,MEDIUM,Spanish Grand Prix,2019,19
+HAM,3,SOFT,Spanish Grand Prix,2019,20
+VET,1,SOFT,Spanish Grand Prix,2019,19
+VET,2,MEDIUM,Spanish Grand Prix,2019,21
+VET,3,MEDIUM,Spanish Grand Prix,2019,26
+SAI,1,SOFT,Spanish Grand Prix,2019,24
+SAI,2,MEDIUM,Spanish Grand Prix,2019,22
+SAI,3,SOFT,Spanish Grand Prix,2019,20
+RUS,1,MEDIUM,Spanish Grand Prix,2019,32
+RUS,2,SOFT,Spanish Grand Prix,2019,12
+RUS,3,MEDIUM,Spanish Grand Prix,2019,21
+RAI,1,MEDIUM,Spanish Grand Prix,2019,28
+RAI,2,HARD,Spanish Grand Prix,2019,17
+RAI,3,SOFT,Spanish Grand Prix,2019,21
+BOT,1,SOFT,Spanish Grand Prix,2019,26
+BOT,2,MEDIUM,Spanish Grand Prix,2019,19
+BOT,3,SOFT,Spanish Grand Prix,2019,21
+GRO,1,SOFT,Spanish Grand Prix,2019,26
+GRO,2,MEDIUM,Spanish Grand Prix,2019,20
+GRO,3,SOFT,Spanish Grand Prix,2019,20
+KUB,1,MEDIUM,Spanish Grand Prix,2019,31
+KUB,2,SOFT,Spanish Grand Prix,2019,13
+KUB,3,MEDIUM,Spanish Grand Prix,2019,21
+GIO,1,SOFT,Spanish Grand Prix,2019,6
+GIO,2,HARD,Spanish Grand Prix,2019,35
+GIO,3,SOFT,Spanish Grand Prix,2019,25
+HAM,1,SOFT,Monaco Grand Prix,2019,11
+HAM,2,MEDIUM,Monaco Grand Prix,2019,67
+VET,1,SOFT,Monaco Grand Prix,2019,11
+VET,2,HARD,Monaco Grand Prix,2019,67
+BOT,1,SOFT,Monaco Grand Prix,2019,11
+BOT,2,MEDIUM,Monaco Grand Prix,2019,1
+BOT,3,HARD,Monaco Grand Prix,2019,66
+VER,1,SOFT,Monaco Grand Prix,2019,11
+VER,2,HARD,Monaco Grand Prix,2019,67
+GAS,1,SOFT,Monaco Grand Prix,2019,27
+GAS,2,MEDIUM,Monaco Grand Prix,2019,35
+GAS,3,SOFT,Monaco Grand Prix,2019,16
+SAI,1,SOFT,Monaco Grand Prix,2019,30
+SAI,2,MEDIUM,Monaco Grand Prix,2019,48
+KVY,1,SOFT,Monaco Grand Prix,2019,32
+KVY,2,MEDIUM,Monaco Grand Prix,2019,46
+ALB,1,SOFT,Monaco Grand Prix,2019,40
+ALB,2,MEDIUM,Monaco Grand Prix,2019,38
+RIC,1,SOFT,Monaco Grand Prix,2019,11
+RIC,2,MEDIUM,Monaco Grand Prix,2019,67
+GRO,1,SOFT,Monaco Grand Prix,2019,50
+GRO,2,MEDIUM,Monaco Grand Prix,2019,28
+NOR,1,MEDIUM,Monaco Grand Prix,2019,47
+NOR,2,SOFT,Monaco Grand Prix,2019,31
+PER,1,MEDIUM,Monaco Grand Prix,2019,11
+PER,2,HARD,Monaco Grand Prix,2019,66
+HUL,1,MEDIUM,Monaco Grand Prix,2019,9
+HUL,2,HARD,Monaco Grand Prix,2019,68
+MAG,1,SOFT,Monaco Grand Prix,2019,11
+MAG,2,MEDIUM,Monaco Grand Prix,2019,66
+RUS,1,MEDIUM,Monaco Grand Prix,2019,10
+RUS,2,HARD,Monaco Grand Prix,2019,67
+STR,1,MEDIUM,Monaco Grand Prix,2019,40
+STR,2,HARD,Monaco Grand Prix,2019,37
+RAI,1,SOFT,Monaco Grand Prix,2019,46
+RAI,2,MEDIUM,Monaco Grand Prix,2019,31
+KUB,1,MEDIUM,Monaco Grand Prix,2019,21
+KUB,2,HARD,Monaco Grand Prix,2019,56
+GIO,1,SOFT,Monaco Grand Prix,2019,44
+GIO,2,MEDIUM,Monaco Grand Prix,2019,32
+LEC,1,MEDIUM,Monaco Grand Prix,2019,9
+LEC,2,HARD,Monaco Grand Prix,2019,7
+LEC,3,SOFT,Monaco Grand Prix,2019,1
+GAS,1,SOFT,Canadian Grand Prix,2019,7
+GAS,2,HARD,Canadian Grand Prix,2019,62
+PER,1,MEDIUM,Canadian Grand Prix,2019,11
+PER,2,HARD,Canadian Grand Prix,2019,58
+LEC,1,MEDIUM,Canadian Grand Prix,2019,33
+LEC,2,HARD,Canadian Grand Prix,2019,37
+STR,1,HARD,Canadian Grand Prix,2019,45
+STR,2,MEDIUM,Canadian Grand Prix,2019,24
+MAG,1,HARD,Canadian Grand Prix,2019,39
+MAG,2,MEDIUM,Canadian Grand Prix,2019,29
+ALB,1,MEDIUM,Canadian Grand Prix,2019,1
+ALB,2,HARD,Canadian Grand Prix,2019,59
+KVY,1,MEDIUM,Canadian Grand Prix,2019,12
+KVY,2,HARD,Canadian Grand Prix,2019,57
+HUL,1,SOFT,Canadian Grand Prix,2019,16
+HUL,2,HARD,Canadian Grand Prix,2019,53
+RIC,1,SOFT,Canadian Grand Prix,2019,8
+RIC,2,HARD,Canadian Grand Prix,2019,61
+VER,1,HARD,Canadian Grand Prix,2019,48
+VER,2,MEDIUM,Canadian Grand Prix,2019,22
+NOR,1,SOFT,Canadian Grand Prix,2019,9
+HAM,1,MEDIUM,Canadian Grand Prix,2019,28
+HAM,2,HARD,Canadian Grand Prix,2019,42
+VET,1,MEDIUM,Canadian Grand Prix,2019,26
+VET,2,HARD,Canadian Grand Prix,2019,44
+SAI,1,SOFT,Canadian Grand Prix,2019,4
+SAI,2,HARD,Canadian Grand Prix,2019,65
+RUS,1,MEDIUM,Canadian Grand Prix,2019,9
+RUS,2,HARD,Canadian Grand Prix,2019,59
+RAI,1,MEDIUM,Canadian Grand Prix,2019,6
+RAI,2,HARD,Canadian Grand Prix,2019,52
+RAI,3,SOFT,Canadian Grand Prix,2019,11
+BOT,1,MEDIUM,Canadian Grand Prix,2019,30
+BOT,2,HARD,Canadian Grand Prix,2019,37
+BOT,3,SOFT,Canadian Grand Prix,2019,3
+GRO,1,MEDIUM,Canadian Grand Prix,2019,34
+GRO,2,HARD,Canadian Grand Prix,2019,35
+KUB,1,MEDIUM,Canadian Grand Prix,2019,9
+KUB,2,HARD,Canadian Grand Prix,2019,29
+KUB,3,HARD,Canadian Grand Prix,2019,29
+GIO,1,HARD,Canadian Grand Prix,2019,33
+GIO,2,MEDIUM,Canadian Grand Prix,2019,36
+HAM,1,MEDIUM,French Grand Prix,2019,24
+HAM,2,HARD,French Grand Prix,2019,29
+BOT,1,MEDIUM,French Grand Prix,2019,23
+BOT,2,HARD,French Grand Prix,2019,30
+LEC,1,MEDIUM,French Grand Prix,2019,21
+LEC,2,HARD,French Grand Prix,2019,32
+VER,1,MEDIUM,French Grand Prix,2019,20
+VER,2,HARD,French Grand Prix,2019,33
+VET,1,MEDIUM,French Grand Prix,2019,25
+VET,2,HARD,French Grand Prix,2019,26
+VET,3,SOFT,French Grand Prix,2019,2
+SAI,1,MEDIUM,French Grand Prix,2019,19
+SAI,2,HARD,French Grand Prix,2019,34
+RAI,1,HARD,French Grand Prix,2019,31
+RAI,2,MEDIUM,French Grand Prix,2019,21
+HUL,1,HARD,French Grand Prix,2019,34
+HUL,2,MEDIUM,French Grand Prix,2019,18
+NOR,1,MEDIUM,French Grand Prix,2019,18
+NOR,2,HARD,French Grand Prix,2019,34
+GAS,1,SOFT,French Grand Prix,2019,17
+GAS,2,HARD,French Grand Prix,2019,35
+RIC,1,MEDIUM,French Grand Prix,2019,16
+RIC,2,HARD,French Grand Prix,2019,36
+PER,1,MEDIUM,French Grand Prix,2019,18
+PER,2,HARD,French Grand Prix,2019,34
+STR,1,HARD,French Grand Prix,2019,39
+STR,2,MEDIUM,French Grand Prix,2019,13
+KVY,1,HARD,French Grand Prix,2019,32
+KVY,2,MEDIUM,French Grand Prix,2019,20
+ALB,1,MEDIUM,French Grand Prix,2019,25
+ALB,2,HARD,French Grand Prix,2019,27
+GIO,1,SOFT,French Grand Prix,2019,7
+GIO,2,HARD,French Grand Prix,2019,27
+GIO,3,MEDIUM,French Grand Prix,2019,18
+MAG,1,MEDIUM,French Grand Prix,2019,16
+MAG,2,HARD,French Grand Prix,2019,36
+KUB,1,MEDIUM,French Grand Prix,2019,24
+KUB,2,HARD,French Grand Prix,2019,27
+RUS,1,MEDIUM,French Grand Prix,2019,25
+RUS,2,HARD,French Grand Prix,2019,8
+RUS,3,MEDIUM,French Grand Prix,2019,18
+GRO,1,HARD,French Grand Prix,2019,31
+GRO,2,MEDIUM,French Grand Prix,2019,14
+VER,1,MEDIUM,Austrian Grand Prix,2019,31
+VER,2,HARD,Austrian Grand Prix,2019,40
+LEC,1,SOFT,Austrian Grand Prix,2019,22
+LEC,2,HARD,Austrian Grand Prix,2019,49
+BOT,1,MEDIUM,Austrian Grand Prix,2019,21
+BOT,2,HARD,Austrian Grand Prix,2019,50
+VET,1,SOFT,Austrian Grand Prix,2019,21
+VET,2,HARD,Austrian Grand Prix,2019,29
+VET,3,SOFT,Austrian Grand Prix,2019,21
+HAM,1,MEDIUM,Austrian Grand Prix,2019,30
+HAM,2,HARD,Austrian Grand Prix,2019,41
+NOR,1,SOFT,Austrian Grand Prix,2019,25
+NOR,2,MEDIUM,Austrian Grand Prix,2019,45
+GAS,1,SOFT,Austrian Grand Prix,2019,25
+GAS,2,HARD,Austrian Grand Prix,2019,45
+SAI,1,MEDIUM,Austrian Grand Prix,2019,41
+SAI,2,HARD,Austrian Grand Prix,2019,29
+RAI,1,SOFT,Austrian Grand Prix,2019,23
+RAI,2,HARD,Austrian Grand Prix,2019,47
+GIO,1,SOFT,Austrian Grand Prix,2019,24
+GIO,2,HARD,Austrian Grand Prix,2019,46
+PER,1,MEDIUM,Austrian Grand Prix,2019,28
+PER,2,HARD,Austrian Grand Prix,2019,42
+RIC,1,MEDIUM,Austrian Grand Prix,2019,46
+RIC,2,SOFT,Austrian Grand Prix,2019,24
+HUL,1,MEDIUM,Austrian Grand Prix,2019,26
+HUL,2,HARD,Austrian Grand Prix,2019,44
+STR,1,MEDIUM,Austrian Grand Prix,2019,25
+STR,2,HARD,Austrian Grand Prix,2019,45
+ALB,1,MEDIUM,Austrian Grand Prix,2019,35
+ALB,2,HARD,Austrian Grand Prix,2019,35
+GRO,1,MEDIUM,Austrian Grand Prix,2019,34
+GRO,2,HARD,Austrian Grand Prix,2019,36
+KVY,1,MEDIUM,Austrian Grand Prix,2019,32
+KVY,2,HARD,Austrian Grand Prix,2019,38
+RUS,1,MEDIUM,Austrian Grand Prix,2019,27
+RUS,2,HARD,Austrian Grand Prix,2019,42
+MAG,1,SOFT,Austrian Grand Prix,2019,11
+MAG,2,HARD,Austrian Grand Prix,2019,2
+MAG,3,HARD,Austrian Grand Prix,2019,49
+MAG,4,SOFT,Austrian Grand Prix,2019,7
+KUB,1,MEDIUM,Austrian Grand Prix,2019,19
+KUB,2,HARD,Austrian Grand Prix,2019,49
+GAS,1,MEDIUM,British Grand Prix,2019,12
+GAS,2,HARD,British Grand Prix,2019,40
+PER,1,MEDIUM,British Grand Prix,2019,18
+PER,2,HARD,British Grand Prix,2019,6
+PER,3,SOFT,British Grand Prix,2019,22
+PER,4,SOFT,British Grand Prix,2019,5
+LEC,1,SOFT,British Grand Prix,2019,13
+LEC,2,MEDIUM,British Grand Prix,2019,8
+LEC,3,HARD,British Grand Prix,2019,31
+STR,1,MEDIUM,British Grand Prix,2019,13
+STR,2,HARD,British Grand Prix,2019,26
+STR,3,SOFT,British Grand Prix,2019,13
+MAG,1,SOFT,British Grand Prix,2019,1
+MAG,2,HARD,British Grand Prix,2019,5
+ALB,1,SOFT,British Grand Prix,2019,13
+ALB,2,MEDIUM,British Grand Prix,2019,39
+KVY,1,SOFT,British Grand Prix,2019,12
+KVY,2,MEDIUM,British Grand Prix,2019,9
+KVY,3,HARD,British Grand Prix,2019,31
+HUL,1,SOFT,British Grand Prix,2019,13
+HUL,2,HARD,British Grand Prix,2019,39
+RIC,1,SOFT,British Grand Prix,2019,12
+RIC,2,MEDIUM,British Grand Prix,2019,8
+RIC,3,HARD,British Grand Prix,2019,32
+VER,1,MEDIUM,British Grand Prix,2019,13
+VER,2,MEDIUM,British Grand Prix,2019,7
+VER,3,HARD,British Grand Prix,2019,32
+NOR,1,SOFT,British Grand Prix,2019,13
+NOR,2,MEDIUM,British Grand Prix,2019,22
+NOR,3,HARD,British Grand Prix,2019,17
+HAM,1,MEDIUM,British Grand Prix,2019,20
+HAM,2,HARD,British Grand Prix,2019,32
+VET,1,SOFT,British Grand Prix,2019,20
+VET,2,HARD,British Grand Prix,2019,18
+VET,3,MEDIUM,British Grand Prix,2019,13
+SAI,1,MEDIUM,British Grand Prix,2019,20
+SAI,2,HARD,British Grand Prix,2019,32
+RUS,1,MEDIUM,British Grand Prix,2019,21
+RUS,2,HARD,British Grand Prix,2019,30
+RAI,1,MEDIUM,British Grand Prix,2019,17
+RAI,2,HARD,British Grand Prix,2019,35
+BOT,1,MEDIUM,British Grand Prix,2019,16
+BOT,2,MEDIUM,British Grand Prix,2019,29
+BOT,3,SOFT,British Grand Prix,2019,7
+GRO,1,SOFT,British Grand Prix,2019,1
+GRO,2,HARD,British Grand Prix,2019,8
+KUB,1,MEDIUM,British Grand Prix,2019,20
+KUB,2,HARD,British Grand Prix,2019,31
+GIO,1,MEDIUM,British Grand Prix,2019,19
+HAM,1,MEDIUM,Hungarian Grand Prix,2019,31
+HAM,2,HARD,Hungarian Grand Prix,2019,18
+HAM,3,MEDIUM,Hungarian Grand Prix,2019,21
+VER,1,MEDIUM,Hungarian Grand Prix,2019,25
+VER,2,HARD,Hungarian Grand Prix,2019,42
+VER,3,SOFT,Hungarian Grand Prix,2019,3
+VET,1,MEDIUM,Hungarian Grand Prix,2019,39
+VET,2,SOFT,Hungarian Grand Prix,2019,31
+LEC,1,MEDIUM,Hungarian Grand Prix,2019,27
+LEC,2,HARD,Hungarian Grand Prix,2019,43
+SAI,1,SOFT,Hungarian Grand Prix,2019,29
+SAI,2,HARD,Hungarian Grand Prix,2019,40
+GAS,1,MEDIUM,Hungarian Grand Prix,2019,28
+GAS,2,HARD,Hungarian Grand Prix,2019,41
+RAI,1,SOFT,Hungarian Grand Prix,2019,29
+RAI,2,MEDIUM,Hungarian Grand Prix,2019,40
+BOT,1,MEDIUM,Hungarian Grand Prix,2019,5
+BOT,2,HARD,Hungarian Grand Prix,2019,41
+BOT,3,MEDIUM,Hungarian Grand Prix,2019,23
+NOR,1,SOFT,Hungarian Grand Prix,2019,28
+NOR,2,HARD,Hungarian Grand Prix,2019,41
+ALB,1,MEDIUM,Hungarian Grand Prix,2019,28
+ALB,2,HARD,Hungarian Grand Prix,2019,41
+PER,1,MEDIUM,Hungarian Grand Prix,2019,18
+PER,2,HARD,Hungarian Grand Prix,2019,51
+HUL,1,MEDIUM,Hungarian Grand Prix,2019,36
+HUL,2,SOFT,Hungarian Grand Prix,2019,33
+MAG,1,MEDIUM,Hungarian Grand Prix,2019,38
+MAG,2,SOFT,Hungarian Grand Prix,2019,31
+RIC,1,HARD,Hungarian Grand Prix,2019,46
+RIC,2,SOFT,Hungarian Grand Prix,2019,23
+KVY,1,MEDIUM,Hungarian Grand Prix,2019,21
+KVY,2,HARD,Hungarian Grand Prix,2019,47
+RUS,1,MEDIUM,Hungarian Grand Prix,2019,16
+RUS,2,HARD,Hungarian Grand Prix,2019,52
+STR,1,MEDIUM,Hungarian Grand Prix,2019,16
+STR,2,HARD,Hungarian Grand Prix,2019,34
+STR,3,SOFT,Hungarian Grand Prix,2019,18
+GIO,1,MEDIUM,Hungarian Grand Prix,2019,15
+GIO,2,HARD,Hungarian Grand Prix,2019,53
+KUB,1,MEDIUM,Hungarian Grand Prix,2019,18
+KUB,2,HARD,Hungarian Grand Prix,2019,49
+GRO,1,SOFT,Hungarian Grand Prix,2019,19
+GRO,2,HARD,Hungarian Grand Prix,2019,30
+GAS,1,SOFT,Belgian Grand Prix,2019,13
+GAS,2,MEDIUM,Belgian Grand Prix,2019,31
+PER,1,SOFT,Belgian Grand Prix,2019,15
+PER,2,MEDIUM,Belgian Grand Prix,2019,29
+LEC,1,SOFT,Belgian Grand Prix,2019,21
+LEC,2,MEDIUM,Belgian Grand Prix,2019,23
+STR,1,SOFT,Belgian Grand Prix,2019,14
+STR,2,MEDIUM,Belgian Grand Prix,2019,16
+STR,3,SOFT,Belgian Grand Prix,2019,14
+MAG,1,SOFT,Belgian Grand Prix,2019,25
+MAG,2,MEDIUM,Belgian Grand Prix,2019,18
+ALB,1,MEDIUM,Belgian Grand Prix,2019,23
+ALB,2,SOFT,Belgian Grand Prix,2019,21
+KVY,1,MEDIUM,Belgian Grand Prix,2019,24
+KVY,2,SOFT,Belgian Grand Prix,2019,20
+HUL,1,SOFT,Belgian Grand Prix,2019,11
+HUL,2,MEDIUM,Belgian Grand Prix,2019,20
+HUL,3,SOFT,Belgian Grand Prix,2019,13
+RIC,1,SOFT,Belgian Grand Prix,2019,1
+RIC,2,SOFT,Belgian Grand Prix,2019,42
+VER,1,SOFT,Belgian Grand Prix,2019,1
+NOR,1,SOFT,Belgian Grand Prix,2019,19
+NOR,2,MEDIUM,Belgian Grand Prix,2019,25
+HAM,1,SOFT,Belgian Grand Prix,2019,22
+HAM,2,MEDIUM,Belgian Grand Prix,2019,22
+VET,1,SOFT,Belgian Grand Prix,2019,15
+VET,2,MEDIUM,Belgian Grand Prix,2019,18
+VET,3,SOFT,Belgian Grand Prix,2019,11
+SAI,1,SOFT,Belgian Grand Prix,2019,1
+RUS,1,MEDIUM,Belgian Grand Prix,2019,30
+RUS,2,SOFT,Belgian Grand Prix,2019,13
+RAI,1,SOFT,Belgian Grand Prix,2019,1
+RAI,2,MEDIUM,Belgian Grand Prix,2019,1
+RAI,3,MEDIUM,Belgian Grand Prix,2019,29
+RAI,4,SOFT,Belgian Grand Prix,2019,12
+BOT,1,SOFT,Belgian Grand Prix,2019,23
+BOT,2,MEDIUM,Belgian Grand Prix,2019,21
+GRO,1,SOFT,Belgian Grand Prix,2019,16
+GRO,2,MEDIUM,Belgian Grand Prix,2019,27
+KUB,1,MEDIUM,Belgian Grand Prix,2019,31
+KUB,2,SOFT,Belgian Grand Prix,2019,12
+GIO,1,MEDIUM,Belgian Grand Prix,2019,29
+GIO,2,SOFT,Belgian Grand Prix,2019,14
+GAS,1,MEDIUM,Italian Grand Prix,2019,28
+GAS,2,SOFT,Italian Grand Prix,2019,24
+PER,1,MEDIUM,Italian Grand Prix,2019,28
+PER,2,SOFT,Italian Grand Prix,2019,25
+LEC,1,SOFT,Italian Grand Prix,2019,20
+LEC,2,HARD,Italian Grand Prix,2019,33
+STR,1,SOFT,Italian Grand Prix,2019,15
+STR,2,SOFT,Italian Grand Prix,2019,7
+STR,3,MEDIUM,Italian Grand Prix,2019,30
+MAG,1,SOFT,Italian Grand Prix,2019,20
+MAG,2,MEDIUM,Italian Grand Prix,2019,14
+MAG,3,SOFT,Italian Grand Prix,2019,9
+ALB,1,SOFT,Italian Grand Prix,2019,26
+ALB,2,MEDIUM,Italian Grand Prix,2019,27
+KVY,1,MEDIUM,Italian Grand Prix,2019,28
+KVY,2,SOFT,Italian Grand Prix,2019,2
+HUL,1,SOFT,Italian Grand Prix,2019,29
+HUL,2,MEDIUM,Italian Grand Prix,2019,24
+RIC,1,SOFT,Italian Grand Prix,2019,30
+RIC,2,MEDIUM,Italian Grand Prix,2019,23
+VER,1,MEDIUM,Italian Grand Prix,2019,1
+VER,2,SOFT,Italian Grand Prix,2019,26
+VER,3,MEDIUM,Italian Grand Prix,2019,26
+NOR,1,MEDIUM,Italian Grand Prix,2019,23
+NOR,2,HARD,Italian Grand Prix,2019,29
+HAM,1,SOFT,Italian Grand Prix,2019,19
+HAM,2,MEDIUM,Italian Grand Prix,2019,30
+HAM,3,SOFT,Italian Grand Prix,2019,4
+VET,1,SOFT,Italian Grand Prix,2019,6
+VET,2,HARD,Italian Grand Prix,2019,6
+VET,3,HARD,Italian Grand Prix,2019,29
+VET,4,MEDIUM,Italian Grand Prix,2019,11
+SAI,1,SOFT,Italian Grand Prix,2019,27
+RUS,1,MEDIUM,Italian Grand Prix,2019,23
+RUS,2,HARD,Italian Grand Prix,2019,29
+RAI,1,MEDIUM,Italian Grand Prix,2019,19
+RAI,2,MEDIUM,Italian Grand Prix,2019,7
+RAI,3,SOFT,Italian Grand Prix,2019,26
+BOT,1,SOFT,Italian Grand Prix,2019,27
+BOT,2,MEDIUM,Italian Grand Prix,2019,26
+GRO,1,SOFT,Italian Grand Prix,2019,7
+GRO,2,MEDIUM,Italian Grand Prix,2019,22
+GRO,3,SOFT,Italian Grand Prix,2019,23
+KUB,1,MEDIUM,Italian Grand Prix,2019,29
+KUB,2,SOFT,Italian Grand Prix,2019,15
+KUB,3,MEDIUM,Italian Grand Prix,2019,7
+GIO,1,SOFT,Italian Grand Prix,2019,21
+GIO,2,MEDIUM,Italian Grand Prix,2019,31
+GAS,1,HARD,Singapore Grand Prix,2019,32
+GAS,2,MEDIUM,Singapore Grand Prix,2019,29
+PER,1,MEDIUM,Singapore Grand Prix,2019,13
+PER,2,HARD,Singapore Grand Prix,2019,30
+LEC,1,SOFT,Singapore Grand Prix,2019,20
+LEC,2,HARD,Singapore Grand Prix,2019,41
+STR,1,MEDIUM,Singapore Grand Prix,2019,31
+STR,2,HARD,Singapore Grand Prix,2019,10
+STR,3,SOFT,Singapore Grand Prix,2019,3
+STR,4,SOFT,Singapore Grand Prix,2019,17
+MAG,1,MEDIUM,Singapore Grand Prix,2019,18
+MAG,2,HARD,Singapore Grand Prix,2019,38
+MAG,3,SOFT,Singapore Grand Prix,2019,5
+ALB,1,SOFT,Singapore Grand Prix,2019,20
+ALB,2,HARD,Singapore Grand Prix,2019,41
+KVY,1,MEDIUM,Singapore Grand Prix,2019,12
+KVY,2,HARD,Singapore Grand Prix,2019,24
+KVY,3,SOFT,Singapore Grand Prix,2019,25
+HUL,1,SOFT,Singapore Grand Prix,2019,1
+HUL,2,HARD,Singapore Grand Prix,2019,35
+HUL,3,MEDIUM,Singapore Grand Prix,2019,25
+RIC,1,MEDIUM,Singapore Grand Prix,2019,34
+RIC,2,HARD,Singapore Grand Prix,2019,27
+VER,1,SOFT,Singapore Grand Prix,2019,19
+VER,2,HARD,Singapore Grand Prix,2019,42
+NOR,1,SOFT,Singapore Grand Prix,2019,20
+NOR,2,HARD,Singapore Grand Prix,2019,41
+HAM,1,SOFT,Singapore Grand Prix,2019,26
+HAM,2,HARD,Singapore Grand Prix,2019,35
+VET,1,SOFT,Singapore Grand Prix,2019,19
+VET,2,HARD,Singapore Grand Prix,2019,42
+SAI,1,SOFT,Singapore Grand Prix,2019,1
+SAI,2,HARD,Singapore Grand Prix,2019,34
+SAI,3,MEDIUM,Singapore Grand Prix,2019,26
+RUS,1,MEDIUM,Singapore Grand Prix,2019,1
+RUS,2,HARD,Singapore Grand Prix,2019,34
+RAI,1,MEDIUM,Singapore Grand Prix,2019,15
+RAI,2,HARD,Singapore Grand Prix,2019,35
+BOT,1,SOFT,Singapore Grand Prix,2019,22
+BOT,2,HARD,Singapore Grand Prix,2019,39
+GRO,1,MEDIUM,Singapore Grand Prix,2019,23
+GRO,2,HARD,Singapore Grand Prix,2019,12
+GRO,3,SOFT,Singapore Grand Prix,2019,26
+KUB,1,MEDIUM,Singapore Grand Prix,2019,21
+KUB,2,HARD,Singapore Grand Prix,2019,23
+KUB,3,MEDIUM,Singapore Grand Prix,2019,17
+GIO,1,MEDIUM,Singapore Grand Prix,2019,34
+GIO,2,HARD,Singapore Grand Prix,2019,2
+GIO,3,SOFT,Singapore Grand Prix,2019,25
+HAM,1,MEDIUM,Russian Grand Prix,2019,28
+HAM,2,SOFT,Russian Grand Prix,2019,25
+BOT,1,MEDIUM,Russian Grand Prix,2019,28
+BOT,2,SOFT,Russian Grand Prix,2019,25
+LEC,1,SOFT,Russian Grand Prix,2019,22
+LEC,2,MEDIUM,Russian Grand Prix,2019,9
+LEC,3,SOFT,Russian Grand Prix,2019,22
+VER,1,SOFT,Russian Grand Prix,2019,28
+VER,2,MEDIUM,Russian Grand Prix,2019,25
+ALB,1,MEDIUM,Russian Grand Prix,2019,29
+ALB,2,SOFT,Russian Grand Prix,2019,24
+SAI,1,SOFT,Russian Grand Prix,2019,21
+SAI,2,MEDIUM,Russian Grand Prix,2019,32
+PER,1,SOFT,Russian Grand Prix,2019,23
+PER,2,MEDIUM,Russian Grand Prix,2019,30
+NOR,1,SOFT,Russian Grand Prix,2019,20
+NOR,2,MEDIUM,Russian Grand Prix,2019,33
+MAG,1,SOFT,Russian Grand Prix,2019,27
+MAG,2,MEDIUM,Russian Grand Prix,2019,26
+HUL,1,SOFT,Russian Grand Prix,2019,16
+HUL,2,MEDIUM,Russian Grand Prix,2019,13
+HUL,3,SOFT,Russian Grand Prix,2019,24
+STR,1,MEDIUM,Russian Grand Prix,2019,27
+STR,2,SOFT,Russian Grand Prix,2019,26
+KVY,1,HARD,Russian Grand Prix,2019,27
+KVY,2,SOFT,Russian Grand Prix,2019,3
+KVY,3,SOFT,Russian Grand Prix,2019,23
+RAI,1,MEDIUM,Russian Grand Prix,2019,9
+RAI,2,MEDIUM,Russian Grand Prix,2019,18
+RAI,3,SOFT,Russian Grand Prix,2019,26
+GAS,1,MEDIUM,Russian Grand Prix,2019,26
+GAS,2,SOFT,Russian Grand Prix,2019,27
+GIO,1,SOFT,Russian Grand Prix,2019,2
+GIO,2,HARD,Russian Grand Prix,2019,25
+GIO,3,MEDIUM,Russian Grand Prix,2019,26
+KUB,1,MEDIUM,Russian Grand Prix,2019,1
+KUB,2,HARD,Russian Grand Prix,2019,1
+KUB,3,MEDIUM,Russian Grand Prix,2019,26
+RUS,1,MEDIUM,Russian Grand Prix,2019,27
+VET,1,SOFT,Russian Grand Prix,2019,26
+RIC,1,SOFT,Russian Grand Prix,2019,1
+RIC,2,MEDIUM,Russian Grand Prix,2019,23
+GRO,1,SOFT,Russian Grand Prix,2019,1
+GAS,1,SOFT,Japanese Grand Prix,2019,18
+GAS,2,MEDIUM,Japanese Grand Prix,2019,34
+PER,1,SOFT,Japanese Grand Prix,2019,19
+PER,2,MEDIUM,Japanese Grand Prix,2019,22
+PER,3,SOFT,Japanese Grand Prix,2019,11
+LEC,1,SOFT,Japanese Grand Prix,2019,3
+LEC,2,MEDIUM,Japanese Grand Prix,2019,22
+LEC,3,SOFT,Japanese Grand Prix,2019,21
+LEC,4,SOFT,Japanese Grand Prix,2019,6
+STR,1,SOFT,Japanese Grand Prix,2019,18
+STR,2,MEDIUM,Japanese Grand Prix,2019,34
+MAG,1,MEDIUM,Japanese Grand Prix,2019,17
+MAG,2,HARD,Japanese Grand Prix,2019,30
+MAG,3,SOFT,Japanese Grand Prix,2019,5
+ALB,1,SOFT,Japanese Grand Prix,2019,15
+ALB,2,MEDIUM,Japanese Grand Prix,2019,19
+ALB,3,SOFT,Japanese Grand Prix,2019,19
+KVY,1,SOFT,Japanese Grand Prix,2019,27
+KVY,2,MEDIUM,Japanese Grand Prix,2019,25
+HUL,1,SOFT,Japanese Grand Prix,2019,19
+HUL,2,MEDIUM,Japanese Grand Prix,2019,33
+RIC,1,MEDIUM,Japanese Grand Prix,2019,29
+RIC,2,SOFT,Japanese Grand Prix,2019,23
+VER,1,SOFT,Japanese Grand Prix,2019,14
+NOR,1,SOFT,Japanese Grand Prix,2019,4
+NOR,2,MEDIUM,Japanese Grand Prix,2019,21
+NOR,3,HARD,Japanese Grand Prix,2019,27
+HAM,1,SOFT,Japanese Grand Prix,2019,21
+HAM,2,MEDIUM,Japanese Grand Prix,2019,21
+HAM,3,SOFT,Japanese Grand Prix,2019,11
+VET,1,SOFT,Japanese Grand Prix,2019,16
+VET,2,SOFT,Japanese Grand Prix,2019,15
+VET,3,MEDIUM,Japanese Grand Prix,2019,22
+SAI,1,SOFT,Japanese Grand Prix,2019,26
+SAI,2,MEDIUM,Japanese Grand Prix,2019,27
+RUS,1,MEDIUM,Japanese Grand Prix,2019,25
+RUS,2,HARD,Japanese Grand Prix,2019,26
+RAI,1,MEDIUM,Japanese Grand Prix,2019,15
+RAI,2,HARD,Japanese Grand Prix,2019,21
+RAI,3,SOFT,Japanese Grand Prix,2019,16
+BOT,1,SOFT,Japanese Grand Prix,2019,17
+BOT,2,MEDIUM,Japanese Grand Prix,2019,19
+BOT,3,SOFT,Japanese Grand Prix,2019,17
+GRO,1,SOFT,Japanese Grand Prix,2019,16
+GRO,2,HARD,Japanese Grand Prix,2019,36
+KUB,1,MEDIUM,Japanese Grand Prix,2019,22
+KUB,2,HARD,Japanese Grand Prix,2019,11
+KUB,3,MEDIUM,Japanese Grand Prix,2019,18
+GIO,1,MEDIUM,Japanese Grand Prix,2019,18
+GIO,2,HARD,Japanese Grand Prix,2019,31
+GIO,3,SOFT,Japanese Grand Prix,2019,3
+HAM,1,MEDIUM,Mexican Grand Prix,2019,23
+HAM,2,HARD,Mexican Grand Prix,2019,48
+VET,1,MEDIUM,Mexican Grand Prix,2019,37
+VET,2,HARD,Mexican Grand Prix,2019,34
+BOT,1,MEDIUM,Mexican Grand Prix,2019,36
+BOT,2,HARD,Mexican Grand Prix,2019,35
+LEC,1,MEDIUM,Mexican Grand Prix,2019,15
+LEC,2,MEDIUM,Mexican Grand Prix,2019,28
+LEC,3,HARD,Mexican Grand Prix,2019,28
+ALB,1,MEDIUM,Mexican Grand Prix,2019,14
+ALB,2,MEDIUM,Mexican Grand Prix,2019,30
+ALB,3,HARD,Mexican Grand Prix,2019,27
+VER,1,MEDIUM,Mexican Grand Prix,2019,5
+VER,2,HARD,Mexican Grand Prix,2019,66
+PER,1,MEDIUM,Mexican Grand Prix,2019,20
+PER,2,HARD,Mexican Grand Prix,2019,51
+RIC,1,HARD,Mexican Grand Prix,2019,50
+RIC,2,MEDIUM,Mexican Grand Prix,2019,21
+GAS,1,SOFT,Mexican Grand Prix,2019,9
+GAS,2,HARD,Mexican Grand Prix,2019,40
+GAS,3,MEDIUM,Mexican Grand Prix,2019,21
+HUL,1,MEDIUM,Mexican Grand Prix,2019,18
+HUL,2,HARD,Mexican Grand Prix,2019,52
+KVY,1,SOFT,Mexican Grand Prix,2019,10
+KVY,2,HARD,Mexican Grand Prix,2019,34
+KVY,3,MEDIUM,Mexican Grand Prix,2019,26
+STR,1,MEDIUM,Mexican Grand Prix,2019,37
+STR,2,HARD,Mexican Grand Prix,2019,33
+SAI,1,SOFT,Mexican Grand Prix,2019,15
+SAI,2,HARD,Mexican Grand Prix,2019,20
+SAI,3,MEDIUM,Mexican Grand Prix,2019,35
+GIO,1,MEDIUM,Mexican Grand Prix,2019,21
+GIO,2,HARD,Mexican Grand Prix,2019,49
+MAG,1,MEDIUM,Mexican Grand Prix,2019,28
+MAG,2,HARD,Mexican Grand Prix,2019,41
+RUS,1,MEDIUM,Mexican Grand Prix,2019,22
+RUS,2,HARD,Mexican Grand Prix,2019,47
+GRO,1,MEDIUM,Mexican Grand Prix,2019,37
+GRO,2,HARD,Mexican Grand Prix,2019,32
+KUB,1,MEDIUM,Mexican Grand Prix,2019,21
+KUB,2,HARD,Mexican Grand Prix,2019,39
+KUB,3,MEDIUM,Mexican Grand Prix,2019,9
+RAI,1,MEDIUM,Mexican Grand Prix,2019,15
+RAI,2,HARD,Mexican Grand Prix,2019,37
+RAI,3,MEDIUM,Mexican Grand Prix,2019,6
+NOR,1,SOFT,Mexican Grand Prix,2019,12
+NOR,2,HARD,Mexican Grand Prix,2019,36
+GAS,1,SOFT,United States Grand Prix,2019,19
+GAS,2,HARD,United States Grand Prix,2019,34
+GAS,3,SOFT,United States Grand Prix,2019,1
+PER,1,MEDIUM,United States Grand Prix,2019,24
+PER,2,HARD,United States Grand Prix,2019,31
+LEC,1,MEDIUM,United States Grand Prix,2019,20
+LEC,2,HARD,United States Grand Prix,2019,22
+LEC,3,SOFT,United States Grand Prix,2019,14
+STR,1,MEDIUM,United States Grand Prix,2019,9
+STR,2,HARD,United States Grand Prix,2019,20
+STR,3,SOFT,United States Grand Prix,2019,26
+MAG,1,MEDIUM,United States Grand Prix,2019,18
+MAG,2,HARD,United States Grand Prix,2019,22
+MAG,3,SOFT,United States Grand Prix,2019,13
+ALB,1,SOFT,United States Grand Prix,2019,1
+ALB,2,MEDIUM,United States Grand Prix,2019,19
+ALB,3,MEDIUM,United States Grand Prix,2019,20
+ALB,4,SOFT,United States Grand Prix,2019,16
+KVY,1,HARD,United States Grand Prix,2019,21
+KVY,2,MEDIUM,United States Grand Prix,2019,18
+KVY,3,SOFT,United States Grand Prix,2019,16
+HUL,1,HARD,United States Grand Prix,2019,27
+HUL,2,MEDIUM,United States Grand Prix,2019,12
+HUL,3,SOFT,United States Grand Prix,2019,16
+RIC,1,SOFT,United States Grand Prix,2019,21
+RIC,2,HARD,United States Grand Prix,2019,35
+VER,1,MEDIUM,United States Grand Prix,2019,13
+VER,2,HARD,United States Grand Prix,2019,21
+VER,3,MEDIUM,United States Grand Prix,2019,22
+NOR,1,SOFT,United States Grand Prix,2019,19
+NOR,2,HARD,United States Grand Prix,2019,23
+NOR,3,MEDIUM,United States Grand Prix,2019,14
+HAM,1,MEDIUM,United States Grand Prix,2019,24
+HAM,2,HARD,United States Grand Prix,2019,32
+VET,1,MEDIUM,United States Grand Prix,2019,8
+SAI,1,SOFT,United States Grand Prix,2019,18
+SAI,2,HARD,United States Grand Prix,2019,37
+RUS,1,MEDIUM,United States Grand Prix,2019,23
+RUS,2,HARD,United States Grand Prix,2019,23
+RUS,3,SOFT,United States Grand Prix,2019,8
+RAI,1,SOFT,United States Grand Prix,2019,18
+RAI,2,HARD,United States Grand Prix,2019,22
+RAI,3,SOFT,United States Grand Prix,2019,15
+BOT,1,MEDIUM,United States Grand Prix,2019,14
+BOT,2,HARD,United States Grand Prix,2019,21
+BOT,3,MEDIUM,United States Grand Prix,2019,21
+GRO,1,MEDIUM,United States Grand Prix,2019,24
+GRO,2,HARD,United States Grand Prix,2019,31
+KUB,1,MEDIUM,United States Grand Prix,2019,11
+KUB,2,HARD,United States Grand Prix,2019,20
+GIO,1,MEDIUM,United States Grand Prix,2019,17
+GIO,2,HARD,United States Grand Prix,2019,22
+GIO,3,SOFT,United States Grand Prix,2019,16
+GAS,1,SOFT,Brazilian Grand Prix,2019,22
+GAS,2,MEDIUM,Brazilian Grand Prix,2019,25
+GAS,3,SOFT,Brazilian Grand Prix,2019,24
+PER,1,SOFT,Brazilian Grand Prix,2019,17
+PER,2,MEDIUM,Brazilian Grand Prix,2019,28
+PER,3,SOFT,Brazilian Grand Prix,2019,26
+LEC,1,MEDIUM,Brazilian Grand Prix,2019,29
+LEC,2,HARD,Brazilian Grand Prix,2019,25
+LEC,3,SOFT,Brazilian Grand Prix,2019,12
+STR,1,SOFT,Brazilian Grand Prix,2019,28
+STR,2,MEDIUM,Brazilian Grand Prix,2019,25
+STR,3,SOFT,Brazilian Grand Prix,2019,13
+MAG,1,SOFT,Brazilian Grand Prix,2019,27
+MAG,2,MEDIUM,Brazilian Grand Prix,2019,26
+MAG,3,SOFT,Brazilian Grand Prix,2019,18
+ALB,1,SOFT,Brazilian Grand Prix,2019,24
+ALB,2,MEDIUM,Brazilian Grand Prix,2019,26
+ALB,3,SOFT,Brazilian Grand Prix,2019,21
+KVY,1,MEDIUM,Brazilian Grand Prix,2019,23
+KVY,2,SOFT,Brazilian Grand Prix,2019,23
+KVY,3,SOFT,Brazilian Grand Prix,2019,25
+HUL,1,MEDIUM,Brazilian Grand Prix,2019,27
+HUL,2,HARD,Brazilian Grand Prix,2019,17
+HUL,3,SOFT,Brazilian Grand Prix,2019,9
+HUL,4,SOFT,Brazilian Grand Prix,2019,18
+RIC,1,MEDIUM,Brazilian Grand Prix,2019,8
+RIC,2,SOFT,Brazilian Grand Prix,2019,32
+RIC,3,SOFT,Brazilian Grand Prix,2019,31
+VER,1,SOFT,Brazilian Grand Prix,2019,21
+VER,2,SOFT,Brazilian Grand Prix,2019,23
+VER,3,MEDIUM,Brazilian Grand Prix,2019,10
+VER,4,SOFT,Brazilian Grand Prix,2019,17
+NOR,1,SOFT,Brazilian Grand Prix,2019,27
+NOR,2,HARD,Brazilian Grand Prix,2019,26
+NOR,3,MEDIUM,Brazilian Grand Prix,2019,18
+HAM,1,SOFT,Brazilian Grand Prix,2019,20
+HAM,2,SOFT,Brazilian Grand Prix,2019,23
+HAM,3,MEDIUM,Brazilian Grand Prix,2019,23
+HAM,4,SOFT,Brazilian Grand Prix,2019,5
+VET,1,SOFT,Brazilian Grand Prix,2019,25
+VET,2,MEDIUM,Brazilian Grand Prix,2019,24
+VET,3,SOFT,Brazilian Grand Prix,2019,17
+SAI,1,SOFT,Brazilian Grand Prix,2019,29
+SAI,2,MEDIUM,Brazilian Grand Prix,2019,42
+RUS,1,MEDIUM,Brazilian Grand Prix,2019,23
+RUS,2,MEDIUM,Brazilian Grand Prix,2019,31
+RUS,3,SOFT,Brazilian Grand Prix,2019,12
+RUS,4,SOFT,Brazilian Grand Prix,2019,5
+RAI,1,SOFT,Brazilian Grand Prix,2019,21
+RAI,2,MEDIUM,Brazilian Grand Prix,2019,26
+RAI,3,SOFT,Brazilian Grand Prix,2019,24
+BOT,1,SOFT,Brazilian Grand Prix,2019,26
+BOT,2,HARD,Brazilian Grand Prix,2019,15
+BOT,3,MEDIUM,Brazilian Grand Prix,2019,11
+GRO,1,SOFT,Brazilian Grand Prix,2019,26
+GRO,2,MEDIUM,Brazilian Grand Prix,2019,39
+GRO,3,SOFT,Brazilian Grand Prix,2019,6
+KUB,1,MEDIUM,Brazilian Grand Prix,2019,20
+KUB,2,MEDIUM,Brazilian Grand Prix,2019,16
+KUB,3,HARD,Brazilian Grand Prix,2019,17
+KUB,4,SOFT,Brazilian Grand Prix,2019,13
+KUB,5,SOFT,Brazilian Grand Prix,2019,4
+GIO,1,SOFT,Brazilian Grand Prix,2019,20
+GIO,2,MEDIUM,Brazilian Grand Prix,2019,26
+GIO,3,SOFT,Brazilian Grand Prix,2019,25
+HAM,1,MEDIUM,Abu Dhabi Grand Prix,2019,26
+HAM,2,HARD,Abu Dhabi Grand Prix,2019,29
+VER,1,MEDIUM,Abu Dhabi Grand Prix,2019,25
+VER,2,HARD,Abu Dhabi Grand Prix,2019,30
+LEC,1,MEDIUM,Abu Dhabi Grand Prix,2019,12
+LEC,2,HARD,Abu Dhabi Grand Prix,2019,26
+LEC,3,SOFT,Abu Dhabi Grand Prix,2019,17
+BOT,1,MEDIUM,Abu Dhabi Grand Prix,2019,29
+BOT,2,HARD,Abu Dhabi Grand Prix,2019,26
+VET,1,SOFT,Abu Dhabi Grand Prix,2019,12
+VET,2,HARD,Abu Dhabi Grand Prix,2019,26
+VET,3,MEDIUM,Abu Dhabi Grand Prix,2019,17
+ALB,1,MEDIUM,Abu Dhabi Grand Prix,2019,13
+ALB,2,HARD,Abu Dhabi Grand Prix,2019,42
+PER,1,MEDIUM,Abu Dhabi Grand Prix,2019,37
+PER,2,HARD,Abu Dhabi Grand Prix,2019,17
+NOR,1,SOFT,Abu Dhabi Grand Prix,2019,8
+NOR,2,HARD,Abu Dhabi Grand Prix,2019,46
+KVY,1,HARD,Abu Dhabi Grand Prix,2019,40
+KVY,2,MEDIUM,Abu Dhabi Grand Prix,2019,14
+SAI,1,SOFT,Abu Dhabi Grand Prix,2019,12
+SAI,2,HARD,Abu Dhabi Grand Prix,2019,29
+SAI,3,MEDIUM,Abu Dhabi Grand Prix,2019,13
+RIC,1,SOFT,Abu Dhabi Grand Prix,2019,11
+RIC,2,HARD,Abu Dhabi Grand Prix,2019,31
+RIC,3,SOFT,Abu Dhabi Grand Prix,2019,12
+HUL,1,SOFT,Abu Dhabi Grand Prix,2019,18
+HUL,2,MEDIUM,Abu Dhabi Grand Prix,2019,36
+RAI,1,MEDIUM,Abu Dhabi Grand Prix,2019,22
+RAI,2,HARD,Abu Dhabi Grand Prix,2019,32
+MAG,1,MEDIUM,Abu Dhabi Grand Prix,2019,20
+MAG,2,HARD,Abu Dhabi Grand Prix,2019,34
+GRO,1,MEDIUM,Abu Dhabi Grand Prix,2019,18
+GRO,2,HARD,Abu Dhabi Grand Prix,2019,36
+GIO,1,SOFT,Abu Dhabi Grand Prix,2019,8
+GIO,2,HARD,Abu Dhabi Grand Prix,2019,18
+GIO,3,MEDIUM,Abu Dhabi Grand Prix,2019,28
+RUS,1,HARD,Abu Dhabi Grand Prix,2019,32
+RUS,2,MEDIUM,Abu Dhabi Grand Prix,2019,22
+GAS,1,MEDIUM,Abu Dhabi Grand Prix,2019,1
+GAS,2,HARD,Abu Dhabi Grand Prix,2019,52
+KUB,1,HARD,Abu Dhabi Grand Prix,2019,24
+KUB,2,MEDIUM,Abu Dhabi Grand Prix,2019,29
+STR,1,MEDIUM,Abu Dhabi Grand Prix,2019,5
+STR,2,HARD,Abu Dhabi Grand Prix,2019,18
+STR,3,SOFT,Abu Dhabi Grand Prix,2019,22
+GAS,1,MEDIUM,Austrian Grand Prix,2020,24
+GAS,2,HARD,Austrian Grand Prix,2020,30
+GAS,3,HARD,Austrian Grand Prix,2020,13
+PER,1,SOFT,Austrian Grand Prix,2020,24
+PER,2,MEDIUM,Austrian Grand Prix,2020,30
+PER,3,MEDIUM,Austrian Grand Prix,2020,13
+LEC,1,SOFT,Austrian Grand Prix,2020,24
+LEC,2,HARD,Austrian Grand Prix,2020,25
+LEC,3,MEDIUM,Austrian Grand Prix,2020,5
+LEC,4,MEDIUM,Austrian Grand Prix,2020,13
+STR,1,SOFT,Austrian Grand Prix,2020,15
+MAG,1,MEDIUM,Austrian Grand Prix,2020,20
+ALB,1,SOFT,Austrian Grand Prix,2020,24
+ALB,2,HARD,Austrian Grand Prix,2020,25
+ALB,3,SOFT,Austrian Grand Prix,2020,5
+ALB,4,SOFT,Austrian Grand Prix,2020,9
+KVY,1,MEDIUM,Austrian Grand Prix,2020,24
+KVY,2,HARD,Austrian Grand Prix,2020,25
+KVY,3,SOFT,Austrian Grand Prix,2020,5
+KVY,4,SOFT,Austrian Grand Prix,2020,11
+RIC,1,SOFT,Austrian Grand Prix,2020,12
+OCO,1,MEDIUM,Austrian Grand Prix,2020,24
+OCO,2,HARD,Austrian Grand Prix,2020,30
+OCO,3,HARD,Austrian Grand Prix,2020,13
+VER,1,MEDIUM,Austrian Grand Prix,2020,10
+NOR,1,SOFT,Austrian Grand Prix,2020,24
+NOR,2,HARD,Austrian Grand Prix,2020,25
+NOR,3,MEDIUM,Austrian Grand Prix,2020,5
+NOR,4,MEDIUM,Austrian Grand Prix,2020,13
+HAM,1,SOFT,Austrian Grand Prix,2020,24
+HAM,2,HARD,Austrian Grand Prix,2020,30
+HAM,3,HARD,Austrian Grand Prix,2020,13
+VET,1,MEDIUM,Austrian Grand Prix,2020,24
+VET,2,HARD,Austrian Grand Prix,2020,25
+VET,3,SOFT,Austrian Grand Prix,2020,5
+VET,4,SOFT,Austrian Grand Prix,2020,13
+SAI,1,SOFT,Austrian Grand Prix,2020,24
+SAI,2,HARD,Austrian Grand Prix,2020,26
+SAI,3,MEDIUM,Austrian Grand Prix,2020,4
+SAI,4,MEDIUM,Austrian Grand Prix,2020,13
+LAT,1,MEDIUM,Austrian Grand Prix,2020,25
+LAT,2,HARD,Austrian Grand Prix,2020,25
+LAT,3,SOFT,Austrian Grand Prix,2020,4
+LAT,4,SOFT,Austrian Grand Prix,2020,13
+RUS,1,MEDIUM,Austrian Grand Prix,2020,20
+RUS,2,HARD,Austrian Grand Prix,2020,25
+RAI,1,MEDIUM,Austrian Grand Prix,2020,19
+RAI,2,HARD,Austrian Grand Prix,2020,27
+RAI,3,SOFT,Austrian Grand Prix,2020,3
+BOT,1,SOFT,Austrian Grand Prix,2020,24
+BOT,2,HARD,Austrian Grand Prix,2020,30
+BOT,3,HARD,Austrian Grand Prix,2020,14
+GRO,1,MEDIUM,Austrian Grand Prix,2020,19
+GRO,2,HARD,Austrian Grand Prix,2020,25
+GIO,1,MEDIUM,Austrian Grand Prix,2020,23
+GIO,2,HARD,Austrian Grand Prix,2020,30
+GIO,3,SOFT,Austrian Grand Prix,2020,1
+GIO,4,SOFT,Austrian Grand Prix,2020,13
+HAM,1,SOFT,Styrian Grand Prix,2020,27
+HAM,2,MEDIUM,Styrian Grand Prix,2020,44
+BOT,1,SOFT,Styrian Grand Prix,2020,34
+BOT,2,MEDIUM,Styrian Grand Prix,2020,37
+VER,1,SOFT,Styrian Grand Prix,2020,24
+VER,2,MEDIUM,Styrian Grand Prix,2020,44
+VER,3,SOFT,Styrian Grand Prix,2020,3
+ALB,1,SOFT,Styrian Grand Prix,2020,35
+ALB,2,MEDIUM,Styrian Grand Prix,2020,36
+NOR,1,SOFT,Styrian Grand Prix,2020,39
+NOR,2,MEDIUM,Styrian Grand Prix,2020,32
+PER,1,SOFT,Styrian Grand Prix,2020,38
+PER,2,MEDIUM,Styrian Grand Prix,2020,33
+STR,1,SOFT,Styrian Grand Prix,2020,33
+STR,2,MEDIUM,Styrian Grand Prix,2020,38
+RIC,1,MEDIUM,Styrian Grand Prix,2020,37
+RIC,2,SOFT,Styrian Grand Prix,2020,34
+SAI,1,SOFT,Styrian Grand Prix,2020,32
+SAI,2,MEDIUM,Styrian Grand Prix,2020,34
+SAI,3,SOFT,Styrian Grand Prix,2020,4
+KVY,1,MEDIUM,Styrian Grand Prix,2020,36
+KVY,2,HARD,Styrian Grand Prix,2020,34
+RAI,1,MEDIUM,Styrian Grand Prix,2020,44
+RAI,2,SOFT,Styrian Grand Prix,2020,26
+MAG,1,SOFT,Styrian Grand Prix,2020,31
+MAG,2,MEDIUM,Styrian Grand Prix,2020,39
+GRO,1,SOFT,Styrian Grand Prix,2020,37
+GRO,2,MEDIUM,Styrian Grand Prix,2020,33
+GIO,1,MEDIUM,Styrian Grand Prix,2020,39
+GIO,2,SOFT,Styrian Grand Prix,2020,31
+GAS,1,SOFT,Styrian Grand Prix,2020,24
+GAS,2,HARD,Styrian Grand Prix,2020,25
+GAS,3,SOFT,Styrian Grand Prix,2020,21
+RUS,1,SOFT,Styrian Grand Prix,2020,34
+RUS,2,MEDIUM,Styrian Grand Prix,2020,35
+LAT,1,MEDIUM,Styrian Grand Prix,2020,32
+LAT,2,SOFT,Styrian Grand Prix,2020,37
+OCO,1,SOFT,Styrian Grand Prix,2020,25
+LEC,1,SOFT,Styrian Grand Prix,2020,1
+LEC,2,HARD,Styrian Grand Prix,2020,3
+VET,1,MEDIUM,Styrian Grand Prix,2020,1
+GAS,1,MEDIUM,British Grand Prix,2020,12
+GAS,2,HARD,British Grand Prix,2020,40
+LEC,1,MEDIUM,British Grand Prix,2020,13
+LEC,2,HARD,British Grand Prix,2020,39
+STR,1,MEDIUM,British Grand Prix,2020,13
+STR,2,HARD,British Grand Prix,2020,39
+MAG,1,MEDIUM,British Grand Prix,2020,2
+ALB,1,MEDIUM,British Grand Prix,2020,6
+ALB,2,HARD,British Grand Prix,2020,24
+ALB,3,MEDIUM,British Grand Prix,2020,22
+KVY,1,MEDIUM,British Grand Prix,2020,12
+HUL,1,HARD,British Grand Prix,2020,1
+RIC,1,SOFT,British Grand Prix,2020,12
+RIC,2,HARD,British Grand Prix,2020,40
+OCO,1,SOFT,British Grand Prix,2020,12
+OCO,2,HARD,British Grand Prix,2020,40
+VER,1,MEDIUM,British Grand Prix,2020,13
+VER,2,HARD,British Grand Prix,2020,37
+VER,3,SOFT,British Grand Prix,2020,2
+NOR,1,SOFT,British Grand Prix,2020,12
+NOR,2,HARD,British Grand Prix,2020,40
+HAM,1,MEDIUM,British Grand Prix,2020,13
+HAM,2,HARD,British Grand Prix,2020,39
+VET,1,SOFT,British Grand Prix,2020,12
+VET,2,HARD,British Grand Prix,2020,40
+SAI,1,SOFT,British Grand Prix,2020,13
+SAI,2,HARD,British Grand Prix,2020,38
+SAI,3,MEDIUM,British Grand Prix,2020,1
+LAT,1,MEDIUM,British Grand Prix,2020,12
+LAT,2,HARD,British Grand Prix,2020,40
+RUS,1,MEDIUM,British Grand Prix,2020,12
+RUS,2,HARD,British Grand Prix,2020,40
+RAI,1,MEDIUM,British Grand Prix,2020,12
+RAI,2,HARD,British Grand Prix,2020,35
+RAI,3,SOFT,British Grand Prix,2020,4
+BOT,1,MEDIUM,British Grand Prix,2020,13
+BOT,2,HARD,British Grand Prix,2020,37
+BOT,3,SOFT,British Grand Prix,2020,2
+GRO,1,MEDIUM,British Grand Prix,2020,36
+GRO,2,HARD,British Grand Prix,2020,16
+GIO,1,MEDIUM,British Grand Prix,2020,12
+GIO,2,HARD,British Grand Prix,2020,40
+VER,1,HARD,70th Anniversary Grand Prix,2020,26
+VER,2,MEDIUM,70th Anniversary Grand Prix,2020,6
+VER,3,HARD,70th Anniversary Grand Prix,2020,20
+HAM,1,MEDIUM,70th Anniversary Grand Prix,2020,14
+HAM,2,HARD,70th Anniversary Grand Prix,2020,27
+HAM,3,HARD,70th Anniversary Grand Prix,2020,11
+BOT,1,MEDIUM,70th Anniversary Grand Prix,2020,13
+BOT,2,HARD,70th Anniversary Grand Prix,2020,19
+BOT,3,HARD,70th Anniversary Grand Prix,2020,20
+LEC,1,MEDIUM,70th Anniversary Grand Prix,2020,18
+LEC,2,HARD,70th Anniversary Grand Prix,2020,34
+ALB,1,MEDIUM,70th Anniversary Grand Prix,2020,6
+ALB,2,HARD,70th Anniversary Grand Prix,2020,24
+ALB,3,HARD,70th Anniversary Grand Prix,2020,22
+STR,1,MEDIUM,70th Anniversary Grand Prix,2020,18
+STR,2,HARD,70th Anniversary Grand Prix,2020,13
+STR,3,HARD,70th Anniversary Grand Prix,2020,21
+HUL,1,MEDIUM,70th Anniversary Grand Prix,2020,15
+HUL,2,HARD,70th Anniversary Grand Prix,2020,15
+HUL,3,HARD,70th Anniversary Grand Prix,2020,14
+HUL,4,SOFT,70th Anniversary Grand Prix,2020,8
+OCO,1,MEDIUM,70th Anniversary Grand Prix,2020,22
+OCO,2,HARD,70th Anniversary Grand Prix,2020,30
+NOR,1,MEDIUM,70th Anniversary Grand Prix,2020,12
+NOR,2,HARD,70th Anniversary Grand Prix,2020,17
+NOR,3,HARD,70th Anniversary Grand Prix,2020,23
+KVY,1,HARD,70th Anniversary Grand Prix,2020,19
+KVY,2,HARD,70th Anniversary Grand Prix,2020,16
+KVY,3,MEDIUM,70th Anniversary Grand Prix,2020,17
+GAS,1,MEDIUM,70th Anniversary Grand Prix,2020,7
+GAS,2,HARD,70th Anniversary Grand Prix,2020,16
+GAS,3,HARD,70th Anniversary Grand Prix,2020,29
+VET,1,HARD,70th Anniversary Grand Prix,2020,22
+VET,2,HARD,70th Anniversary Grand Prix,2020,11
+VET,3,MEDIUM,70th Anniversary Grand Prix,2020,19
+SAI,1,HARD,70th Anniversary Grand Prix,2020,22
+SAI,2,MEDIUM,70th Anniversary Grand Prix,2020,12
+SAI,3,HARD,70th Anniversary Grand Prix,2020,18
+RIC,1,MEDIUM,70th Anniversary Grand Prix,2020,14
+RIC,2,MEDIUM,70th Anniversary Grand Prix,2020,12
+RIC,3,HARD,70th Anniversary Grand Prix,2020,9
+RIC,4,MEDIUM,70th Anniversary Grand Prix,2020,16
+RAI,1,HARD,70th Anniversary Grand Prix,2020,26
+RAI,2,MEDIUM,70th Anniversary Grand Prix,2020,25
+GRO,1,MEDIUM,70th Anniversary Grand Prix,2020,17
+GRO,2,HARD,70th Anniversary Grand Prix,2020,21
+GRO,3,HARD,70th Anniversary Grand Prix,2020,13
+GIO,1,MEDIUM,70th Anniversary Grand Prix,2020,7
+GIO,2,HARD,70th Anniversary Grand Prix,2020,26
+GIO,3,MEDIUM,70th Anniversary Grand Prix,2020,18
+RUS,1,MEDIUM,70th Anniversary Grand Prix,2020,8
+RUS,2,HARD,70th Anniversary Grand Prix,2020,16
+RUS,3,HARD,70th Anniversary Grand Prix,2020,15
+RUS,4,MEDIUM,70th Anniversary Grand Prix,2020,12
+LAT,1,MEDIUM,70th Anniversary Grand Prix,2020,9
+LAT,2,HARD,70th Anniversary Grand Prix,2020,17
+LAT,3,HARD,70th Anniversary Grand Prix,2020,20
+LAT,4,MEDIUM,70th Anniversary Grand Prix,2020,5
+MAG,1,MEDIUM,70th Anniversary Grand Prix,2020,9
+MAG,2,HARD,70th Anniversary Grand Prix,2020,11
+MAG,3,HARD,70th Anniversary Grand Prix,2020,23
+HAM,1,SOFT,Spanish Grand Prix,2020,23
+HAM,2,MEDIUM,Spanish Grand Prix,2020,27
+HAM,3,MEDIUM,Spanish Grand Prix,2020,16
+VER,1,SOFT,Spanish Grand Prix,2020,21
+VER,2,MEDIUM,Spanish Grand Prix,2020,20
+VER,3,MEDIUM,Spanish Grand Prix,2020,25
+BOT,1,SOFT,Spanish Grand Prix,2020,23
+BOT,2,MEDIUM,Spanish Grand Prix,2020,25
+BOT,3,SOFT,Spanish Grand Prix,2020,16
+BOT,4,MEDIUM,Spanish Grand Prix,2020,2
+STR,1,SOFT,Spanish Grand Prix,2020,27
+STR,2,MEDIUM,Spanish Grand Prix,2020,15
+STR,3,SOFT,Spanish Grand Prix,2020,23
+PER,1,SOFT,Spanish Grand Prix,2020,29
+PER,2,MEDIUM,Spanish Grand Prix,2020,36
+SAI,1,SOFT,Spanish Grand Prix,2020,22
+SAI,2,SOFT,Spanish Grand Prix,2020,19
+SAI,3,MEDIUM,Spanish Grand Prix,2020,24
+VET,1,MEDIUM,Spanish Grand Prix,2020,29
+VET,2,SOFT,Spanish Grand Prix,2020,36
+ALB,1,SOFT,Spanish Grand Prix,2020,17
+ALB,2,HARD,Spanish Grand Prix,2020,22
+ALB,3,MEDIUM,Spanish Grand Prix,2020,26
+GAS,1,SOFT,Spanish Grand Prix,2020,21
+GAS,2,MEDIUM,Spanish Grand Prix,2020,21
+GAS,3,MEDIUM,Spanish Grand Prix,2020,23
+NOR,1,SOFT,Spanish Grand Prix,2020,21
+NOR,2,SOFT,Spanish Grand Prix,2020,23
+NOR,3,MEDIUM,Spanish Grand Prix,2020,21
+RIC,1,MEDIUM,Spanish Grand Prix,2020,35
+RIC,2,SOFT,Spanish Grand Prix,2020,30
+KVY,1,SOFT,Spanish Grand Prix,2020,21
+KVY,2,MEDIUM,Spanish Grand Prix,2020,24
+KVY,3,MEDIUM,Spanish Grand Prix,2020,20
+OCO,1,MEDIUM,Spanish Grand Prix,2020,34
+OCO,2,SOFT,Spanish Grand Prix,2020,31
+RAI,1,MEDIUM,Spanish Grand Prix,2020,20
+RAI,2,MEDIUM,Spanish Grand Prix,2020,24
+RAI,3,SOFT,Spanish Grand Prix,2020,21
+MAG,1,SOFT,Spanish Grand Prix,2020,28
+MAG,2,MEDIUM,Spanish Grand Prix,2020,37
+GIO,1,MEDIUM,Spanish Grand Prix,2020,21
+GIO,2,MEDIUM,Spanish Grand Prix,2020,24
+GIO,3,SOFT,Spanish Grand Prix,2020,20
+RUS,1,SOFT,Spanish Grand Prix,2020,19
+RUS,2,MEDIUM,Spanish Grand Prix,2020,16
+RUS,3,MEDIUM,Spanish Grand Prix,2020,30
+LAT,1,MEDIUM,Spanish Grand Prix,2020,28
+LAT,2,MEDIUM,Spanish Grand Prix,2020,21
+LAT,3,SOFT,Spanish Grand Prix,2020,15
+GRO,1,MEDIUM,Spanish Grand Prix,2020,32
+GRO,2,SOFT,Spanish Grand Prix,2020,30
+GRO,3,SOFT,Spanish Grand Prix,2020,2
+LEC,1,SOFT,Spanish Grand Prix,2020,29
+LEC,2,MEDIUM,Spanish Grand Prix,2020,9
+GAS,1,HARD,Belgian Grand Prix,2020,26
+GAS,2,MEDIUM,Belgian Grand Prix,2020,18
+PER,1,SOFT,Belgian Grand Prix,2020,18
+PER,2,HARD,Belgian Grand Prix,2020,26
+LEC,1,SOFT,Belgian Grand Prix,2020,10
+LEC,2,HARD,Belgian Grand Prix,2020,14
+LEC,3,MEDIUM,Belgian Grand Prix,2020,20
+STR,1,SOFT,Belgian Grand Prix,2020,11
+STR,2,HARD,Belgian Grand Prix,2020,33
+MAG,1,MEDIUM,Belgian Grand Prix,2020,10
+MAG,2,HARD,Belgian Grand Prix,2020,25
+MAG,3,SOFT,Belgian Grand Prix,2020,9
+ALB,1,SOFT,Belgian Grand Prix,2020,11
+ALB,2,SOFT,Belgian Grand Prix,2020,33
+KVY,1,MEDIUM,Belgian Grand Prix,2020,11
+KVY,2,HARD,Belgian Grand Prix,2020,33
+RIC,1,SOFT,Belgian Grand Prix,2020,11
+RIC,2,HARD,Belgian Grand Prix,2020,33
+OCO,1,SOFT,Belgian Grand Prix,2020,11
+OCO,2,HARD,Belgian Grand Prix,2020,33
+VER,1,MEDIUM,Belgian Grand Prix,2020,11
+VER,2,SOFT,Belgian Grand Prix,2020,33
+NOR,1,SOFT,Belgian Grand Prix,2020,11
+NOR,2,SOFT,Belgian Grand Prix,2020,33
+HAM,1,MEDIUM,Belgian Grand Prix,2020,11
+HAM,2,HARD,Belgian Grand Prix,2020,33
+VET,1,MEDIUM,Belgian Grand Prix,2020,11
+VET,2,HARD,Belgian Grand Prix,2020,33
+SAI,1,SOFT,Belgian Grand Prix,2020,1
+LAT,1,MEDIUM,Belgian Grand Prix,2020,10
+LAT,2,HARD,Belgian Grand Prix,2020,20
+LAT,3,MEDIUM,Belgian Grand Prix,2020,14
+RUS,1,MEDIUM,Belgian Grand Prix,2020,10
+RAI,1,MEDIUM,Belgian Grand Prix,2020,10
+RAI,2,SOFT,Belgian Grand Prix,2020,34
+BOT,1,MEDIUM,Belgian Grand Prix,2020,11
+BOT,2,HARD,Belgian Grand Prix,2020,33
+GRO,1,MEDIUM,Belgian Grand Prix,2020,10
+GRO,2,HARD,Belgian Grand Prix,2020,34
+GIO,1,MEDIUM,Belgian Grand Prix,2020,10
+GAS,1,SOFT,Italian Grand Prix,2020,19
+GAS,2,HARD,Italian Grand Prix,2020,7
+GAS,3,MEDIUM,Italian Grand Prix,2020,27
+SAI,1,SOFT,Italian Grand Prix,2020,22
+SAI,2,MEDIUM,Italian Grand Prix,2020,4
+SAI,3,MEDIUM,Italian Grand Prix,2020,27
+STR,1,SOFT,Italian Grand Prix,2020,26
+STR,2,MEDIUM,Italian Grand Prix,2020,27
+NOR,1,SOFT,Italian Grand Prix,2020,22
+NOR,2,MEDIUM,Italian Grand Prix,2020,4
+NOR,3,MEDIUM,Italian Grand Prix,2020,27
+BOT,1,SOFT,Italian Grand Prix,2020,22
+BOT,2,MEDIUM,Italian Grand Prix,2020,4
+BOT,3,MEDIUM,Italian Grand Prix,2020,27
+RIC,1,SOFT,Italian Grand Prix,2020,22
+RIC,2,MEDIUM,Italian Grand Prix,2020,4
+RIC,3,MEDIUM,Italian Grand Prix,2020,27
+HAM,1,SOFT,Italian Grand Prix,2020,20
+HAM,2,MEDIUM,Italian Grand Prix,2020,6
+HAM,3,HARD,Italian Grand Prix,2020,2
+HAM,4,HARD,Italian Grand Prix,2020,25
+OCO,1,SOFT,Italian Grand Prix,2020,22
+OCO,2,MEDIUM,Italian Grand Prix,2020,4
+OCO,3,SOFT,Italian Grand Prix,2020,27
+KVY,1,HARD,Italian Grand Prix,2020,22
+KVY,2,MEDIUM,Italian Grand Prix,2020,4
+KVY,3,MEDIUM,Italian Grand Prix,2020,27
+PER,1,SOFT,Italian Grand Prix,2020,22
+PER,2,MEDIUM,Italian Grand Prix,2020,4
+PER,3,MEDIUM,Italian Grand Prix,2020,27
+LAT,1,MEDIUM,Italian Grand Prix,2020,16
+LAT,2,HARD,Italian Grand Prix,2020,10
+LAT,3,MEDIUM,Italian Grand Prix,2020,27
+GRO,1,MEDIUM,Italian Grand Prix,2020,22
+GRO,2,HARD,Italian Grand Prix,2020,4
+GRO,3,HARD,Italian Grand Prix,2020,27
+RAI,1,MEDIUM,Italian Grand Prix,2020,18
+RAI,2,HARD,Italian Grand Prix,2020,8
+RAI,3,SOFT,Italian Grand Prix,2020,27
+RUS,1,MEDIUM,Italian Grand Prix,2020,22
+RUS,2,HARD,Italian Grand Prix,2020,4
+RUS,3,MEDIUM,Italian Grand Prix,2020,27
+ALB,1,SOFT,Italian Grand Prix,2020,22
+ALB,2,MEDIUM,Italian Grand Prix,2020,4
+ALB,3,HARD,Italian Grand Prix,2020,27
+GIO,1,MEDIUM,Italian Grand Prix,2020,20
+GIO,2,HARD,Italian Grand Prix,2020,6
+GIO,3,SOFT,Italian Grand Prix,2020,4
+GIO,4,SOFT,Italian Grand Prix,2020,23
+VER,1,SOFT,Italian Grand Prix,2020,22
+VER,2,MEDIUM,Italian Grand Prix,2020,4
+VER,3,MEDIUM,Italian Grand Prix,2020,4
+LEC,1,SOFT,Italian Grand Prix,2020,17
+LEC,2,HARD,Italian Grand Prix,2020,7
+MAG,1,MEDIUM,Italian Grand Prix,2020,1
+MAG,2,HARD,Italian Grand Prix,2020,17
+VET,1,HARD,Italian Grand Prix,2020,6
+GAS,1,SOFT,Tuscan Grand Prix,2020,1
+PER,1,SOFT,Tuscan Grand Prix,2020,7
+PER,2,SOFT,Tuscan Grand Prix,2020,1
+PER,3,SOFT,Tuscan Grand Prix,2020,20
+PER,4,MEDIUM,Tuscan Grand Prix,2020,15
+PER,5,SOFT,Tuscan Grand Prix,2020,2
+PER,6,SOFT,Tuscan Grand Prix,2020,14
+LEC,1,SOFT,Tuscan Grand Prix,2020,7
+LEC,2,SOFT,Tuscan Grand Prix,2020,1
+LEC,3,SOFT,Tuscan Grand Prix,2020,13
+LEC,4,HARD,Tuscan Grand Prix,2020,16
+LEC,5,MEDIUM,Tuscan Grand Prix,2020,8
+LEC,6,SOFT,Tuscan Grand Prix,2020,14
+STR,1,SOFT,Tuscan Grand Prix,2020,7
+STR,2,SOFT,Tuscan Grand Prix,2020,1
+STR,3,SOFT,Tuscan Grand Prix,2020,22
+STR,4,MEDIUM,Tuscan Grand Prix,2020,13
+MAG,1,SOFT,Tuscan Grand Prix,2020,6
+ALB,1,SOFT,Tuscan Grand Prix,2020,7
+ALB,2,SOFT,Tuscan Grand Prix,2020,1
+ALB,3,SOFT,Tuscan Grand Prix,2020,24
+ALB,4,MEDIUM,Tuscan Grand Prix,2020,11
+ALB,5,SOFT,Tuscan Grand Prix,2020,2
+ALB,6,SOFT,Tuscan Grand Prix,2020,14
+KVY,1,MEDIUM,Tuscan Grand Prix,2020,7
+KVY,2,MEDIUM,Tuscan Grand Prix,2020,1
+KVY,3,SOFT,Tuscan Grand Prix,2020,21
+KVY,4,MEDIUM,Tuscan Grand Prix,2020,14
+KVY,5,SOFT,Tuscan Grand Prix,2020,2
+KVY,6,SOFT,Tuscan Grand Prix,2020,14
+RIC,1,SOFT,Tuscan Grand Prix,2020,7
+RIC,2,SOFT,Tuscan Grand Prix,2020,1
+RIC,3,SOFT,Tuscan Grand Prix,2020,19
+RIC,4,MEDIUM,Tuscan Grand Prix,2020,16
+RIC,5,SOFT,Tuscan Grand Prix,2020,2
+RIC,6,SOFT,Tuscan Grand Prix,2020,14
+OCO,1,SOFT,Tuscan Grand Prix,2020,7
+OCO,2,SOFT,Tuscan Grand Prix,2020,1
+VER,1,SOFT,Tuscan Grand Prix,2020,1
+NOR,1,SOFT,Tuscan Grand Prix,2020,7
+NOR,2,SOFT,Tuscan Grand Prix,2020,1
+NOR,3,SOFT,Tuscan Grand Prix,2020,21
+NOR,4,MEDIUM,Tuscan Grand Prix,2020,14
+NOR,5,SOFT,Tuscan Grand Prix,2020,2
+NOR,6,SOFT,Tuscan Grand Prix,2020,14
+HAM,1,SOFT,Tuscan Grand Prix,2020,7
+HAM,2,SOFT,Tuscan Grand Prix,2020,1
+HAM,3,MEDIUM,Tuscan Grand Prix,2020,24
+HAM,4,HARD,Tuscan Grand Prix,2020,12
+HAM,5,MEDIUM,Tuscan Grand Prix,2020,1
+HAM,6,SOFT,Tuscan Grand Prix,2020,14
+VET,1,SOFT,Tuscan Grand Prix,2020,1
+VET,2,MEDIUM,Tuscan Grand Prix,2020,6
+VET,3,MEDIUM,Tuscan Grand Prix,2020,1
+VET,4,SOFT,Tuscan Grand Prix,2020,20
+VET,5,HARD,Tuscan Grand Prix,2020,15
+VET,6,SOFT,Tuscan Grand Prix,2020,2
+VET,7,SOFT,Tuscan Grand Prix,2020,14
+SAI,1,SOFT,Tuscan Grand Prix,2020,6
+LAT,1,MEDIUM,Tuscan Grand Prix,2020,7
+RUS,1,MEDIUM,Tuscan Grand Prix,2020,7
+RUS,2,MEDIUM,Tuscan Grand Prix,2020,1
+RUS,3,MEDIUM,Tuscan Grand Prix,2020,21
+RUS,4,HARD,Tuscan Grand Prix,2020,14
+RUS,5,SOFT,Tuscan Grand Prix,2020,2
+RUS,6,SOFT,Tuscan Grand Prix,2020,14
+RAI,1,MEDIUM,Tuscan Grand Prix,2020,1
+RAI,2,MEDIUM,Tuscan Grand Prix,2020,6
+RAI,3,MEDIUM,Tuscan Grand Prix,2020,1
+RAI,4,MEDIUM,Tuscan Grand Prix,2020,19
+RAI,5,HARD,Tuscan Grand Prix,2020,15
+RAI,6,SOFT,Tuscan Grand Prix,2020,2
+RAI,7,SOFT,Tuscan Grand Prix,2020,15
+BOT,1,SOFT,Tuscan Grand Prix,2020,7
+BOT,2,SOFT,Tuscan Grand Prix,2020,1
+BOT,3,MEDIUM,Tuscan Grand Prix,2020,23
+BOT,4,HARD,Tuscan Grand Prix,2020,12
+BOT,5,MEDIUM,Tuscan Grand Prix,2020,2
+BOT,6,SOFT,Tuscan Grand Prix,2020,14
+GRO,1,MEDIUM,Tuscan Grand Prix,2020,7
+GRO,2,HARD,Tuscan Grand Prix,2020,1
+GRO,3,SOFT,Tuscan Grand Prix,2020,20
+GRO,4,HARD,Tuscan Grand Prix,2020,14
+GRO,5,SOFT,Tuscan Grand Prix,2020,2
+GRO,6,SOFT,Tuscan Grand Prix,2020,15
+GIO,1,SOFT,Tuscan Grand Prix,2020,6
+BOT,1,MEDIUM,Russian Grand Prix,2020,26
+BOT,2,HARD,Russian Grand Prix,2020,27
+VER,1,MEDIUM,Russian Grand Prix,2020,25
+VER,2,HARD,Russian Grand Prix,2020,28
+HAM,1,SOFT,Russian Grand Prix,2020,16
+HAM,2,HARD,Russian Grand Prix,2020,37
+PER,1,SOFT,Russian Grand Prix,2020,20
+PER,2,HARD,Russian Grand Prix,2020,33
+RIC,1,SOFT,Russian Grand Prix,2020,15
+RIC,2,HARD,Russian Grand Prix,2020,38
+LEC,1,MEDIUM,Russian Grand Prix,2020,28
+LEC,2,HARD,Russian Grand Prix,2020,25
+OCO,1,SOFT,Russian Grand Prix,2020,18
+OCO,2,HARD,Russian Grand Prix,2020,35
+KVY,1,HARD,Russian Grand Prix,2020,30
+KVY,2,MEDIUM,Russian Grand Prix,2020,23
+GAS,1,SOFT,Russian Grand Prix,2020,18
+GAS,2,HARD,Russian Grand Prix,2020,24
+GAS,3,MEDIUM,Russian Grand Prix,2020,11
+ALB,1,SOFT,Russian Grand Prix,2020,1
+ALB,2,HARD,Russian Grand Prix,2020,26
+ALB,3,MEDIUM,Russian Grand Prix,2020,26
+GIO,1,MEDIUM,Russian Grand Prix,2020,16
+GIO,2,HARD,Russian Grand Prix,2020,36
+MAG,1,MEDIUM,Russian Grand Prix,2020,19
+MAG,2,HARD,Russian Grand Prix,2020,33
+VET,1,MEDIUM,Russian Grand Prix,2020,30
+VET,2,HARD,Russian Grand Prix,2020,22
+RAI,1,HARD,Russian Grand Prix,2020,35
+RAI,2,MEDIUM,Russian Grand Prix,2020,17
+NOR,1,SOFT,Russian Grand Prix,2020,1
+NOR,2,HARD,Russian Grand Prix,2020,46
+NOR,3,MEDIUM,Russian Grand Prix,2020,5
+LAT,1,MEDIUM,Russian Grand Prix,2020,17
+LAT,2,HARD,Russian Grand Prix,2020,35
+GRO,1,MEDIUM,Russian Grand Prix,2020,17
+GRO,2,HARD,Russian Grand Prix,2020,25
+GRO,3,MEDIUM,Russian Grand Prix,2020,10
+RUS,1,MEDIUM,Russian Grand Prix,2020,1
+RUS,2,HARD,Russian Grand Prix,2020,13
+RUS,3,MEDIUM,Russian Grand Prix,2020,36
+RUS,4,SOFT,Russian Grand Prix,2020,2
+SAI,1,SOFT,Russian Grand Prix,2020,1
+STR,1,MEDIUM,Russian Grand Prix,2020,1
+GAS,1,MEDIUM,Eifel Grand Prix,2020,30
+GAS,2,HARD,Eifel Grand Prix,2020,14
+GAS,3,SOFT,Eifel Grand Prix,2020,16
+PER,1,SOFT,Eifel Grand Prix,2020,28
+PER,2,MEDIUM,Eifel Grand Prix,2020,17
+PER,3,SOFT,Eifel Grand Prix,2020,15
+LEC,1,SOFT,Eifel Grand Prix,2020,10
+LEC,2,MEDIUM,Eifel Grand Prix,2020,25
+LEC,3,MEDIUM,Eifel Grand Prix,2020,25
+MAG,1,SOFT,Eifel Grand Prix,2020,14
+MAG,2,MEDIUM,Eifel Grand Prix,2020,20
+MAG,3,MEDIUM,Eifel Grand Prix,2020,26
+ALB,1,SOFT,Eifel Grand Prix,2020,7
+ALB,2,MEDIUM,Eifel Grand Prix,2020,16
+KVY,1,MEDIUM,Eifel Grand Prix,2020,17
+KVY,2,HARD,Eifel Grand Prix,2020,27
+KVY,3,SOFT,Eifel Grand Prix,2020,16
+HUL,1,SOFT,Eifel Grand Prix,2020,29
+HUL,2,MEDIUM,Eifel Grand Prix,2020,15
+HUL,3,SOFT,Eifel Grand Prix,2020,16
+RIC,1,SOFT,Eifel Grand Prix,2020,16
+RIC,2,MEDIUM,Eifel Grand Prix,2020,28
+RIC,3,SOFT,Eifel Grand Prix,2020,16
+OCO,1,SOFT,Eifel Grand Prix,2020,22
+VER,1,SOFT,Eifel Grand Prix,2020,16
+VER,2,MEDIUM,Eifel Grand Prix,2020,29
+VER,3,SOFT,Eifel Grand Prix,2020,15
+NOR,1,SOFT,Eifel Grand Prix,2020,29
+NOR,2,MEDIUM,Eifel Grand Prix,2020,14
+HAM,1,SOFT,Eifel Grand Prix,2020,16
+HAM,2,MEDIUM,Eifel Grand Prix,2020,29
+HAM,3,SOFT,Eifel Grand Prix,2020,15
+VET,1,MEDIUM,Eifel Grand Prix,2020,11
+VET,2,HARD,Eifel Grand Prix,2020,30
+VET,3,SOFT,Eifel Grand Prix,2020,19
+SAI,1,SOFT,Eifel Grand Prix,2020,28
+SAI,2,MEDIUM,Eifel Grand Prix,2020,16
+SAI,3,SOFT,Eifel Grand Prix,2020,16
+LAT,1,SOFT,Eifel Grand Prix,2020,14
+LAT,2,MEDIUM,Eifel Grand Prix,2020,19
+LAT,3,MEDIUM,Eifel Grand Prix,2020,27
+RUS,1,SOFT,Eifel Grand Prix,2020,11
+RUS,2,MEDIUM,Eifel Grand Prix,2020,2
+RAI,1,SOFT,Eifel Grand Prix,2020,10
+RAI,2,MEDIUM,Eifel Grand Prix,2020,34
+RAI,3,SOFT,Eifel Grand Prix,2020,16
+BOT,1,SOFT,Eifel Grand Prix,2020,13
+BOT,2,MEDIUM,Eifel Grand Prix,2020,5
+GRO,1,MEDIUM,Eifel Grand Prix,2020,28
+GRO,2,HARD,Eifel Grand Prix,2020,32
+GIO,1,SOFT,Eifel Grand Prix,2020,15
+GIO,2,MEDIUM,Eifel Grand Prix,2020,21
+GIO,3,MEDIUM,Eifel Grand Prix,2020,24
+HAM,1,MEDIUM,Portuguese Grand Prix,2020,40
+HAM,2,HARD,Portuguese Grand Prix,2020,26
+BOT,1,MEDIUM,Portuguese Grand Prix,2020,41
+BOT,2,HARD,Portuguese Grand Prix,2020,25
+VER,1,SOFT,Portuguese Grand Prix,2020,23
+VER,2,MEDIUM,Portuguese Grand Prix,2020,43
+LEC,1,MEDIUM,Portuguese Grand Prix,2020,34
+LEC,2,HARD,Portuguese Grand Prix,2020,32
+GAS,1,SOFT,Portuguese Grand Prix,2020,28
+GAS,2,MEDIUM,Portuguese Grand Prix,2020,37
+SAI,1,SOFT,Portuguese Grand Prix,2020,26
+SAI,2,MEDIUM,Portuguese Grand Prix,2020,39
+PER,1,SOFT,Portuguese Grand Prix,2020,1
+PER,2,MEDIUM,Portuguese Grand Prix,2020,44
+PER,3,SOFT,Portuguese Grand Prix,2020,20
+OCO,1,MEDIUM,Portuguese Grand Prix,2020,53
+OCO,2,SOFT,Portuguese Grand Prix,2020,12
+RIC,1,SOFT,Portuguese Grand Prix,2020,14
+RIC,2,MEDIUM,Portuguese Grand Prix,2020,51
+VET,1,MEDIUM,Portuguese Grand Prix,2020,27
+VET,2,HARD,Portuguese Grand Prix,2020,38
+RAI,1,SOFT,Portuguese Grand Prix,2020,11
+RAI,2,MEDIUM,Portuguese Grand Prix,2020,54
+ALB,1,SOFT,Portuguese Grand Prix,2020,19
+ALB,2,MEDIUM,Portuguese Grand Prix,2020,27
+ALB,3,SOFT,Portuguese Grand Prix,2020,19
+NOR,1,SOFT,Portuguese Grand Prix,2020,18
+NOR,2,HARD,Portuguese Grand Prix,2020,25
+NOR,3,MEDIUM,Portuguese Grand Prix,2020,22
+RUS,1,MEDIUM,Portuguese Grand Prix,2020,36
+RUS,2,HARD,Portuguese Grand Prix,2020,29
+GIO,1,MEDIUM,Portuguese Grand Prix,2020,28
+GIO,2,HARD,Portuguese Grand Prix,2020,37
+MAG,1,HARD,Portuguese Grand Prix,2020,31
+MAG,2,MEDIUM,Portuguese Grand Prix,2020,34
+GRO,1,MEDIUM,Portuguese Grand Prix,2020,26
+GRO,2,HARD,Portuguese Grand Prix,2020,39
+LAT,1,MEDIUM,Portuguese Grand Prix,2020,24
+LAT,2,HARD,Portuguese Grand Prix,2020,40
+KVY,1,MEDIUM,Portuguese Grand Prix,2020,25
+KVY,2,HARD,Portuguese Grand Prix,2020,30
+KVY,3,SOFT,Portuguese Grand Prix,2020,9
+STR,1,MEDIUM,Portuguese Grand Prix,2020,18
+STR,2,HARD,Portuguese Grand Prix,2020,16
+STR,3,SOFT,Portuguese Grand Prix,2020,17
+GAS,1,SOFT,Emilia Romagna Grand Prix,2020,8
+PER,1,MEDIUM,Emilia Romagna Grand Prix,2020,27
+PER,2,HARD,Emilia Romagna Grand Prix,2020,24
+PER,3,SOFT,Emilia Romagna Grand Prix,2020,12
+LEC,1,SOFT,Emilia Romagna Grand Prix,2020,13
+LEC,2,HARD,Emilia Romagna Grand Prix,2020,50
+STR,1,MEDIUM,Emilia Romagna Grand Prix,2020,1
+STR,2,HARD,Emilia Romagna Grand Prix,2020,28
+STR,3,MEDIUM,Emilia Romagna Grand Prix,2020,23
+STR,4,SOFT,Emilia Romagna Grand Prix,2020,11
+MAG,1,MEDIUM,Emilia Romagna Grand Prix,2020,27
+MAG,2,HARD,Emilia Romagna Grand Prix,2020,20
+ALB,1,SOFT,Emilia Romagna Grand Prix,2020,14
+ALB,2,HARD,Emilia Romagna Grand Prix,2020,45
+ALB,3,SOFT,Emilia Romagna Grand Prix,2020,4
+KVY,1,SOFT,Emilia Romagna Grand Prix,2020,14
+KVY,2,HARD,Emilia Romagna Grand Prix,2020,37
+KVY,3,SOFT,Emilia Romagna Grand Prix,2020,12
+RIC,1,SOFT,Emilia Romagna Grand Prix,2020,14
+RIC,2,HARD,Emilia Romagna Grand Prix,2020,49
+OCO,1,MEDIUM,Emilia Romagna Grand Prix,2020,13
+OCO,2,HARD,Emilia Romagna Grand Prix,2020,15
+VER,1,MEDIUM,Emilia Romagna Grand Prix,2020,18
+VER,2,HARD,Emilia Romagna Grand Prix,2020,33
+NOR,1,SOFT,Emilia Romagna Grand Prix,2020,13
+NOR,2,MEDIUM,Emilia Romagna Grand Prix,2020,40
+NOR,3,SOFT,Emilia Romagna Grand Prix,2020,10
+HAM,1,MEDIUM,Emilia Romagna Grand Prix,2020,30
+HAM,2,HARD,Emilia Romagna Grand Prix,2020,22
+HAM,3,SOFT,Emilia Romagna Grand Prix,2020,11
+VET,1,MEDIUM,Emilia Romagna Grand Prix,2020,39
+VET,2,HARD,Emilia Romagna Grand Prix,2020,12
+VET,3,SOFT,Emilia Romagna Grand Prix,2020,12
+SAI,1,SOFT,Emilia Romagna Grand Prix,2020,17
+SAI,2,MEDIUM,Emilia Romagna Grand Prix,2020,34
+SAI,3,SOFT,Emilia Romagna Grand Prix,2020,12
+LAT,1,MEDIUM,Emilia Romagna Grand Prix,2020,34
+LAT,2,HARD,Emilia Romagna Grand Prix,2020,29
+RUS,1,MEDIUM,Emilia Romagna Grand Prix,2020,11
+RUS,2,HARD,Emilia Romagna Grand Prix,2020,41
+RAI,1,MEDIUM,Emilia Romagna Grand Prix,2020,48
+RAI,2,SOFT,Emilia Romagna Grand Prix,2020,15
+BOT,1,MEDIUM,Emilia Romagna Grand Prix,2020,19
+BOT,2,HARD,Emilia Romagna Grand Prix,2020,32
+BOT,3,SOFT,Emilia Romagna Grand Prix,2020,12
+GRO,1,MEDIUM,Emilia Romagna Grand Prix,2020,9
+GRO,2,HARD,Emilia Romagna Grand Prix,2020,41
+GRO,3,SOFT,Emilia Romagna Grand Prix,2020,13
+GIO,1,SOFT,Emilia Romagna Grand Prix,2020,10
+GIO,2,MEDIUM,Emilia Romagna Grand Prix,2020,53
+GAS,1,MEDIUM,Bahrain Grand Prix,2020,1
+GAS,2,HARD,Bahrain Grand Prix,2020,24
+GAS,3,HARD,Bahrain Grand Prix,2020,32
+PER,1,MEDIUM,Bahrain Grand Prix,2020,1
+PER,2,MEDIUM,Bahrain Grand Prix,2020,19
+PER,3,HARD,Bahrain Grand Prix,2020,16
+PER,4,HARD,Bahrain Grand Prix,2020,18
+LEC,1,HARD,Bahrain Grand Prix,2020,1
+LEC,2,MEDIUM,Bahrain Grand Prix,2020,22
+LEC,3,HARD,Bahrain Grand Prix,2020,17
+LEC,4,HARD,Bahrain Grand Prix,2020,16
+STR,1,MEDIUM,Bahrain Grand Prix,2020,1
+STR,2,MEDIUM,Bahrain Grand Prix,2020,2
+MAG,1,MEDIUM,Bahrain Grand Prix,2020,1
+MAG,2,HARD,Bahrain Grand Prix,2020,2
+MAG,3,HARD,Bahrain Grand Prix,2020,24
+MAG,4,HARD,Bahrain Grand Prix,2020,26
+MAG,5,SOFT,Bahrain Grand Prix,2020,3
+ALB,1,MEDIUM,Bahrain Grand Prix,2020,1
+ALB,2,MEDIUM,Bahrain Grand Prix,2020,18
+ALB,3,MEDIUM,Bahrain Grand Prix,2020,15
+ALB,4,HARD,Bahrain Grand Prix,2020,23
+KVY,1,MEDIUM,Bahrain Grand Prix,2020,1
+KVY,2,SOFT,Bahrain Grand Prix,2020,16
+KVY,3,HARD,Bahrain Grand Prix,2020,16
+KVY,4,HARD,Bahrain Grand Prix,2020,23
+RIC,1,MEDIUM,Bahrain Grand Prix,2020,1
+RIC,2,MEDIUM,Bahrain Grand Prix,2020,15
+RIC,3,HARD,Bahrain Grand Prix,2020,20
+RIC,4,HARD,Bahrain Grand Prix,2020,21
+OCO,1,MEDIUM,Bahrain Grand Prix,2020,1
+OCO,2,MEDIUM,Bahrain Grand Prix,2020,16
+OCO,3,MEDIUM,Bahrain Grand Prix,2020,17
+OCO,4,HARD,Bahrain Grand Prix,2020,23
+VER,1,MEDIUM,Bahrain Grand Prix,2020,1
+VER,2,MEDIUM,Bahrain Grand Prix,2020,19
+VER,3,HARD,Bahrain Grand Prix,2020,14
+VER,4,HARD,Bahrain Grand Prix,2020,12
+VER,5,MEDIUM,Bahrain Grand Prix,2020,11
+NOR,1,MEDIUM,Bahrain Grand Prix,2020,1
+NOR,2,MEDIUM,Bahrain Grand Prix,2020,17
+NOR,3,MEDIUM,Bahrain Grand Prix,2020,20
+NOR,4,HARD,Bahrain Grand Prix,2020,19
+HAM,1,MEDIUM,Bahrain Grand Prix,2020,1
+HAM,2,MEDIUM,Bahrain Grand Prix,2020,18
+HAM,3,MEDIUM,Bahrain Grand Prix,2020,16
+HAM,4,HARD,Bahrain Grand Prix,2020,22
+VET,1,MEDIUM,Bahrain Grand Prix,2020,1
+VET,2,HARD,Bahrain Grand Prix,2020,19
+VET,3,MEDIUM,Bahrain Grand Prix,2020,19
+VET,4,HARD,Bahrain Grand Prix,2020,17
+SAI,1,SOFT,Bahrain Grand Prix,2020,1
+SAI,2,SOFT,Bahrain Grand Prix,2020,20
+SAI,3,MEDIUM,Bahrain Grand Prix,2020,18
+SAI,4,HARD,Bahrain Grand Prix,2020,18
+LAT,1,HARD,Bahrain Grand Prix,2020,1
+LAT,2,MEDIUM,Bahrain Grand Prix,2020,20
+LAT,3,MEDIUM,Bahrain Grand Prix,2020,16
+LAT,4,HARD,Bahrain Grand Prix,2020,19
+RUS,1,MEDIUM,Bahrain Grand Prix,2020,1
+RUS,2,MEDIUM,Bahrain Grand Prix,2020,19
+RUS,3,HARD,Bahrain Grand Prix,2020,19
+RUS,4,MEDIUM,Bahrain Grand Prix,2020,17
+RAI,1,MEDIUM,Bahrain Grand Prix,2020,1
+RAI,2,MEDIUM,Bahrain Grand Prix,2020,16
+RAI,3,HARD,Bahrain Grand Prix,2020,23
+RAI,4,MEDIUM,Bahrain Grand Prix,2020,16
+BOT,1,MEDIUM,Bahrain Grand Prix,2020,1
+BOT,2,MEDIUM,Bahrain Grand Prix,2020,3
+BOT,3,HARD,Bahrain Grand Prix,2020,21
+BOT,4,MEDIUM,Bahrain Grand Prix,2020,13
+BOT,5,MEDIUM,Bahrain Grand Prix,2020,19
+GRO,1,HARD,Bahrain Grand Prix,2020,1
+GIO,1,MEDIUM,Bahrain Grand Prix,2020,1
+GIO,2,MEDIUM,Bahrain Grand Prix,2020,19
+GIO,3,HARD,Bahrain Grand Prix,2020,33
+GIO,4,SOFT,Bahrain Grand Prix,2020,3
+GAS,1,SOFT,Sakhir Grand Prix,2020,28
+GAS,2,MEDIUM,Sakhir Grand Prix,2020,23
+GAS,3,HARD,Sakhir Grand Prix,2020,36
+PER,1,SOFT,Sakhir Grand Prix,2020,1
+PER,2,MEDIUM,Sakhir Grand Prix,2020,46
+PER,3,HARD,Sakhir Grand Prix,2020,40
+LEC,1,SOFT,Sakhir Grand Prix,2020,1
+STR,1,SOFT,Sakhir Grand Prix,2020,42
+STR,2,MEDIUM,Sakhir Grand Prix,2020,45
+MAG,1,SOFT,Sakhir Grand Prix,2020,26
+MAG,2,MEDIUM,Sakhir Grand Prix,2020,28
+MAG,3,SOFT,Sakhir Grand Prix,2020,33
+ALB,1,MEDIUM,Sakhir Grand Prix,2020,47
+ALB,2,HARD,Sakhir Grand Prix,2020,15
+ALB,3,SOFT,Sakhir Grand Prix,2020,25
+KVY,1,SOFT,Sakhir Grand Prix,2020,27
+KVY,2,MEDIUM,Sakhir Grand Prix,2020,26
+KVY,3,HARD,Sakhir Grand Prix,2020,34
+RIC,1,SOFT,Sakhir Grand Prix,2020,29
+RIC,2,MEDIUM,Sakhir Grand Prix,2020,26
+RIC,3,HARD,Sakhir Grand Prix,2020,32
+OCO,1,MEDIUM,Sakhir Grand Prix,2020,41
+OCO,2,HARD,Sakhir Grand Prix,2020,46
+VER,1,SOFT,Sakhir Grand Prix,2020,1
+NOR,1,SOFT,Sakhir Grand Prix,2020,20
+NOR,2,MEDIUM,Sakhir Grand Prix,2020,34
+NOR,3,MEDIUM,Sakhir Grand Prix,2020,33
+VET,1,MEDIUM,Sakhir Grand Prix,2020,31
+VET,2,HARD,Sakhir Grand Prix,2020,23
+VET,3,SOFT,Sakhir Grand Prix,2020,9
+VET,4,SOFT,Sakhir Grand Prix,2020,24
+FIT,1,SOFT,Sakhir Grand Prix,2020,31
+FIT,2,MEDIUM,Sakhir Grand Prix,2020,22
+FIT,3,SOFT,Sakhir Grand Prix,2020,10
+FIT,4,SOFT,Sakhir Grand Prix,2020,24
+SAI,1,SOFT,Sakhir Grand Prix,2020,28
+SAI,2,MEDIUM,Sakhir Grand Prix,2020,27
+SAI,3,MEDIUM,Sakhir Grand Prix,2020,32
+LAT,1,SOFT,Sakhir Grand Prix,2020,27
+LAT,2,MEDIUM,Sakhir Grand Prix,2020,26
+RUS,1,MEDIUM,Sakhir Grand Prix,2020,45
+RUS,2,HARD,Sakhir Grand Prix,2020,17
+RUS,3,MEDIUM,Sakhir Grand Prix,2020,1
+RUS,4,MEDIUM,Sakhir Grand Prix,2020,15
+RUS,5,SOFT,Sakhir Grand Prix,2020,9
+RAI,1,MEDIUM,Sakhir Grand Prix,2020,23
+RAI,2,HARD,Sakhir Grand Prix,2020,31
+RAI,3,MEDIUM,Sakhir Grand Prix,2020,8
+RAI,4,SOFT,Sakhir Grand Prix,2020,25
+BOT,1,MEDIUM,Sakhir Grand Prix,2020,49
+BOT,2,HARD,Sakhir Grand Prix,2020,13
+BOT,3,HARD,Sakhir Grand Prix,2020,25
+AIT,1,MEDIUM,Sakhir Grand Prix,2020,31
+AIT,2,HARD,Sakhir Grand Prix,2020,23
+AIT,3,MEDIUM,Sakhir Grand Prix,2020,5
+AIT,4,SOFT,Sakhir Grand Prix,2020,28
+GIO,1,MEDIUM,Sakhir Grand Prix,2020,26
+GIO,2,HARD,Sakhir Grand Prix,2020,28
+GIO,3,MEDIUM,Sakhir Grand Prix,2020,33
+GAS,1,SOFT,Abu Dhabi Grand Prix,2020,10
+GAS,2,HARD,Abu Dhabi Grand Prix,2020,45
+PER,1,HARD,Abu Dhabi Grand Prix,2020,9
+LEC,1,MEDIUM,Abu Dhabi Grand Prix,2020,22
+LEC,2,HARD,Abu Dhabi Grand Prix,2020,32
+STR,1,SOFT,Abu Dhabi Grand Prix,2020,10
+STR,2,HARD,Abu Dhabi Grand Prix,2020,45
+MAG,1,HARD,Abu Dhabi Grand Prix,2020,31
+MAG,2,MEDIUM,Abu Dhabi Grand Prix,2020,16
+MAG,3,MEDIUM,Abu Dhabi Grand Prix,2020,7
+ALB,1,SOFT,Abu Dhabi Grand Prix,2020,10
+ALB,2,HARD,Abu Dhabi Grand Prix,2020,45
+KVY,1,SOFT,Abu Dhabi Grand Prix,2020,10
+KVY,2,HARD,Abu Dhabi Grand Prix,2020,44
+RIC,1,HARD,Abu Dhabi Grand Prix,2020,39
+RIC,2,MEDIUM,Abu Dhabi Grand Prix,2020,16
+OCO,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+OCO,2,HARD,Abu Dhabi Grand Prix,2020,45
+VER,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+VER,2,HARD,Abu Dhabi Grand Prix,2020,45
+NOR,1,SOFT,Abu Dhabi Grand Prix,2020,10
+NOR,2,HARD,Abu Dhabi Grand Prix,2020,45
+HAM,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+HAM,2,HARD,Abu Dhabi Grand Prix,2020,45
+VET,1,HARD,Abu Dhabi Grand Prix,2020,35
+VET,2,MEDIUM,Abu Dhabi Grand Prix,2020,19
+FIT,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+FIT,2,HARD,Abu Dhabi Grand Prix,2020,24
+FIT,3,MEDIUM,Abu Dhabi Grand Prix,2020,14
+FIT,4,SOFT,Abu Dhabi Grand Prix,2020,5
+SAI,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+SAI,2,HARD,Abu Dhabi Grand Prix,2020,45
+LAT,1,MEDIUM,Abu Dhabi Grand Prix,2020,11
+LAT,2,HARD,Abu Dhabi Grand Prix,2020,24
+LAT,3,MEDIUM,Abu Dhabi Grand Prix,2020,19
+RUS,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+RUS,2,HARD,Abu Dhabi Grand Prix,2020,44
+RAI,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+RAI,2,HARD,Abu Dhabi Grand Prix,2020,44
+BOT,1,MEDIUM,Abu Dhabi Grand Prix,2020,10
+BOT,2,HARD,Abu Dhabi Grand Prix,2020,45
+GIO,1,MEDIUM,Abu Dhabi Grand Prix,2020,27
+GIO,2,HARD,Abu Dhabi Grand Prix,2020,27
+HAM,1,MEDIUM,Bahrain Grand Prix,2021,13
+HAM,2,HARD,Bahrain Grand Prix,2021,15
+HAM,3,HARD,Bahrain Grand Prix,2021,28
+VER,1,MEDIUM,Bahrain Grand Prix,2021,17
+VER,2,MEDIUM,Bahrain Grand Prix,2021,22
+VER,3,HARD,Bahrain Grand Prix,2021,17
+BOT,1,MEDIUM,Bahrain Grand Prix,2021,16
+BOT,2,HARD,Bahrain Grand Prix,2021,14
+BOT,3,HARD,Bahrain Grand Prix,2021,24
+BOT,4,MEDIUM,Bahrain Grand Prix,2021,2
+NOR,1,SOFT,Bahrain Grand Prix,2021,12
+NOR,2,MEDIUM,Bahrain Grand Prix,2021,21
+NOR,3,HARD,Bahrain Grand Prix,2021,23
+PER,1,MEDIUM,Bahrain Grand Prix,2021,2
+PER,2,MEDIUM,Bahrain Grand Prix,2021,17
+PER,3,HARD,Bahrain Grand Prix,2021,19
+PER,4,MEDIUM,Bahrain Grand Prix,2021,18
+LEC,1,SOFT,Bahrain Grand Prix,2021,12
+LEC,2,MEDIUM,Bahrain Grand Prix,2021,20
+LEC,3,HARD,Bahrain Grand Prix,2021,24
+RIC,1,SOFT,Bahrain Grand Prix,2021,13
+RIC,2,MEDIUM,Bahrain Grand Prix,2021,19
+RIC,3,HARD,Bahrain Grand Prix,2021,24
+SAI,1,SOFT,Bahrain Grand Prix,2021,15
+SAI,2,MEDIUM,Bahrain Grand Prix,2021,22
+SAI,3,HARD,Bahrain Grand Prix,2021,19
+TSU,1,MEDIUM,Bahrain Grand Prix,2021,15
+TSU,2,HARD,Bahrain Grand Prix,2021,18
+TSU,3,HARD,Bahrain Grand Prix,2021,23
+STR,1,SOFT,Bahrain Grand Prix,2021,12
+STR,2,MEDIUM,Bahrain Grand Prix,2021,16
+STR,3,HARD,Bahrain Grand Prix,2021,28
+RAI,1,MEDIUM,Bahrain Grand Prix,2021,13
+RAI,2,HARD,Bahrain Grand Prix,2021,16
+RAI,3,MEDIUM,Bahrain Grand Prix,2021,27
+GIO,1,MEDIUM,Bahrain Grand Prix,2021,12
+GIO,2,HARD,Bahrain Grand Prix,2021,18
+GIO,3,MEDIUM,Bahrain Grand Prix,2021,25
+OCO,1,SOFT,Bahrain Grand Prix,2021,13
+OCO,2,MEDIUM,Bahrain Grand Prix,2021,18
+OCO,3,HARD,Bahrain Grand Prix,2021,24
+RUS,1,SOFT,Bahrain Grand Prix,2021,13
+RUS,2,MEDIUM,Bahrain Grand Prix,2021,23
+RUS,3,MEDIUM,Bahrain Grand Prix,2021,19
+VET,1,MEDIUM,Bahrain Grand Prix,2021,24
+VET,2,HARD,Bahrain Grand Prix,2021,31
+MSC,1,MEDIUM,Bahrain Grand Prix,2021,14
+MSC,2,MEDIUM,Bahrain Grand Prix,2021,19
+MSC,3,HARD,Bahrain Grand Prix,2021,22
+GAS,1,MEDIUM,Bahrain Grand Prix,2021,4
+GAS,2,HARD,Bahrain Grand Prix,2021,15
+GAS,3,MEDIUM,Bahrain Grand Prix,2021,20
+GAS,4,HARD,Bahrain Grand Prix,2021,13
+LAT,1,SOFT,Bahrain Grand Prix,2021,14
+LAT,2,MEDIUM,Bahrain Grand Prix,2021,18
+LAT,3,MEDIUM,Bahrain Grand Prix,2021,19
+ALO,1,SOFT,Bahrain Grand Prix,2021,11
+ALO,2,MEDIUM,Bahrain Grand Prix,2021,18
+ALO,3,HARD,Bahrain Grand Prix,2021,3
+MAZ,1,MEDIUM,Bahrain Grand Prix,2021,1
+GAS,1,SOFT,Portuguese Grand Prix,2021,2
+GAS,2,SOFT,Portuguese Grand Prix,2021,1
+GAS,3,SOFT,Portuguese Grand Prix,2021,21
+GAS,4,MEDIUM,Portuguese Grand Prix,2021,42
+PER,1,MEDIUM,Portuguese Grand Prix,2021,2
+PER,2,MEDIUM,Portuguese Grand Prix,2021,1
+PER,3,MEDIUM,Portuguese Grand Prix,2021,48
+PER,4,SOFT,Portuguese Grand Prix,2021,15
+ALO,1,MEDIUM,Portuguese Grand Prix,2021,2
+ALO,2,MEDIUM,Portuguese Grand Prix,2021,1
+ALO,3,MEDIUM,Portuguese Grand Prix,2021,37
+ALO,4,HARD,Portuguese Grand Prix,2021,26
+LEC,1,MEDIUM,Portuguese Grand Prix,2021,2
+LEC,2,MEDIUM,Portuguese Grand Prix,2021,1
+LEC,3,MEDIUM,Portuguese Grand Prix,2021,22
+LEC,4,HARD,Portuguese Grand Prix,2021,41
+STR,1,SOFT,Portuguese Grand Prix,2021,2
+STR,2,SOFT,Portuguese Grand Prix,2021,1
+STR,3,SOFT,Portuguese Grand Prix,2021,36
+STR,4,MEDIUM,Portuguese Grand Prix,2021,26
+TSU,1,MEDIUM,Portuguese Grand Prix,2021,2
+TSU,2,MEDIUM,Portuguese Grand Prix,2021,1
+TSU,3,MEDIUM,Portuguese Grand Prix,2021,18
+TSU,4,HARD,Portuguese Grand Prix,2021,44
+RIC,1,MEDIUM,Portuguese Grand Prix,2021,2
+RIC,2,MEDIUM,Portuguese Grand Prix,2021,1
+RIC,3,MEDIUM,Portuguese Grand Prix,2021,38
+RIC,4,HARD,Portuguese Grand Prix,2021,25
+OCO,1,SOFT,Portuguese Grand Prix,2021,2
+OCO,2,SOFT,Portuguese Grand Prix,2021,1
+OCO,3,SOFT,Portuguese Grand Prix,2021,19
+OCO,4,HARD,Portuguese Grand Prix,2021,44
+VER,1,MEDIUM,Portuguese Grand Prix,2021,2
+VER,2,MEDIUM,Portuguese Grand Prix,2021,1
+VER,3,MEDIUM,Portuguese Grand Prix,2021,32
+VER,4,HARD,Portuguese Grand Prix,2021,29
+VER,5,SOFT,Portuguese Grand Prix,2021,2
+NOR,1,SOFT,Portuguese Grand Prix,2021,2
+NOR,2,SOFT,Portuguese Grand Prix,2021,1
+NOR,3,SOFT,Portuguese Grand Prix,2021,19
+NOR,4,MEDIUM,Portuguese Grand Prix,2021,44
+HAM,1,MEDIUM,Portuguese Grand Prix,2021,2
+HAM,2,MEDIUM,Portuguese Grand Prix,2021,1
+HAM,3,MEDIUM,Portuguese Grand Prix,2021,34
+HAM,4,HARD,Portuguese Grand Prix,2021,29
+MSC,1,MEDIUM,Portuguese Grand Prix,2021,2
+MSC,2,MEDIUM,Portuguese Grand Prix,2021,1
+MSC,3,MEDIUM,Portuguese Grand Prix,2021,29
+MSC,4,HARD,Portuguese Grand Prix,2021,32
+VET,1,SOFT,Portuguese Grand Prix,2021,2
+VET,2,SOFT,Portuguese Grand Prix,2021,1
+VET,3,SOFT,Portuguese Grand Prix,2021,19
+VET,4,MEDIUM,Portuguese Grand Prix,2021,43
+SAI,1,SOFT,Portuguese Grand Prix,2021,2
+SAI,2,SOFT,Portuguese Grand Prix,2021,1
+SAI,3,SOFT,Portuguese Grand Prix,2021,18
+SAI,4,MEDIUM,Portuguese Grand Prix,2021,45
+LAT,1,MEDIUM,Portuguese Grand Prix,2021,2
+LAT,2,MEDIUM,Portuguese Grand Prix,2021,1
+LAT,3,MEDIUM,Portuguese Grand Prix,2021,21
+LAT,4,HARD,Portuguese Grand Prix,2021,40
+RUS,1,MEDIUM,Portuguese Grand Prix,2021,2
+RUS,2,MEDIUM,Portuguese Grand Prix,2021,1
+RUS,3,MEDIUM,Portuguese Grand Prix,2021,25
+RUS,4,HARD,Portuguese Grand Prix,2021,37
+RAI,1,SOFT,Portuguese Grand Prix,2021,2
+BOT,1,MEDIUM,Portuguese Grand Prix,2021,2
+BOT,2,MEDIUM,Portuguese Grand Prix,2021,1
+BOT,3,MEDIUM,Portuguese Grand Prix,2021,33
+BOT,4,HARD,Portuguese Grand Prix,2021,27
+BOT,5,SOFT,Portuguese Grand Prix,2021,3
+MAZ,1,MEDIUM,Portuguese Grand Prix,2021,2
+MAZ,2,MEDIUM,Portuguese Grand Prix,2021,1
+MAZ,3,MEDIUM,Portuguese Grand Prix,2021,28
+MAZ,4,HARD,Portuguese Grand Prix,2021,12
+MAZ,5,SOFT,Portuguese Grand Prix,2021,21
+GIO,1,MEDIUM,Portuguese Grand Prix,2021,2
+GIO,2,MEDIUM,Portuguese Grand Prix,2021,1
+GIO,3,MEDIUM,Portuguese Grand Prix,2021,19
+GIO,4,HARD,Portuguese Grand Prix,2021,43
+GAS,1,SOFT,Spanish Grand Prix,2021,18
+GAS,2,MEDIUM,Spanish Grand Prix,2021,29
+GAS,3,SOFT,Spanish Grand Prix,2021,18
+PER,1,SOFT,Spanish Grand Prix,2021,27
+PER,2,MEDIUM,Spanish Grand Prix,2021,30
+PER,3,SOFT,Spanish Grand Prix,2021,9
+ALO,1,SOFT,Spanish Grand Prix,2021,21
+ALO,2,MEDIUM,Spanish Grand Prix,2021,40
+ALO,3,SOFT,Spanish Grand Prix,2021,4
+LEC,1,SOFT,Spanish Grand Prix,2021,28
+LEC,2,MEDIUM,Spanish Grand Prix,2021,30
+LEC,3,SOFT,Spanish Grand Prix,2021,8
+STR,1,SOFT,Spanish Grand Prix,2021,22
+STR,2,MEDIUM,Spanish Grand Prix,2021,17
+STR,3,SOFT,Spanish Grand Prix,2021,26
+TSU,1,SOFT,Spanish Grand Prix,2021,7
+RIC,1,SOFT,Spanish Grand Prix,2021,25
+RIC,2,MEDIUM,Spanish Grand Prix,2021,21
+RIC,3,SOFT,Spanish Grand Prix,2021,20
+OCO,1,SOFT,Spanish Grand Prix,2021,23
+OCO,2,MEDIUM,Spanish Grand Prix,2021,42
+VER,1,SOFT,Spanish Grand Prix,2021,24
+VER,2,MEDIUM,Spanish Grand Prix,2021,36
+VER,3,SOFT,Spanish Grand Prix,2021,6
+NOR,1,SOFT,Spanish Grand Prix,2021,23
+NOR,2,MEDIUM,Spanish Grand Prix,2021,28
+NOR,3,SOFT,Spanish Grand Prix,2021,14
+HAM,1,SOFT,Spanish Grand Prix,2021,28
+HAM,2,MEDIUM,Spanish Grand Prix,2021,14
+HAM,3,MEDIUM,Spanish Grand Prix,2021,24
+MSC,1,SOFT,Spanish Grand Prix,2021,23
+MSC,2,MEDIUM,Spanish Grand Prix,2021,27
+MSC,3,MEDIUM,Spanish Grand Prix,2021,14
+VET,1,SOFT,Spanish Grand Prix,2021,21
+VET,2,MEDIUM,Spanish Grand Prix,2021,17
+VET,3,SOFT,Spanish Grand Prix,2021,27
+SAI,1,SOFT,Spanish Grand Prix,2021,22
+SAI,2,MEDIUM,Spanish Grand Prix,2021,24
+SAI,3,SOFT,Spanish Grand Prix,2021,20
+LAT,1,SOFT,Spanish Grand Prix,2021,9
+LAT,2,MEDIUM,Spanish Grand Prix,2021,18
+LAT,3,MEDIUM,Spanish Grand Prix,2021,23
+LAT,4,SOFT,Spanish Grand Prix,2021,15
+RUS,1,SOFT,Spanish Grand Prix,2021,9
+RUS,2,MEDIUM,Spanish Grand Prix,2021,19
+RUS,3,MEDIUM,Spanish Grand Prix,2021,37
+RAI,1,MEDIUM,Spanish Grand Prix,2021,37
+RAI,2,SOFT,Spanish Grand Prix,2021,28
+BOT,1,SOFT,Spanish Grand Prix,2021,23
+BOT,2,MEDIUM,Spanish Grand Prix,2021,30
+BOT,3,SOFT,Spanish Grand Prix,2021,13
+MAZ,1,SOFT,Spanish Grand Prix,2021,22
+MAZ,2,MEDIUM,Spanish Grand Prix,2021,20
+MAZ,3,MEDIUM,Spanish Grand Prix,2021,22
+GIO,1,SOFT,Spanish Grand Prix,2021,8
+GIO,2,MEDIUM,Spanish Grand Prix,2021,31
+GIO,3,SOFT,Spanish Grand Prix,2021,26
+VER,1,SOFT,Monaco Grand Prix,2021,34
+VER,2,HARD,Monaco Grand Prix,2021,44
+SAI,1,SOFT,Monaco Grand Prix,2021,32
+SAI,2,HARD,Monaco Grand Prix,2021,46
+NOR,1,SOFT,Monaco Grand Prix,2021,30
+NOR,2,HARD,Monaco Grand Prix,2021,48
+PER,1,SOFT,Monaco Grand Prix,2021,35
+PER,2,HARD,Monaco Grand Prix,2021,43
+VET,1,SOFT,Monaco Grand Prix,2021,31
+VET,2,HARD,Monaco Grand Prix,2021,47
+GAS,1,SOFT,Monaco Grand Prix,2021,30
+GAS,2,HARD,Monaco Grand Prix,2021,48
+HAM,1,SOFT,Monaco Grand Prix,2021,29
+HAM,2,HARD,Monaco Grand Prix,2021,38
+HAM,3,SOFT,Monaco Grand Prix,2021,11
+STR,1,HARD,Monaco Grand Prix,2021,58
+STR,2,SOFT,Monaco Grand Prix,2021,19
+OCO,1,SOFT,Monaco Grand Prix,2021,37
+OCO,2,MEDIUM,Monaco Grand Prix,2021,40
+GIO,1,SOFT,Monaco Grand Prix,2021,33
+GIO,2,HARD,Monaco Grand Prix,2021,44
+RAI,1,MEDIUM,Monaco Grand Prix,2021,43
+RAI,2,HARD,Monaco Grand Prix,2021,34
+RIC,1,MEDIUM,Monaco Grand Prix,2021,36
+RIC,2,HARD,Monaco Grand Prix,2021,41
+ALO,1,MEDIUM,Monaco Grand Prix,2021,45
+ALO,2,SOFT,Monaco Grand Prix,2021,32
+RUS,1,MEDIUM,Monaco Grand Prix,2021,31
+RUS,2,HARD,Monaco Grand Prix,2021,46
+LAT,1,MEDIUM,Monaco Grand Prix,2021,43
+LAT,2,HARD,Monaco Grand Prix,2021,34
+TSU,1,HARD,Monaco Grand Prix,2021,64
+TSU,2,SOFT,Monaco Grand Prix,2021,13
+MAZ,1,SOFT,Monaco Grand Prix,2021,34
+MAZ,2,HARD,Monaco Grand Prix,2021,41
+MSC,1,SOFT,Monaco Grand Prix,2021,37
+MSC,2,HARD,Monaco Grand Prix,2021,38
+BOT,1,SOFT,Monaco Grand Prix,2021,30
+LEC,1,SOFT,Monaco Grand Prix,2021,1
+GAS,1,SOFT,Azerbaijan Grand Prix,2021,11
+GAS,2,HARD,Azerbaijan Grand Prix,2021,36
+GAS,3,HARD,Azerbaijan Grand Prix,2021,1
+GAS,4,SOFT,Azerbaijan Grand Prix,2021,3
+PER,1,SOFT,Azerbaijan Grand Prix,2021,13
+PER,2,HARD,Azerbaijan Grand Prix,2021,34
+PER,3,HARD,Azerbaijan Grand Prix,2021,1
+PER,4,SOFT,Azerbaijan Grand Prix,2021,3
+ALO,1,SOFT,Azerbaijan Grand Prix,2021,7
+ALO,2,HARD,Azerbaijan Grand Prix,2021,27
+ALO,3,SOFT,Azerbaijan Grand Prix,2021,13
+ALO,4,SOFT,Azerbaijan Grand Prix,2021,1
+ALO,5,SOFT,Azerbaijan Grand Prix,2021,3
+LEC,1,SOFT,Azerbaijan Grand Prix,2021,9
+LEC,2,HARD,Azerbaijan Grand Prix,2021,38
+LEC,3,HARD,Azerbaijan Grand Prix,2021,1
+LEC,4,SOFT,Azerbaijan Grand Prix,2021,3
+STR,1,HARD,Azerbaijan Grand Prix,2021,30
+TSU,1,SOFT,Azerbaijan Grand Prix,2021,9
+TSU,2,HARD,Azerbaijan Grand Prix,2021,38
+TSU,3,HARD,Azerbaijan Grand Prix,2021,1
+TSU,4,SOFT,Azerbaijan Grand Prix,2021,3
+RIC,1,SOFT,Azerbaijan Grand Prix,2021,11
+RIC,2,HARD,Azerbaijan Grand Prix,2021,36
+RIC,3,HARD,Azerbaijan Grand Prix,2021,1
+RIC,4,SOFT,Azerbaijan Grand Prix,2021,3
+OCO,1,SOFT,Azerbaijan Grand Prix,2021,3
+VER,1,SOFT,Azerbaijan Grand Prix,2021,12
+VER,2,HARD,Azerbaijan Grand Prix,2021,34
+NOR,1,SOFT,Azerbaijan Grand Prix,2021,7
+NOR,2,HARD,Azerbaijan Grand Prix,2021,40
+NOR,3,HARD,Azerbaijan Grand Prix,2021,1
+NOR,4,SOFT,Azerbaijan Grand Prix,2021,3
+HAM,1,SOFT,Azerbaijan Grand Prix,2021,11
+HAM,2,HARD,Azerbaijan Grand Prix,2021,36
+HAM,3,HARD,Azerbaijan Grand Prix,2021,1
+HAM,4,SOFT,Azerbaijan Grand Prix,2021,3
+MSC,1,SOFT,Azerbaijan Grand Prix,2021,8
+MSC,2,HARD,Azerbaijan Grand Prix,2021,26
+MSC,3,SOFT,Azerbaijan Grand Prix,2021,10
+MSC,4,SOFT,Azerbaijan Grand Prix,2021,3
+MSC,5,SOFT,Azerbaijan Grand Prix,2021,1
+MSC,6,SOFT,Azerbaijan Grand Prix,2021,3
+VET,1,SOFT,Azerbaijan Grand Prix,2021,18
+VET,2,HARD,Azerbaijan Grand Prix,2021,29
+VET,3,HARD,Azerbaijan Grand Prix,2021,1
+VET,4,SOFT,Azerbaijan Grand Prix,2021,3
+SAI,1,SOFT,Azerbaijan Grand Prix,2021,10
+SAI,2,HARD,Azerbaijan Grand Prix,2021,37
+SAI,3,HARD,Azerbaijan Grand Prix,2021,1
+SAI,4,SOFT,Azerbaijan Grand Prix,2021,3
+LAT,1,MEDIUM,Azerbaijan Grand Prix,2021,9
+LAT,2,HARD,Azerbaijan Grand Prix,2021,39
+LAT,3,SOFT,Azerbaijan Grand Prix,2021,3
+RUS,1,MEDIUM,Azerbaijan Grand Prix,2021,1
+RUS,2,HARD,Azerbaijan Grand Prix,2021,33
+RUS,3,HARD,Azerbaijan Grand Prix,2021,13
+RUS,4,SOFT,Azerbaijan Grand Prix,2021,1
+RAI,1,MEDIUM,Azerbaijan Grand Prix,2021,13
+RAI,2,HARD,Azerbaijan Grand Prix,2021,34
+RAI,3,HARD,Azerbaijan Grand Prix,2021,1
+RAI,4,SOFT,Azerbaijan Grand Prix,2021,3
+BOT,1,SOFT,Azerbaijan Grand Prix,2021,11
+BOT,2,HARD,Azerbaijan Grand Prix,2021,36
+BOT,3,SOFT,Azerbaijan Grand Prix,2021,1
+BOT,4,SOFT,Azerbaijan Grand Prix,2021,3
+MAZ,1,SOFT,Azerbaijan Grand Prix,2021,9
+MAZ,2,HARD,Azerbaijan Grand Prix,2021,25
+MAZ,3,SOFT,Azerbaijan Grand Prix,2021,10
+MAZ,4,SOFT,Azerbaijan Grand Prix,2021,2
+MAZ,5,SOFT,Azerbaijan Grand Prix,2021,1
+MAZ,6,SOFT,Azerbaijan Grand Prix,2021,1
+MAZ,7,SOFT,Azerbaijan Grand Prix,2021,3
+GIO,1,SOFT,Azerbaijan Grand Prix,2021,2
+GIO,2,HARD,Azerbaijan Grand Prix,2021,32
+GIO,3,HARD,Azerbaijan Grand Prix,2021,13
+GIO,4,HARD,Azerbaijan Grand Prix,2021,1
+GIO,5,SOFT,Azerbaijan Grand Prix,2021,3
+VER,1,MEDIUM,French Grand Prix,2021,18
+VER,2,HARD,French Grand Prix,2021,14
+VER,3,MEDIUM,French Grand Prix,2021,21
+HAM,1,MEDIUM,French Grand Prix,2021,19
+HAM,2,HARD,French Grand Prix,2021,34
+PER,1,MEDIUM,French Grand Prix,2021,24
+PER,2,HARD,French Grand Prix,2021,29
+BOT,1,MEDIUM,French Grand Prix,2021,17
+BOT,2,HARD,French Grand Prix,2021,36
+NOR,1,MEDIUM,French Grand Prix,2021,24
+NOR,2,HARD,French Grand Prix,2021,29
+RIC,1,MEDIUM,French Grand Prix,2021,16
+RIC,2,HARD,French Grand Prix,2021,37
+GAS,1,MEDIUM,French Grand Prix,2021,17
+GAS,2,HARD,French Grand Prix,2021,36
+ALO,1,MEDIUM,French Grand Prix,2021,18
+ALO,2,HARD,French Grand Prix,2021,35
+VET,1,HARD,French Grand Prix,2021,37
+VET,2,MEDIUM,French Grand Prix,2021,16
+STR,1,HARD,French Grand Prix,2021,34
+STR,2,SOFT,French Grand Prix,2021,19
+SAI,1,MEDIUM,French Grand Prix,2021,17
+SAI,2,HARD,French Grand Prix,2021,36
+RUS,1,MEDIUM,French Grand Prix,2021,17
+RUS,2,HARD,French Grand Prix,2021,35
+TSU,1,MEDIUM,French Grand Prix,2021,15
+TSU,2,HARD,French Grand Prix,2021,37
+OCO,1,HARD,French Grand Prix,2021,28
+OCO,2,MEDIUM,French Grand Prix,2021,24
+GIO,1,HARD,French Grand Prix,2021,28
+GIO,2,MEDIUM,French Grand Prix,2021,24
+LEC,1,MEDIUM,French Grand Prix,2021,14
+LEC,2,HARD,French Grand Prix,2021,24
+LEC,3,MEDIUM,French Grand Prix,2021,14
+RAI,1,HARD,French Grand Prix,2021,33
+RAI,2,MEDIUM,French Grand Prix,2021,19
+LAT,1,MEDIUM,French Grand Prix,2021,18
+LAT,2,HARD,French Grand Prix,2021,34
+MSC,1,MEDIUM,French Grand Prix,2021,15
+MSC,2,HARD,French Grand Prix,2021,37
+MAZ,1,HARD,French Grand Prix,2021,31
+MAZ,2,MEDIUM,French Grand Prix,2021,21
+VER,1,MEDIUM,Styrian Grand Prix,2021,29
+VER,2,HARD,Styrian Grand Prix,2021,42
+HAM,1,MEDIUM,Styrian Grand Prix,2021,28
+HAM,2,HARD,Styrian Grand Prix,2021,41
+HAM,3,SOFT,Styrian Grand Prix,2021,2
+BOT,1,MEDIUM,Styrian Grand Prix,2021,27
+BOT,2,HARD,Styrian Grand Prix,2021,44
+PER,1,SOFT,Styrian Grand Prix,2021,26
+PER,2,HARD,Styrian Grand Prix,2021,28
+PER,3,MEDIUM,Styrian Grand Prix,2021,17
+NOR,1,SOFT,Styrian Grand Prix,2021,31
+NOR,2,HARD,Styrian Grand Prix,2021,39
+SAI,1,MEDIUM,Styrian Grand Prix,2021,41
+SAI,2,HARD,Styrian Grand Prix,2021,29
+LEC,1,SOFT,Styrian Grand Prix,2021,1
+LEC,2,HARD,Styrian Grand Prix,2021,36
+LEC,3,MEDIUM,Styrian Grand Prix,2021,33
+STR,1,SOFT,Styrian Grand Prix,2021,28
+STR,2,HARD,Styrian Grand Prix,2021,42
+ALO,1,SOFT,Styrian Grand Prix,2021,27
+ALO,2,HARD,Styrian Grand Prix,2021,43
+TSU,1,SOFT,Styrian Grand Prix,2021,26
+TSU,2,HARD,Styrian Grand Prix,2021,44
+RAI,1,HARD,Styrian Grand Prix,2021,36
+RAI,2,MEDIUM,Styrian Grand Prix,2021,34
+VET,1,MEDIUM,Styrian Grand Prix,2021,27
+VET,2,HARD,Styrian Grand Prix,2021,43
+RIC,1,MEDIUM,Styrian Grand Prix,2021,41
+RIC,2,HARD,Styrian Grand Prix,2021,29
+OCO,1,MEDIUM,Styrian Grand Prix,2021,36
+OCO,2,HARD,Styrian Grand Prix,2021,34
+GIO,1,MEDIUM,Styrian Grand Prix,2021,23
+GIO,2,HARD,Styrian Grand Prix,2021,47
+MSC,1,MEDIUM,Styrian Grand Prix,2021,33
+MSC,2,HARD,Styrian Grand Prix,2021,36
+LAT,1,MEDIUM,Styrian Grand Prix,2021,1
+LAT,2,SOFT,Styrian Grand Prix,2021,24
+LAT,3,HARD,Styrian Grand Prix,2021,43
+MAZ,1,MEDIUM,Styrian Grand Prix,2021,21
+MAZ,2,HARD,Styrian Grand Prix,2021,47
+RUS,1,MEDIUM,Styrian Grand Prix,2021,25
+RUS,2,HARD,Styrian Grand Prix,2021,1
+RUS,3,HARD,Styrian Grand Prix,2021,10
+GAS,1,SOFT,Styrian Grand Prix,2021,1
+VER,1,MEDIUM,Austrian Grand Prix,2021,32
+VER,2,HARD,Austrian Grand Prix,2021,28
+VER,3,HARD,Austrian Grand Prix,2021,11
+BOT,1,MEDIUM,Austrian Grand Prix,2021,30
+BOT,2,HARD,Austrian Grand Prix,2021,41
+NOR,1,MEDIUM,Austrian Grand Prix,2021,30
+NOR,2,HARD,Austrian Grand Prix,2021,41
+HAM,1,MEDIUM,Austrian Grand Prix,2021,31
+HAM,2,HARD,Austrian Grand Prix,2021,22
+HAM,3,HARD,Austrian Grand Prix,2021,18
+SAI,1,HARD,Austrian Grand Prix,2021,48
+SAI,2,MEDIUM,Austrian Grand Prix,2021,23
+PER,1,MEDIUM,Austrian Grand Prix,2021,32
+PER,2,HARD,Austrian Grand Prix,2021,39
+RIC,1,MEDIUM,Austrian Grand Prix,2021,29
+RIC,2,HARD,Austrian Grand Prix,2021,42
+LEC,1,MEDIUM,Austrian Grand Prix,2021,34
+LEC,2,HARD,Austrian Grand Prix,2021,37
+GAS,1,SOFT,Austrian Grand Prix,2021,13
+GAS,2,HARD,Austrian Grand Prix,2021,32
+GAS,3,HARD,Austrian Grand Prix,2021,26
+ALO,1,MEDIUM,Austrian Grand Prix,2021,32
+ALO,2,HARD,Austrian Grand Prix,2021,38
+RUS,1,MEDIUM,Austrian Grand Prix,2021,30
+RUS,2,HARD,Austrian Grand Prix,2021,40
+TSU,1,SOFT,Austrian Grand Prix,2021,12
+TSU,2,HARD,Austrian Grand Prix,2021,39
+TSU,3,HARD,Austrian Grand Prix,2021,19
+STR,1,SOFT,Austrian Grand Prix,2021,14
+STR,2,HARD,Austrian Grand Prix,2021,32
+STR,3,HARD,Austrian Grand Prix,2021,24
+GIO,1,MEDIUM,Austrian Grand Prix,2021,1
+GIO,2,HARD,Austrian Grand Prix,2021,28
+GIO,3,HARD,Austrian Grand Prix,2021,41
+RAI,1,HARD,Austrian Grand Prix,2021,37
+RAI,2,MEDIUM,Austrian Grand Prix,2021,33
+LAT,1,MEDIUM,Austrian Grand Prix,2021,33
+LAT,2,HARD,Austrian Grand Prix,2021,37
+VET,1,SOFT,Austrian Grand Prix,2021,17
+VET,2,HARD,Austrian Grand Prix,2021,32
+VET,3,HARD,Austrian Grand Prix,2021,21
+MSC,1,MEDIUM,Austrian Grand Prix,2021,34
+MSC,2,HARD,Austrian Grand Prix,2021,35
+MAZ,1,MEDIUM,Austrian Grand Prix,2021,27
+MAZ,2,HARD,Austrian Grand Prix,2021,18
+MAZ,3,HARD,Austrian Grand Prix,2021,24
+OCO,1,MEDIUM,Austrian Grand Prix,2021,1
+HAM,1,MEDIUM,British Grand Prix,2021,2
+HAM,2,MEDIUM,British Grand Prix,2021,25
+HAM,3,HARD,British Grand Prix,2021,25
+LEC,1,MEDIUM,British Grand Prix,2021,2
+LEC,2,MEDIUM,British Grand Prix,2021,27
+LEC,3,HARD,British Grand Prix,2021,23
+BOT,1,MEDIUM,British Grand Prix,2021,2
+BOT,2,MEDIUM,British Grand Prix,2021,20
+BOT,3,HARD,British Grand Prix,2021,30
+NOR,1,MEDIUM,British Grand Prix,2021,2
+NOR,2,MEDIUM,British Grand Prix,2021,19
+NOR,3,HARD,British Grand Prix,2021,31
+RIC,1,MEDIUM,British Grand Prix,2021,2
+RIC,2,MEDIUM,British Grand Prix,2021,18
+RIC,3,HARD,British Grand Prix,2021,32
+SAI,1,MEDIUM,British Grand Prix,2021,2
+SAI,2,MEDIUM,British Grand Prix,2021,26
+SAI,3,HARD,British Grand Prix,2021,24
+ALO,1,MEDIUM,British Grand Prix,2021,2
+ALO,2,MEDIUM,British Grand Prix,2021,22
+ALO,3,HARD,British Grand Prix,2021,28
+STR,1,MEDIUM,British Grand Prix,2021,2
+STR,2,MEDIUM,British Grand Prix,2021,21
+STR,3,HARD,British Grand Prix,2021,29
+OCO,1,MEDIUM,British Grand Prix,2021,2
+OCO,2,MEDIUM,British Grand Prix,2021,17
+OCO,3,HARD,British Grand Prix,2021,33
+TSU,1,MEDIUM,British Grand Prix,2021,2
+TSU,2,MEDIUM,British Grand Prix,2021,28
+TSU,3,HARD,British Grand Prix,2021,22
+GAS,1,MEDIUM,British Grand Prix,2021,2
+GAS,2,MEDIUM,British Grand Prix,2021,26
+GAS,3,HARD,British Grand Prix,2021,18
+GAS,4,SOFT,British Grand Prix,2021,6
+RUS,1,MEDIUM,British Grand Prix,2021,2
+RUS,2,MEDIUM,British Grand Prix,2021,16
+RUS,3,HARD,British Grand Prix,2021,33
+GIO,1,MEDIUM,British Grand Prix,2021,2
+GIO,2,MEDIUM,British Grand Prix,2021,21
+GIO,3,HARD,British Grand Prix,2021,28
+LAT,1,MEDIUM,British Grand Prix,2021,2
+LAT,2,MEDIUM,British Grand Prix,2021,17
+LAT,3,HARD,British Grand Prix,2021,32
+RAI,1,MEDIUM,British Grand Prix,2021,2
+RAI,2,MEDIUM,British Grand Prix,2021,16
+RAI,3,HARD,British Grand Prix,2021,33
+PER,1,HARD,British Grand Prix,2021,2
+PER,2,HARD,British Grand Prix,2021,16
+PER,3,MEDIUM,British Grand Prix,2021,20
+PER,4,MEDIUM,British Grand Prix,2021,10
+PER,5,SOFT,British Grand Prix,2021,3
+MAZ,1,MEDIUM,British Grand Prix,2021,2
+MAZ,2,MEDIUM,British Grand Prix,2021,23
+MAZ,3,HARD,British Grand Prix,2021,26
+MSC,1,MEDIUM,British Grand Prix,2021,2
+MSC,2,MEDIUM,British Grand Prix,2021,22
+MSC,3,HARD,British Grand Prix,2021,27
+VET,1,MEDIUM,British Grand Prix,2021,2
+VET,2,MEDIUM,British Grand Prix,2021,16
+VET,3,HARD,British Grand Prix,2021,22
+VER,1,MEDIUM,British Grand Prix,2021,1
+VER,1,SOFT,Dutch Grand Prix,2021,21
+VER,2,MEDIUM,Dutch Grand Prix,2021,19
+VER,3,HARD,Dutch Grand Prix,2021,32
+HAM,1,SOFT,Dutch Grand Prix,2021,20
+HAM,2,MEDIUM,Dutch Grand Prix,2021,19
+HAM,3,MEDIUM,Dutch Grand Prix,2021,31
+HAM,4,SOFT,Dutch Grand Prix,2021,2
+BOT,1,SOFT,Dutch Grand Prix,2021,31
+BOT,2,MEDIUM,Dutch Grand Prix,2021,36
+BOT,3,SOFT,Dutch Grand Prix,2021,5
+GAS,1,SOFT,Dutch Grand Prix,2021,24
+GAS,2,MEDIUM,Dutch Grand Prix,2021,47
+LEC,1,SOFT,Dutch Grand Prix,2021,34
+LEC,2,HARD,Dutch Grand Prix,2021,37
+ALO,1,SOFT,Dutch Grand Prix,2021,33
+ALO,2,MEDIUM,Dutch Grand Prix,2021,38
+SAI,1,SOFT,Dutch Grand Prix,2021,31
+SAI,2,HARD,Dutch Grand Prix,2021,40
+PER,1,HARD,Dutch Grand Prix,2021,8
+PER,2,MEDIUM,Dutch Grand Prix,2021,39
+PER,3,SOFT,Dutch Grand Prix,2021,24
+OCO,1,SOFT,Dutch Grand Prix,2021,31
+OCO,2,MEDIUM,Dutch Grand Prix,2021,40
+NOR,1,MEDIUM,Dutch Grand Prix,2021,42
+NOR,2,HARD,Dutch Grand Prix,2021,29
+RIC,1,SOFT,Dutch Grand Prix,2021,30
+RIC,2,HARD,Dutch Grand Prix,2021,41
+STR,1,SOFT,Dutch Grand Prix,2021,27
+STR,2,HARD,Dutch Grand Prix,2021,43
+VET,1,SOFT,Dutch Grand Prix,2021,10
+VET,2,HARD,Dutch Grand Prix,2021,34
+VET,3,MEDIUM,Dutch Grand Prix,2021,26
+GIO,1,SOFT,Dutch Grand Prix,2021,27
+GIO,2,MEDIUM,Dutch Grand Prix,2021,6
+GIO,3,HARD,Dutch Grand Prix,2021,37
+KUB,1,MEDIUM,Dutch Grand Prix,2021,40
+KUB,2,HARD,Dutch Grand Prix,2021,30
+LAT,1,MEDIUM,Dutch Grand Prix,2021,23
+LAT,2,HARD,Dutch Grand Prix,2021,47
+RUS,1,MEDIUM,Dutch Grand Prix,2021,27
+RUS,2,HARD,Dutch Grand Prix,2021,41
+RUS,3,SOFT,Dutch Grand Prix,2021,1
+MSC,1,SOFT,Dutch Grand Prix,2021,4
+MSC,2,HARD,Dutch Grand Prix,2021,26
+MSC,3,MEDIUM,Dutch Grand Prix,2021,39
+TSU,1,SOFT,Dutch Grand Prix,2021,31
+TSU,2,MEDIUM,Dutch Grand Prix,2021,17
+MAZ,1,MEDIUM,Dutch Grand Prix,2021,33
+MAZ,2,HARD,Dutch Grand Prix,2021,8
+GAS,1,HARD,Italian Grand Prix,2021,3
+PER,1,MEDIUM,Italian Grand Prix,2021,26
+PER,2,HARD,Italian Grand Prix,2021,27
+ALO,1,MEDIUM,Italian Grand Prix,2021,25
+ALO,2,HARD,Italian Grand Prix,2021,28
+LEC,1,MEDIUM,Italian Grand Prix,2021,26
+LEC,2,HARD,Italian Grand Prix,2021,27
+STR,1,MEDIUM,Italian Grand Prix,2021,25
+STR,2,HARD,Italian Grand Prix,2021,28
+TSU,1,MEDIUM,Italian Grand Prix,2021,1
+RIC,1,MEDIUM,Italian Grand Prix,2021,22
+RIC,2,HARD,Italian Grand Prix,2021,31
+OCO,1,MEDIUM,Italian Grand Prix,2021,26
+OCO,2,HARD,Italian Grand Prix,2021,27
+VER,1,MEDIUM,Italian Grand Prix,2021,23
+VER,2,HARD,Italian Grand Prix,2021,3
+NOR,1,MEDIUM,Italian Grand Prix,2021,24
+NOR,2,HARD,Italian Grand Prix,2021,29
+HAM,1,HARD,Italian Grand Prix,2021,25
+MSC,1,MEDIUM,Italian Grand Prix,2021,23
+MSC,2,HARD,Italian Grand Prix,2021,30
+VET,1,MEDIUM,Italian Grand Prix,2021,22
+VET,2,HARD,Italian Grand Prix,2021,4
+VET,3,MEDIUM,Italian Grand Prix,2021,27
+SAI,1,MEDIUM,Italian Grand Prix,2021,26
+SAI,2,HARD,Italian Grand Prix,2021,27
+LAT,1,MEDIUM,Italian Grand Prix,2021,23
+LAT,2,HARD,Italian Grand Prix,2021,30
+RUS,1,MEDIUM,Italian Grand Prix,2021,26
+RUS,2,HARD,Italian Grand Prix,2021,27
+BOT,1,HARD,Italian Grand Prix,2021,26
+BOT,2,MEDIUM,Italian Grand Prix,2021,27
+KUB,1,HARD,Italian Grand Prix,2021,26
+KUB,2,MEDIUM,Italian Grand Prix,2021,27
+MAZ,1,MEDIUM,Italian Grand Prix,2021,24
+MAZ,2,SOFT,Italian Grand Prix,2021,4
+MAZ,3,HARD,Italian Grand Prix,2021,11
+MAZ,4,SOFT,Italian Grand Prix,2021,3
+GIO,1,MEDIUM,Italian Grand Prix,2021,1
+GIO,2,HARD,Italian Grand Prix,2021,24
+GIO,3,MEDIUM,Italian Grand Prix,2021,28
+VER,1,MEDIUM,United States Grand Prix,2021,10
+VER,2,HARD,United States Grand Prix,2021,19
+VER,3,HARD,United States Grand Prix,2021,27
+HAM,1,MEDIUM,United States Grand Prix,2021,13
+HAM,2,HARD,United States Grand Prix,2021,24
+HAM,3,HARD,United States Grand Prix,2021,19
+PER,1,MEDIUM,United States Grand Prix,2021,12
+PER,2,MEDIUM,United States Grand Prix,2021,18
+PER,3,HARD,United States Grand Prix,2021,26
+LEC,1,MEDIUM,United States Grand Prix,2021,12
+LEC,2,HARD,United States Grand Prix,2021,20
+LEC,3,HARD,United States Grand Prix,2021,24
+RIC,1,MEDIUM,United States Grand Prix,2021,11
+RIC,2,HARD,United States Grand Prix,2021,19
+RIC,3,HARD,United States Grand Prix,2021,26
+BOT,1,MEDIUM,United States Grand Prix,2021,15
+BOT,2,HARD,United States Grand Prix,2021,19
+BOT,3,HARD,United States Grand Prix,2021,22
+SAI,1,SOFT,United States Grand Prix,2021,11
+SAI,2,HARD,United States Grand Prix,2021,18
+SAI,3,HARD,United States Grand Prix,2021,27
+NOR,1,MEDIUM,United States Grand Prix,2021,10
+NOR,2,HARD,United States Grand Prix,2021,20
+NOR,3,HARD,United States Grand Prix,2021,26
+TSU,1,SOFT,United States Grand Prix,2021,9
+TSU,2,HARD,United States Grand Prix,2021,23
+TSU,3,HARD,United States Grand Prix,2021,23
+VET,1,MEDIUM,United States Grand Prix,2021,17
+VET,2,MEDIUM,United States Grand Prix,2021,21
+VET,3,HARD,United States Grand Prix,2021,17
+GIO,1,MEDIUM,United States Grand Prix,2021,8
+GIO,2,MEDIUM,United States Grand Prix,2021,18
+GIO,3,HARD,United States Grand Prix,2021,29
+STR,1,MEDIUM,United States Grand Prix,2021,18
+STR,2,MEDIUM,United States Grand Prix,2021,16
+STR,3,HARD,United States Grand Prix,2021,21
+RAI,1,MEDIUM,United States Grand Prix,2021,12
+RAI,2,MEDIUM,United States Grand Prix,2021,19
+RAI,3,HARD,United States Grand Prix,2021,24
+RUS,1,MEDIUM,United States Grand Prix,2021,9
+RUS,2,HARD,United States Grand Prix,2021,22
+RUS,3,HARD,United States Grand Prix,2021,24
+LAT,1,MEDIUM,United States Grand Prix,2021,5
+LAT,2,HARD,United States Grand Prix,2021,20
+LAT,3,HARD,United States Grand Prix,2021,30
+MSC,1,MEDIUM,United States Grand Prix,2021,11
+MSC,2,HARD,United States Grand Prix,2021,23
+MSC,3,MEDIUM,United States Grand Prix,2021,20
+MAZ,1,MEDIUM,United States Grand Prix,2021,1
+MAZ,2,HARD,United States Grand Prix,2021,23
+MAZ,3,MEDIUM,United States Grand Prix,2021,13
+MAZ,4,MEDIUM,United States Grand Prix,2021,17
+ALO,1,MEDIUM,United States Grand Prix,2021,7
+ALO,2,HARD,United States Grand Prix,2021,21
+ALO,3,HARD,United States Grand Prix,2021,11
+ALO,4,MEDIUM,United States Grand Prix,2021,10
+OCO,1,MEDIUM,United States Grand Prix,2021,3
+OCO,2,HARD,United States Grand Prix,2021,22
+OCO,3,MEDIUM,United States Grand Prix,2021,15
+GAS,1,MEDIUM,United States Grand Prix,2021,10
+GAS,2,HARD,United States Grand Prix,2021,4

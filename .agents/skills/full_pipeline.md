@@ -11,7 +11,7 @@ End-to-end pipeline: FastF1 data extraction → model training → strategy opti
 
 ### Option A: Make commands (step by step)
 ```bash
-cd model
+cd f1_strategy
 
 # Step 1: Extract data from FastF1 (30-60 min first time)
 make fastf1-fetch
@@ -28,13 +28,13 @@ make serve
 
 ### Option B: End-to-end script
 ```bash
-cd model
+cd f1_strategy
 DATA_MODE=fastf1 YEARS="2019 2020 2021 2022 2023 2024" bash scripts/run_end_to_end.sh
 ```
 
 ### Option C: Original Kaggle pipeline (legacy)
 ```bash
-cd model
+cd f1_strategy
 DATA_MODE=demo bash scripts/run_end_to_end.sh
 ```
 
@@ -47,22 +47,22 @@ FastF1 API → fetch_fastf1.py → 8 CSVs → strategy_models.py → 5 .joblib m
 ```
 
 ### Stage 1: Data Extraction
-- **Script**: `model/f1pit/data/fetch_fastf1.py`
+- **Script**: `f1_strategy/f1pit/data/fetch_fastf1.py`
 - **Input**: FastF1 API (internet required)
 - **Output**: 8 CSV files in `data/processed/`
 
 ### Stage 2: Model Training
-- **Script**: `model/f1pit/models/strategy_models.py`
+- **Script**: `f1_strategy/f1pit/models/strategy_models.py`
 - **Input**: CSVs from Stage 1 + `data/CircuitInfo.csv`
 - **Output**: 5 `.joblib` model pipelines + `strategy_metrics.json`
 
 ### Stage 3: Strategy Optimization
-- **Script**: `model/f1pit/models/strategy_optimizer.py`
+- **Script**: `f1_strategy/f1pit/models/strategy_optimizer.py`
 - **Input**: Trained models + circuit/driver parameters
 - **Output**: Ranked list of strategies with estimated race times
 
 ### Stage 4: API Serving
-- **Script**: `model/f1pit/api/server.py`
+- **Script**: `f1_strategy/f1pit/api/server.py`
 - **Endpoints**:
   - `GET /api/strategy/optimal` – best strategy for a circuit
   - `GET /api/strategy/compare` – deterministic vs window
@@ -79,7 +79,7 @@ npm run dev
 
 ## Testing
 ```bash
-cd model
+cd f1_strategy
 make test
 # Expected: 10 tests pass
 ```

@@ -11,7 +11,7 @@ Test suite covering feature engineering, model logic, strategy enumeration, and 
 
 ### All tests
 ```bash
-cd model
+cd f1_strategy
 make test
 # Or:
 PYTHONPATH=. python -m pytest tests/ -q
@@ -78,11 +78,11 @@ for name, metrics in m["models"].items():
 
 ### API smoke test
 ```bash
-# Start server first: cd model && make serve
+# Start server first: cd f1_strategy && make serve
 curl "http://localhost:8000/api/health"
 curl "http://localhost:8000/api/strategy/optimal?track=Bahrain&total_laps=57"
 curl "http://localhost:8000/api/safety-car/probability?track=Bahrain&total_laps=57"
 ```
 
 ## Adding New Tests
-Place new test files in `model/tests/`. Follow the naming convention `test_*.py`. Use the synthetic data generators in `test_strategy_models.py` as templates.
+Place new test files in `f1_strategy/tests/`. Follow the naming convention `test_*.py`. Use the synthetic data generators in `test_strategy_models.py` as templates.
