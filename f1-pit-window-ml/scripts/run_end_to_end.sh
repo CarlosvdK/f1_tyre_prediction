@@ -26,6 +26,12 @@ prepare_demo_data() {
 
 if [ "${DATA_MODE}" = "demo" ]; then
   prepare_demo_data
+elif [ "${DATA_MODE}" = "fastf1" ]; then
+  echo "═══ Using FastF1 pipeline ═══"
+  python -m f1pit.data.fetch_fastf1 --years ${YEARS}
+  python -m f1pit.models.strategy_models --data_dir data/processed --train_years 2019 2020 2021 2022 2023 --test_years 2024
+  echo "═══ FastF1 pipeline complete ═══"
+  exit 0
 elif [ "${DATA_MODE}" = "live" ]; then
   python -m f1pit.data.download_kaggle --copy_csvs 1
   if [ "${ERGAST_FLAG}" = "1" ]; then

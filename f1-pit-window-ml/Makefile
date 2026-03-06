@@ -1,6 +1,6 @@
 PYTHONPATH := src
 
-.PHONY: download ergast build train eval e2e test
+.PHONY: download ergast build train eval e2e test fastf1-fetch strategy-train strategy-optimize
 
 download:
 	PYTHONPATH=$(PYTHONPATH) python -m f1pit.data.download_kaggle --copy_csvs 1
@@ -22,3 +22,12 @@ e2e:
 
 test:
 	PYTHONPATH=$(PYTHONPATH) python -m pytest -q
+
+fastf1-fetch:
+	PYTHONPATH=$(PYTHONPATH) python -m f1pit.data.fetch_fastf1 --years 2019 2020 2021 2022 2023 2024
+
+strategy-train:
+	PYTHONPATH=$(PYTHONPATH) python -m f1pit.models.strategy_models
+
+strategy-optimize:
+	PYTHONPATH=$(PYTHONPATH) python -m f1pit.models.strategy_optimizer --gp Bahrain --total_laps 57

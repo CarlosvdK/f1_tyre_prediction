@@ -506,6 +506,7 @@ def get_predictions(
     )
 
 
+
 def _local_dev() -> None:
     import uvicorn
 
@@ -517,5 +518,124 @@ def _local_dev() -> None:
     )
 
 
+# ── Strategy endpoints (use new strategy models) ─────────────────────────
+
+@lru_cache(maxsize=1)
+def _get_strategy_optimizer():
+    """Lazily load the strategy optimizer with trained models."""
+    from f1pit.models.strategy_optimizer import load_optimizer
+    model_dir = PATHS.artifacts / "strategy_latest"
+    circuit_info_path = PATHS.project_root.parent / "CircuitInfo.csv"
+    if not model_dir.exists():
+        return None
+    try:
+        return load_optimizer(model_dir, circuit_info_path)
+    except Exception:
+        return None
+
+
+@lru_cache(maxsize=1)
+def _get_safety_car_model():
+    """Lazily load the safety car model."""
+    sc_path = PATHS.artifacts / "strategy_latest" / "safety_car_model.joblib"
+    if not sc_path.exists():
+        return None
+    try:
+        return joblib.load(sc_path)
+    except Exception:
+        return None
+
+
+@app.get("/api/strategy/optimal")
+def get_optimal_strategy(
+    track: str = Query(..., description="Grand Prix name (e.g. 'Bahrain')"),
+    driver: str = Query("VER"),
+    team: str = Query("Red Bull Racing"),
+    total_laps: int = Query(57),
+    mode: str = Query("deterministic", description="deterministic or window"),
+) -> dict:
+    optimizer = _get_strategy_optimizer()
+    if optimizer is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Strategy models not trained yet. Run: make strategy-train",
+        )
+
+    if mode == "window":
+        result = optimizer.optimize_window(
+            gp=track, driver=driver, team=team, total_laps=total_laps,
+        )
+    else:
+        result = optimizer.optimize_deterministic(
+            gp=track, driver=driver, team=team, total_laps=total_laps,
+        )
+
+    return result.to_dict()
+
+
+@app.get("/api/strategy/compare")
+def compare_strategies(
+    track: str = Query(...),
+    driver: str = Query("VER"),
+    team: str = Query("Red Bull Racing"),
+    total_laps: int = Query(57),
+) -> dict:
+    """Compare deterministic and window strategies side-by-side."""
+    optimizer = _get_strategy_optimizer()
+    if optimizer is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Strategy models not trained yet. Run: make strategy-train",
+        )
+
+    det = optimizer.optimize_deterministic(
+        gp=track, driver=driver, team=team, total_laps=total_laps,
+    )
+    win = optimizer.optimize_window(
+        gp=track, driver=driver, team=team, total_laps=total_laps,
+    )
+
+    return {
+        "deterministic": det.to_dict(),
+        "window": win.to_dict(),
+    }
+
+
+@app.get("/api/safety-car/probability")
+def safety_car_probability(
+    track: str = Query(..., description="Grand Prix name"),
+    total_laps: int = Query(57),
+) -> list[dict]:
+    """Return safety car probability for each lap of a race."""
+    sc_artifact = _get_safety_car_model()
+    if sc_artifact is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Safety car model not trained yet. Run: make strategy-train",
+        )
+
+    pipeline = sc_artifact["pipeline"]
+    feature_cols = sc_artifact["feature_cols"]
+
+    rows = []
+    for lap in range(1, total_laps + 1):
+        row = {"LapNumber": lap, "GP": track}
+        rows.append(row)
+
+    pred_df = pd.DataFrame(rows)
+    usable_cols = [c for c in feature_cols if c in pred_df.columns]
+
+    try:
+        probs = pipeline.predict_proba(pred_df[usable_cols])[:, 1]
+    except Exception:
+        probs = np.full(total_laps, 0.05)
+
+    return [
+        {"lap": int(lap + 1), "probability": round(float(p), 4)}
+        for lap, p in enumerate(probs)
+    ]
+
+
 if __name__ == "__main__":
     _local_dev()
+
