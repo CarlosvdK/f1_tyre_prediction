@@ -1,0 +1,970 @@
+/* ═══════════════════════════════════════════════════════════════
+   F1 Broadcast Overlay Design System
+   No cards. No borders. Full-bleed 3D scene.
+   Gradient scrims. Typographic floating metrics.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Tokens ──────────────────────────────────────────────────── */
+:root {
+  /* Colour */
+  --red: #e10600;
+  --white: #f5f5f7;
+  --white-60: rgba(245, 245, 247, 0.60);
+  --white-35: rgba(245, 245, 247, 0.35);
+  --white-15: rgba(245, 245, 247, 0.15);
+  --white-07: rgba(245, 245, 247, 0.07);
+  --black: #0c0c0e;
+
+  /* Scrim gradients */
+  --scrim-top: linear-gradient(to bottom,
+      rgba(10, 10, 14, 0.92) 0%,
+      rgba(10, 10, 14, 0.55) 40%,
+      transparent 100%);
+  --scrim-bot: linear-gradient(to top,
+      rgba(10, 10, 14, 0.96) 0%,
+      rgba(10, 10, 14, 0.65) 45%,
+      transparent 100%);
+
+  /* Dividers */
+  --div: rgba(255, 255, 255, 0.14);
+
+  /* Typography scale */
+  --fs-super: clamp(2.4rem, 3.8vw, 3.6rem);
+  /* hero number */
+  --fs-large: clamp(1.6rem, 2.5vw, 2.4rem);
+  /* KPI value */
+  --fs-body: 0.88rem;
+  /* normal text */
+  --fs-label: 0.56rem;
+  /* ALL CAPS labels */
+  --fs-micro: 0.48rem;
+  /* tiny meta */
+
+  /* Spacing */
+  --pad: 28px;
+  --pad-sm: 16px;
+  --nav-h: 52px;
+  --strip-h: 72px;
+  /* bottom strip height */
+
+  /* Fonts */
+  --ff-display: 'Barlow Condensed', 'Segoe UI', sans-serif;
+  --ff-body: 'Titillium Web', 'Segoe UI', sans-serif;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --t-fast: 180ms;
+  --t-med: 360ms;
+}
+
+/* ── Reset ───────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--ff-body);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* ── Root shell ──────────────────────────────────────────────── */
+.f1-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--black);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVIGATION — floats over scene via sticky + transparent bg
+   ═══════════════════════════════════════════════════════════════ */
+.f1-nav {
+  position: sticky;
+  top: 0;
+  z-index: 300;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad);
+  /* Transparent — part of the top scrim */
+  background: transparent;
+  pointer-events: none;
+  /* clicks pass through to Canvas below */
+}
+
+/* Give interactive items their pointer events back */
+.f1-nav>* {
+  pointer-events: auto;
+}
+
+/* Very thin top white rule */
+.f1-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.28) 25%,
+      rgba(255, 255, 255, 0.42) 50%,
+      rgba(255, 255, 255, 0.28) 75%,
+      transparent 100%);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.nav-logo-f1 {
+  font-family: var(--ff-display);
+  font-size: 1.18rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: var(--red);
+  padding: 3px 9px 2px;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.nav-title-main {
+  font-family: var(--ff-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--white);
+  line-height: 1;
+}
+
+.nav-title-sub {
+  font-family: var(--ff-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  display: block;
+  margin-top: 3px;
+}
+
+.nav-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--div);
+  margin: 0 16px;
+  flex-shrink: 0;
+}
+
+.nav-live {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--ff-display);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white-60);
+}
+
+.nav-live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #36e888;
+  box-shadow: 0 0 8px rgba(54, 232, 136, 0.7);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  55% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-badge {
+  font-family: var(--ff-display);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white-60);
+}
+
+.nav-badge strong {
+  color: var(--white);
+  margin-left: 4px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCENE SHELL — contains 3D canvas + all overlays
+   Full-bleed: covers everything from nav to bottom strip
+   ═══════════════════════════════════════════════════════════════ */
+.scene-shell {
+  position: relative;
+  /* Pull up behind the transparent nav */
+  margin-top: calc(-1 * var(--nav-h));
+  width: 100%;
+  height: calc(100svh - var(--strip-h));
+  min-height: 480px;
+  overflow: hidden;
+  background: var(--black);
+  flex-shrink: 0;
+}
+
+/* Full canvas fill */
+.scene-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.scene-canvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Top gradient scrim — covers the nav area, fades into view */
+.scene-top-scrim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 220px;
+  background: var(--scrim-top);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Bottom gradient scrim — blends 3D into the telemetry strip */
+.scene-bottom-scrim {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: var(--scrim-bot);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Controls bar — floats over the scene, below the nav */
+.controls-overlay {
+  position: absolute;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding: 0 var(--pad);
+  gap: 0;
+  /* Hair-line bottom rule only */
+  border-bottom: 1px solid var(--div);
+}
+
+.ctrl-cell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  padding-right: 20px;
+  margin-right: 20px;
+  border-right: 1px solid var(--div);
+  height: 100%;
+}
+
+.ctrl-label {
+  font-family: var(--ff-display);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--white-35);
+}
+
+.ctrl-select {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: var(--ff-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 0 14px 0 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7' height='4' viewBox='0 0 7 4'%3E%3Cpath d='M0 0l3.5 4L7 0z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  min-width: 80px;
+  transition: color var(--t-fast) var(--ease);
+}
+
+.ctrl-select:hover {
+  color: #fff;
+}
+
+.ctrl-select option {
+  background: #1a1a22;
+  color: #f5f5f7;
+}
+
+.ctrl-select.compound-soft {
+  color: #ff6060;
+}
+
+.ctrl-select.compound-medium {
+  color: #f5c842;
+}
+
+.ctrl-select.compound-hard {
+  color: #e8e8e8;
+}
+
+.ctrl-select.compound-inter {
+  color: #40c870;
+}
+
+.ctrl-select.compound-wet {
+  color: #4090e0;
+}
+
+.ctrl-lap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+}
+
+.ctrl-lap-value {
+  font-family: var(--ff-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--white);
+  white-space: nowrap;
+  min-width: 52px;
+}
+
+.play-btn {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: var(--ff-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast);
+  flex-shrink: 0;
+}
+
+.play-btn:hover {
+  color: #fff;
+  border-bottom-color: var(--div);
+}
+
+.play-btn:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 1px;
+  background: var(--div);
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  transition: transform var(--t-fast);
+}
+
+input[type='range']::-webkit-slider-thumb:hover {
+  transform: scale(1.6);
+}
+
+/* Floating corner label */
+.scene-label {
+  position: absolute;
+  bottom: 180px;
+  left: var(--pad);
+  z-index: 20;
+  pointer-events: none;
+}
+
+.scene-eyebrow {
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.scene-car-name {
+  font-family: var(--ff-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  display: block;
+}
+
+.scene-car-sub {
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  display: block;
+  margin-top: 3px;
+}
+
+.orbit-hint {
+  position: absolute;
+  bottom: 180px;
+  right: var(--pad);
+  z-index: 20;
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOTTOM TELEMETRY STRIP — one row, all metrics, typographic
+   ═══════════════════════════════════════════════════════════════ */
+.telem-strip {
+  position: relative;
+  z-index: 50;
+  height: var(--strip-h);
+  display: flex;
+  align-items: stretch;
+  background: rgba(10, 10, 14, 0.94);
+  border-top: 1px solid var(--div);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* Subtle top shimmer */
+.telem-strip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.18) 30%,
+      rgba(255, 255, 255, 0.28) 50%,
+      rgba(255, 255, 255, 0.18) 70%,
+      transparent 100%);
+}
+
+.telem-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 var(--pad);
+  border-right: 1px solid var(--div);
+  min-width: 90px;
+  transition: background var(--t-fast) var(--ease);
+}
+
+.telem-item:last-child {
+  border-right: none;
+}
+
+.telem-item:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.telem-label {
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  margin-bottom: 5px;
+  transition: color var(--t-fast);
+}
+
+.telem-value {
+  font-family: var(--ff-display);
+  font-size: var(--fs-large);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  transition: color var(--t-med) var(--ease);
+}
+
+.telem-unit {
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: var(--white-35);
+  margin-left: 4px;
+  vertical-align: baseline;
+}
+
+/* Pit window — slightly highlighted */
+.telem-item.highlight .telem-value {
+  color: #fff;
+}
+
+/* Compound tinting */
+.v-soft {
+  color: #ff6060 !important;
+}
+
+.v-medium {
+  color: #f5c842 !important;
+}
+
+.v-hard {
+  color: #e8e8e8 !important;
+}
+
+.v-inter {
+  color: #40c870 !important;
+}
+
+.v-wet {
+  color: #4090e0 !important;
+}
+
+/* Strategy Bar Visualization */
+.strategy-visual {
+  flex: 1.5;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.strategy-bar {
+  display: flex;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.strat-stint {
+  height: 100%;
+  transition: flex var(--t-med) var(--ease);
+}
+
+.bg-soft {
+  background: #e10600;
+}
+
+.bg-medium {
+  background: #ffd400;
+}
+
+.bg-hard {
+  background: #f5f5f7;
+}
+
+.bg-inter {
+  background: #00a442;
+}
+
+.bg-wet {
+  background: #0077c8;
+}
+
+.strategy-labels {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  font-family: var(--ff-display);
+  font-size: var(--fs-body);
+  color: var(--white);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* Loading state */
+.telem-value.loading {
+  opacity: 0.25;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOADING OVERLAY (viewer)
+   ═══════════════════════════════════════════════════════════════ */
+.viewer-loading {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: rgba(10, 10, 14, 0.86);
+}
+
+.loading-title {
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--white-35);
+}
+
+.loading-bars {
+  display: flex;
+  gap: 5px;
+}
+
+.loading-bars span {
+  display: block;
+  width: 28px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.55);
+  animation: bar 900ms ease-in-out infinite;
+}
+
+.loading-bars span:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.loading-bars span:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+@keyframes bar {
+
+  0%,
+  100% {
+    transform: scaleX(0.28);
+    opacity: 0.2;
+  }
+
+  50% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}
+
+.viewer-msg {
+  position: absolute;
+  bottom: 200px;
+  left: var(--pad);
+  z-index: 20;
+  font-family: var(--ff-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: var(--white-35);
+}
+
+.viewer-msg.error {
+  color: #ff7060;
+}
+
+/* Tire hover tooltip */
+.hover-tooltip-card {
+  position: absolute;
+  top: calc(var(--nav-h) + 56px);
+  right: var(--pad);
+  z-index: 30;
+  min-width: 148px;
+  padding: 12px 16px;
+  background: rgba(14, 14, 18, 0.78);
+  backdrop-filter: blur(20px) saturate(1.3);
+  border: 1px solid var(--div);
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.hover-tooltip-card header {
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  margin-bottom: 9px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--div);
+}
+
+.hover-tooltip-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 5px 12px;
+  font-family: var(--ff-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.hover-tooltip-grid span {
+  color: var(--white-35);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CIRCUIT MAP SECTION — below the full-bleed scene
+   ═══════════════════════════════════════════════════════════════ */
+.track-section {
+  padding: 0 var(--pad) 52px;
+  background: var(--black);
+}
+
+.track-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 0 16px;
+  border-bottom: 1px solid var(--div);
+  margin-bottom: 20px;
+}
+
+.track-section-title {
+  font-family: var(--ff-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.track-section-sub {
+  font-family: var(--ff-display);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  color: var(--white-35);
+  margin-top: 5px;
+}
+
+.track-feature-legend {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+.feature-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ff-display);
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white-35);
+}
+
+.feature-legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.track-map-wrap {
+  border: 1px solid var(--div);
+  border-radius: 8px;
+  overflow: hidden;
+  height: clamp(380px, 50vh, 560px);
+  background: rgba(14, 14, 18, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.plot-shell {
+  width: 100%;
+  height: 100%;
+  opacity: 0.08;
+  transition: opacity 300ms var(--ease);
+}
+
+.plot-shell.ready {
+  opacity: 1;
+}
+
+/* Fallback sectors */
+.sector-fallback {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sector-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 48px;
+  gap: 12px;
+  align-items: center;
+}
+
+.sector-row span {
+  font-family: var(--ff-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--white-35);
+}
+
+.sector-bar-shell {
+  height: 2px;
+  background: var(--div);
+  border-radius: 1px;
+}
+
+.sector-bar {
+  height: 100%;
+  border-radius: 1px;
+  background: linear-gradient(90deg, rgba(30, 86, 200, 0.8), rgba(200, 220, 255, 0.55));
+}
+
+.sector-row strong {
+  font-family: var(--ff-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+/* ── Status ──────────────────────────────────────────────────── */
+.status-strip {
+  display: flex;
+  gap: 16px;
+  padding: 8px var(--pad);
+  background: rgba(10, 10, 14, 0.9);
+  border-top: 1px solid var(--div);
+  font-family: var(--ff-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--white-35);
+}
+
+.error {
+  color: #ff7060;
+}
+
+/* ── Responsive ──────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .track-feature-legend {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --pad: var(--pad-sm);
+    --strip-h: 60px;
+  }
+
+  .telem-strip {
+    overflow-x: auto;
+  }
+
+  .telem-item {
+    min-width: 80px;
+    padding: 0 14px;
+  }
+
+  .telem-value {
+    font-size: 1.3rem;
+  }
+
+  .controls-overlay {
+    overflow-x: auto;
+  }
+}
+
+/* Floating Tyre Life Labels in 3D Space */
+.tyre-life-label {
+  font-family: var(--ff-display);
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 1;
+  background: rgba(10, 10, 14, 0.55);
+  padding: 8px 16px;
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 0px 4px 12px rgba(0, 0, 0, 0.9);
+  user-select: none;
+}
