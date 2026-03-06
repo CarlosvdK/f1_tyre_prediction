@@ -1,0 +1,1 @@
+/Users/Carlos/Desktop/Projects/F1_pred/f1_tyre_prediction/f1-pit-window-ml/data/raw/kaggle_f1
