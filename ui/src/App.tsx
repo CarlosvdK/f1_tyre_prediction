@@ -1,16 +1,17 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CarViewer from './components/CarViewer';
 import DegradationChart from './components/DegradationChart';
-import StrategyPanel from './components/StrategyPanel';
-import TrackMap3D from './components/TrackMap3D';
+import TrackMap from './components/TrackMap';
 import {
   getPredictions,
+  getTelemetry,
   listDrivers,
   listLaps,
   listTracks,
   type Compound,
   type FeatureKey,
   type Prediction,
+  type TelemetryPoint,
   type Track,
   type TrackCondition,
 } from './data/api';
@@ -40,20 +41,23 @@ function useAnimatedValue(target: number, duration = 500): number {
 }
 
 export default function App() {
+  const MODEL_COMPOUND: Compound = 'medium';
+  const MODEL_CONDITION: TrackCondition = 'dry';
+  const MAP_FEATURE: FeatureKey = 'degradation_intensity_proxy';
+
   /* ── State ──────────────────────────────────────────────────── */
   const [tracks, setTracks] = useState<Track[]>([]);
-  const [drivers, setDrivers] = useState<string[]>([]);
   const [laps, setLaps] = useState<number[]>([]);
   const [track, setTrack] = useState('');
   const [driver, setDriver] = useState('');
   const [lap, setLap] = useState(1);
-  const [compound, setCompound] = useState<Compound>('medium');
-  const [conditions, setConditions] = useState<TrackCondition>('dry');
-  const [feature, setFeature] = useState<FeatureKey>('degradation_intensity_proxy');
   const [isPlaying, setIsPlaying] = useState(false);
 
   const [prediction, setPrediction] = useState<Prediction | null>(null);
+  const [telemetry, setTelemetry] = useState<TelemetryPoint[]>([]);
+  const [baselineTelemetry, setBaselineTelemetry] = useState<TelemetryPoint[]>([]);
   const [loading, setLoading] = useState(false);
+  const [mapLoading, setMapLoading] = useState(false);
   const [error, setError] = useState('');
 
   const selectedTrack = useMemo(
@@ -84,7 +88,6 @@ export default function App() {
     listDrivers(track)
       .then((items) => {
         if (!alive) return;
-        setDrivers(items);
         setDriver((c) => (items.includes(c) ? c : items[0] ?? ''));
       })
       .catch((e) => { if (alive) setError(e instanceof Error ? e.message : 'Failed to load drivers'); });
@@ -110,7 +113,7 @@ export default function App() {
     let alive = true;
     setLoading(true);
     setError('');
-    getPredictions(track, driver, lap, compound, conditions)
+    getPredictions(track, driver, lap, MODEL_COMPOUND, MODEL_CONDITION)
       .then((pred) => {
         if (!alive) return;
         setPrediction(pred);
@@ -118,7 +121,33 @@ export default function App() {
       .catch((e) => { if (alive) setError(e instanceof Error ? e.message : 'Failed to load data'); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
-  }, [track, driver, lap, compound, conditions]);
+  }, [track, driver, lap]);
+
+  useEffect(() => {
+    if (!track || !driver || !lap) return;
+    let alive = true;
+    const baselineLap = Math.max(1, lap - 5);
+    setMapLoading(true);
+    Promise.all([
+      getTelemetry(track, driver, lap),
+      getTelemetry(track, driver, baselineLap),
+    ])
+      .then(([current, baseline]) => {
+        if (!alive) return;
+        setTelemetry(current);
+        setBaselineTelemetry(baseline);
+      })
+      .catch((e) => {
+        if (!alive) return;
+        setTelemetry([]);
+        setBaselineTelemetry([]);
+        setError(e instanceof Error ? e.message : 'Failed to load telemetry map');
+      })
+      .finally(() => {
+        if (alive) setMapLoading(false);
+      });
+    return () => { alive = false; };
+  }, [track, driver, lap]);
 
   useEffect(() => {
     if (!isPlaying || laps.length < 2) return;
@@ -154,8 +183,6 @@ export default function App() {
           {selectedTrack?.name ?? 'Loading…'}
         </div>
         <div className="nav-right">
-          <span className="nav-badge">Driver <strong>{driver || '—'}</strong></span>
-          <div className="nav-sep" />
           <span className="nav-badge">Lap <strong>{lap} / {maxLap}</strong></span>
         </div>
       </nav>
@@ -168,7 +195,7 @@ export default function App() {
 
         {/* Full-bleed 3D */}
         <CarViewer
-          compound={compound}
+          compound={MODEL_COMPOUND}
           wear={{
             wear_FL: prediction?.wear_FL,
             wear_FR: prediction?.wear_FR,
@@ -189,41 +216,6 @@ export default function App() {
             <span className="ctrl-label">Circuit</span>
             <select className="ctrl-select" value={track} onChange={(e) => setTrack(e.target.value)}>
               {tracks.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-            </select>
-          </div>
-          <div className="ctrl-cell">
-            <span className="ctrl-label">Driver</span>
-            <select className="ctrl-select" value={driver} onChange={(e) => setDriver(e.target.value)}>
-              {drivers.map((d) => <option key={d} value={d}>{d}</option>)}
-            </select>
-          </div>
-          <div className="ctrl-cell">
-            <span className="ctrl-label">Tyre</span>
-            <select
-              className={`ctrl-select compound-${compound}`}
-              value={compound}
-              onChange={(e) => setCompound(e.target.value as Compound)}
-            >
-              {(['soft', 'medium', 'hard', 'inter', 'wet'] as Compound[]).map((c) => (
-                <option key={c} value={c}>{c.toUpperCase()}</option>
-              ))}
-            </select>
-          </div>
-          <div className="ctrl-cell">
-            <span className="ctrl-label">Conditions</span>
-            <select className="ctrl-select" value={conditions} onChange={(e) => setConditions(e.target.value as TrackCondition)}>
-              {(['dry', 'hot', 'cool', 'damp', 'wet'] as TrackCondition[]).map((c) => (
-                <option key={c} value={c}>{c.toUpperCase()}</option>
-              ))}
-            </select>
-          </div>
-          <div className="ctrl-cell">
-            <span className="ctrl-label">Heatmap</span>
-            <select className="ctrl-select" value={feature} onChange={(e) => setFeature(e.target.value as FeatureKey)}>
-              <option value="degradation_intensity_proxy">Degradation</option>
-              <option value="braking_earlier_delta">Braking Earlier</option>
-              <option value="lower_corner_speed_delta">Corner Speed Δ</option>
-              <option value="throttle_delay_delta">Throttle Delay</option>
             </select>
           </div>
           <div className="ctrl-lap">
@@ -248,20 +240,49 @@ export default function App() {
           </div>
         </div>
 
-        {/* Track map — glass overlay, top-right of the scene */}
-        <div style={{
-          position: 'absolute', top: 80, right: 24,
-          width: 420, height: 280,
-          borderRadius: 12,
-          overflow: 'hidden',
-          border: '1px solid rgba(255,255,255,0.10)',
-          background: 'rgba(10,10,22,0.72)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          zIndex: 25,
-          boxShadow: '0 8px 32px rgba(0,0,0,0.55)',
-        }}>
-          <TrackMap3D trackId={track} />
+        <div className="scene-data-overlays">
+          <section className="scene-glass-card scene-chart-card">
+            <div className="scene-card-body">
+              <DegradationChart
+                currentLap={lap}
+                totalLaps={maxLap}
+                prediction={prediction}
+                compound={prediction?.strategy_stint1_compound ?? MODEL_COMPOUND}
+              />
+            </div>
+          </section>
+
+          <section className="scene-glass-card scene-map-card">
+            <header className="scene-card-head">
+              <div>
+                <h2 className="scene-card-title">Telemetry Feature Map</h2>
+                <p className="scene-card-sub">Lap {lap} vs baseline lap {Math.max(1, lap - 5)}</p>
+              </div>
+              <div className="track-feature-legend">
+                <span className="feature-legend-item">
+                  <span className="feature-legend-dot" style={{ background: '#1e56c8' }} />
+                  Lower
+                </span>
+                <span className="feature-legend-item">
+                  <span className="feature-legend-dot" style={{ background: '#dee6f3' }} />
+                  Neutral
+                </span>
+                <span className="feature-legend-item">
+                  <span className="feature-legend-dot" style={{ background: '#cf2020' }} />
+                  Higher
+                </span>
+              </div>
+            </header>
+            <div className="scene-card-body">
+              <TrackMap
+                outline={selectedTrack?.outline ?? []}
+                telemetry={telemetry}
+                baselineTelemetry={baselineTelemetry}
+                feature={MAP_FEATURE}
+                lap={lap}
+              />
+            </div>
+          </section>
         </div>
 
         {/* Floating corner meta */}
@@ -332,11 +353,6 @@ export default function App() {
         </div>
 
         <div className="telem-item">
-          <div className="telem-label">Conditions</div>
-          <div className="telem-value">{conditions.toUpperCase()}</div>
-        </div>
-
-        <div className="telem-item">
           <div className="telem-label">Circuit</div>
           <div className="telem-value" style={{ fontSize: 'clamp(0.88rem, 1.4vw, 1.2rem)' }}>
             {selectedTrack?.name ?? '—'}
@@ -344,29 +360,10 @@ export default function App() {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════════════════════════
-          ANALYSIS PANEL — degradation chart + strategy optimizer
-          ═══════════════════════════════════════════════════════════ */}
-      <div className="analysis-panel">
-        <DegradationChart
-          currentLap={lap}
-          totalLaps={maxLap}
-          prediction={prediction}
-          compound={compound}
-        />
-        <StrategyPanel
-          prediction={prediction}
-          compound={compound}
-          track={track}
-          driver={driver}
-          currentLap={lap}
-          totalLaps={maxLap}
-        />
-      </div>
-
-      {(loading || error) && (
+      {(loading || mapLoading || error) && (
         <div className="status-strip">
           {loading && <span>Loading telemetry…</span>}
+          {mapLoading && <span>Refreshing map…</span>}
           {error && <span className="error">{error}</span>}
         </div>
       )}

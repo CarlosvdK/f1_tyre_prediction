@@ -4,13 +4,14 @@ import createPlotlyComponent from 'react-plotly.js/factory';
 import type { FeatureKey, TelemetryPoint, XYPoint } from '../data/api';
 
 const Plot = createPlotlyComponent(Plotly);
-const RESAMPLE_POINTS = 1800;
+const RESAMPLE_POINTS = 1500;
 
 interface TrackMapProps {
   outline: XYPoint[];
   telemetry: TelemetryPoint[];
   baselineTelemetry: TelemetryPoint[];
   feature: FeatureKey;
+  lap: number;
 }
 
 interface Transform {
@@ -168,43 +169,51 @@ function fallbackSectorValues(points: TelemetryPoint[]): number[] {
   return buckets.map((b) => (b.length ? b.reduce((a, c) => a + c, 0) / b.length : 0));
 }
 
+function argMax(values: number[]): number {
+  if (values.length === 0) return 0;
+  let bestIndex = 0;
+  let bestValue = values[0];
+  for (let i = 1; i < values.length; i++) {
+    if (values[i] > bestValue) {
+      bestValue = values[i];
+      bestIndex = i;
+    }
+  }
+  return bestIndex;
+}
+
 export default function TrackMap({
   outline,
   telemetry,
   baselineTelemetry,
   feature,
+  lap,
 }: TrackMapProps) {
-  const [fadeIn, setFadeIn] = useState(true);
-  const [playhead, setPlayhead] = useState(0);
+  const [revealProgress, setRevealProgress] = useState(0);
 
   const prepared = useMemo(() => {
     const safeBase = baselineTelemetry.length > 0 ? baselineTelemetry : telemetry;
     const currentResampled = smoothTelemetry(resampleTelemetry(telemetry, RESAMPLE_POINTS));
     const baselineResampled = smoothTelemetry(resampleTelemetry(safeBase, RESAMPLE_POINTS));
-    const outlineResampled = smoothOutline(resampleOutline(outline, 900));
-
-    const mergedOutline = outlineResampled.map((point, idx) => {
-      const a = baselineResampled[idx % Math.max(baselineResampled.length, 1)];
-      const b = currentResampled[idx % Math.max(currentResampled.length, 1)];
-      if (!a || !b) return point;
-      return {
-        x: point.x * 0.58 + a.x * 0.22 + b.x * 0.2,
-        y: point.y * 0.58 + a.y * 0.22 + b.y * 0.2,
-      };
-    });
-
+    const outlineResampled = smoothOutline(resampleOutline(outline, RESAMPLE_POINTS));
     const hasTelemetry = hasValidXY(currentResampled);
-    const hasOutline = hasValidXY(mergedOutline);
-    const transform = getTransform(hasOutline ? mergedOutline : currentResampled);
-
-    const normalizedOutline = mergedOutline.map((p) => normalizePoint(p, transform));
-    const normalizedCurrent = currentResampled.map((p) => normalizePoint(p, transform));
-    const normalizedBaseline = baselineResampled.map((p) => normalizePoint(p, transform));
+    const validOutline = hasValidXY(outlineResampled);
+    const geometryPath = validOutline
+      ? outlineResampled
+      : currentResampled.map((point) => ({ x: point.x, y: point.y }));
+    const hasGeometry = hasValidXY(geometryPath);
+    const transform = getTransform(hasGeometry ? geometryPath : currentResampled);
+    const normalizedOutline = geometryPath.map((p) => normalizePoint(p, transform));
+    const featurePath = normalizedOutline;
     const avgSpeed = averageSpeed(currentResampled);
 
     const z = currentResampled.map((point, index) => {
       const baseline = baselineResampled[index % baselineResampled.length] ?? point;
       return computeFeatureDelta(feature, point, baseline, avgSpeed);
+    });
+    const brakingShift = currentResampled.map((point, index) => {
+      const baseline = baselineResampled[index % baselineResampled.length] ?? point;
+      return Math.max(0, point.brake - baseline.brake);
     });
 
     const brakeScores = currentResampled.map((p) => p.brake);
@@ -214,31 +223,42 @@ export default function TrackMap({
       .map((point, index) => ({ point, index }))
       .filter((item) => item.point.brake >= threshold)
       .filter((_, index) => index % 12 === 0);
+    let focusIndex = feature === 'braking_earlier_delta'
+      ? argMax(brakingShift)
+      : argMax(z.map((value) => Math.abs(value)));
+    if (!Number.isFinite(focusIndex) || focusIndex < 0 || focusIndex >= featurePath.length) {
+      focusIndex = Math.floor((Math.max(1, lap) % 100) / 100 * Math.max(1, featurePath.length - 1));
+    }
 
     return {
       hasTelemetry,
       normalizedOutline,
-      normalizedCurrent,
-      normalizedBaseline,
+      featurePath,
+      currentSamples: currentResampled,
       z,
       brakingZones,
       fallbackSectors: fallbackSectorValues(currentResampled),
+      focusIndex,
     };
-  }, [outline, telemetry, baselineTelemetry, feature]);
+  }, [outline, telemetry, baselineTelemetry, feature, lap]);
 
   useEffect(() => {
-    setFadeIn(false);
-    const id = window.setTimeout(() => setFadeIn(true), 30);
-    return () => window.clearTimeout(id);
-  }, [feature, telemetry, baselineTelemetry]);
-
-  useEffect(() => {
-    if (!prepared.hasTelemetry || prepared.normalizedCurrent.length === 0) return;
+    if (!prepared.hasTelemetry || prepared.featurePath.length === 0) {
+      setRevealProgress(0);
+      return;
+    }
+    setRevealProgress(0);
+    const totalMs = 3600;
+    const tickMs = 80;
+    const steps = Math.max(1, Math.ceil(totalMs / tickMs));
+    let step = 0;
     const id = window.setInterval(() => {
-      setPlayhead((index) => (index + 8) % prepared.normalizedCurrent.length);
-    }, 120);
+      step += 1;
+      setRevealProgress(Math.min(1, step / steps));
+      if (step >= steps) window.clearInterval(id);
+    }, tickMs);
     return () => window.clearInterval(id);
-  }, [prepared.hasTelemetry, prepared.normalizedCurrent.length]);
+  }, [lap, feature, telemetry, baselineTelemetry, prepared.hasTelemetry, prepared.featurePath.length]);
 
   /* ── Fallback: no XY data ─────────────────────────────────────── */
   if (!prepared.hasTelemetry) {
@@ -270,17 +290,22 @@ export default function TrackMap({
   }
 
   const z = prepared.z;
-  const minAbs = Math.max(Math.abs(Math.min(...z, 0)), Math.abs(Math.max(...z, 0)));
-  const playheadPoint = prepared.normalizedCurrent[playhead] ?? prepared.normalizedCurrent[0];
+  const minAbs = Math.max(0.001, Math.abs(Math.min(...z, 0)), Math.abs(Math.max(...z, 0)));
+  const totalPoints = prepared.featurePath.length;
+  const revealIndex = Math.max(0, Math.floor(revealProgress * Math.max(totalPoints - 1, 0)));
+  const visibleCount = Math.max(1, revealIndex + 1);
+  const focusPoint = prepared.featurePath[Math.min(revealIndex, prepared.focusIndex)] ?? prepared.featurePath[0];
   const brakingX = prepared.brakingZones
-    .map((item) => prepared.normalizedCurrent[item.index]?.x)
+    .filter((item) => item.index <= revealIndex)
+    .map((item) => prepared.featurePath[item.index]?.x)
     .filter((v): v is number => Number.isFinite(v));
   const brakingY = prepared.brakingZones
-    .map((item) => prepared.normalizedCurrent[item.index]?.y)
+    .filter((item) => item.index <= revealIndex)
+    .map((item) => prepared.featurePath[item.index]?.y)
     .filter((v): v is number => Number.isFinite(v));
 
   return (
-    <div className={`plot-shell ${fadeIn ? 'ready' : ''}`}>
+    <div className="plot-shell ready">
       <Plot
         data={[
           /* ── Track outline ─── */
@@ -289,20 +314,20 @@ export default function TrackMap({
             y: prepared.normalizedOutline.map((p) => p.y),
             mode: 'lines',
             type: 'scatter',
-            line: { color: 'rgba(255,255,255,0.22)', width: 10 },
+            line: { color: 'rgba(255,255,255,0.92)', width: 4 },
             name: 'Track outline',
             hoverinfo: 'skip',
           },
-          /* ── Feature heat ─── */
+          /* ── Feature reveal ─── */
           {
-            x: prepared.normalizedCurrent.map((p) => p.x),
-            y: prepared.normalizedCurrent.map((p) => p.y),
+            x: prepared.featurePath.slice(0, visibleCount).map((p) => p.x),
+            y: prepared.featurePath.slice(0, visibleCount).map((p) => p.y),
             mode: 'markers',
             type: 'scatter',
             marker: {
               size: 5,
-              opacity: 0.95,
-              color: z,
+              opacity: 0.92,
+              color: z.slice(0, visibleCount),
               colorscale: [
                 [0, '#1e56c8'],
                 [0.5, '#dee6f3'],
@@ -323,7 +348,15 @@ export default function TrackMap({
                 bgcolor: 'rgba(0,0,0,0)',
               },
             },
-            text: z.map((delta) => `Δ: ${delta.toFixed(3)}`),
+            text: z.slice(0, visibleCount).map((delta, index) => {
+              const point = prepared.currentSamples[index] ?? prepared.currentSamples[0];
+              return [
+                `Δ: ${delta.toFixed(3)}`,
+                `Speed: ${point.speed.toFixed(1)} km/h`,
+                `Brake: ${(point.brake * 100).toFixed(0)}%`,
+                `Throttle: ${(point.throttle * 100).toFixed(0)}%`,
+              ].join('<br>');
+            }),
             hovertemplate: '%{text}<extra></extra>',
             name: feature.replace(/_/g, ' '),
           },
@@ -341,20 +374,10 @@ export default function TrackMap({
             name: 'Braking zones',
             hoverinfo: 'skip',
           },
-          /* ── Reference lap ─── */
+          /* ── Car position ─── */
           {
-            x: prepared.normalizedBaseline.map((p) => p.x),
-            y: prepared.normalizedBaseline.map((p) => p.y),
-            mode: 'lines',
-            type: 'scatter',
-            line: { color: 'rgba(80,140,240,0.35)', width: 1.8, dash: 'dot' },
-            hoverinfo: 'skip',
-            name: 'Reference lap',
-          },
-          /* ── Live position ─── */
-          {
-            x: [playheadPoint?.x ?? 0],
-            y: [playheadPoint?.y ?? 0],
+            x: [focusPoint?.x ?? 0],
+            y: [focusPoint?.y ?? 0],
             mode: 'markers',
             type: 'scatter',
             marker: {
@@ -390,7 +413,8 @@ export default function TrackMap({
           },
           font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif' },
           hovermode: 'closest',
-          transition: { duration: 240, easing: 'cubic-in-out' },
+          transition: { duration: 0, easing: 'linear' },
+          uirevision: `${lap}-${feature}`,
         }}
         config={{ displayModeBar: false, responsive: true }}
         style={{ width: '100%', height: '100%' }}

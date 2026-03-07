@@ -54,6 +54,8 @@ interface ModelAssetProps {
   modelPath: string;
   compound: Compound;
   wear: TireWearMap;
+  prediction?: Prediction | null;
+  currentLap?: number;
   onTireCountChange: (count: number) => void;
   onHoverChange: (state: TireHoverState | null) => void;
   onReady: () => void;
@@ -238,9 +240,10 @@ function StudioEnvironment() {
 
 /* ── Car model ──────────────────────────────────────────────────── */
 function ModelInstance({
-  object, compound, wear, onTireCountChange, onHoverChange, onReady,
+  object, compound, wear, prediction, currentLap, onTireCountChange, onHoverChange, onReady,
 }: {
   object: Object3D; compound: Compound; wear: TireWearMap;
+  prediction?: Prediction | null; currentLap?: number;
   onTireCountChange: (count: number) => void;
   onHoverChange: (state: TireHoverState | null) => void;
   onReady: () => void;
@@ -300,6 +303,7 @@ function ModelInstance({
 
         const isLeft = t.id.includes('L');
         const stemLength = 0.6;
+        const tempProxyC = Math.round(84 + w * 76);
 
         // If X axis is the thinnest, the axle points along X (Left/Right)
         if (size.x < size.z) {
@@ -316,7 +320,7 @@ function ModelInstance({
         }
 
         const isHovered = hoverState?.tireId === t.id;
-        const opacity = isHovered ? 1 : 0;
+        const opacity = isHovered ? 1 : 0.82;
 
         return (
           <group key={`ui-${t.id}`}>
@@ -337,15 +341,48 @@ function ModelInstance({
                 opacity: opacity
               }}
             >
-              <div className={`tyre-life-container ${isLeft ? 'left-side' : 'right-side'}`}>
+              <div className={`tyre-life-container ${isLeft ? 'left-side' : 'right-side'} ${isHovered ? 'hovered' : ''}`}>
+                <div className="tyre-life-head">
+                  <span className="tyre-life-id">{t.id}</span>
+                  <span className="tyre-life-temp">{tempProxyC}°C</span>
+                </div>
                 <div className="tyre-life-label" style={{ color }}>
-                  {lifePct}%
+                  {lifePct}% LIFE
+                </div>
+                <div className="tyre-life-meter">
+                  <span style={{ width: `${lifePct}%`, background: color }} />
                 </div>
               </div>
             </Html>
           </group>
         );
       })}
+      {prediction && (
+        <Html
+          position={[0, 1.22, 0]}
+          center
+          occlude="blending"
+          style={{ pointerEvents: 'none' }}
+        >
+          <div className="car-strategy-chip">
+            <div className="car-strategy-title">Live Strategy Readout</div>
+            <div className="car-strategy-grid">
+              <span>Pit Window</span>
+              <strong>L{prediction.pit_window_start}–L{prediction.pit_window_end}</strong>
+              <span>Target Stop</span>
+              <strong>L{prediction.strategy_optimal_pit_lap ?? '—'}</strong>
+              <span>Pace Loss</span>
+              <strong>{prediction.sec_per_lap_increase.toFixed(3)} s/lap</strong>
+              <span>Laps To Pit</span>
+              <strong>
+                {prediction.strategy_optimal_pit_lap && currentLap
+                  ? Math.max(0, prediction.strategy_optimal_pit_lap - currentLap)
+                  : '—'}
+              </strong>
+            </div>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }
@@ -419,16 +456,16 @@ function PlaceholderModel({
 }
 
 function ResolvedModel({
-  modelPath, modelType, mtlPath, texturePath, compound, wear,
+  modelPath, modelType, mtlPath, texturePath, compound, wear, prediction, currentLap,
   onTireCountChange, onHoverChange, onReady,
 }: {
   modelPath: string; modelType: string; mtlPath?: string; texturePath?: string;
-  compound: Compound; wear: TireWearMap;
+  compound: Compound; wear: TireWearMap; prediction?: Prediction | null; currentLap?: number;
   onTireCountChange: (count: number) => void;
   onHoverChange: (state: TireHoverState | null) => void;
   onReady: () => void;
 }) {
-  const p = { modelPath, compound, wear, onTireCountChange, onHoverChange, onReady };
+  const p = { modelPath, compound, wear, prediction, currentLap, onTireCountChange, onHoverChange, onReady };
   if (modelType === 'glb' || modelType === 'gltf') return <GLTFAsset {...p} />;
   if (modelType === 'fbx') return <FBXAsset {...p} />;
   if (modelType === 'obj' && mtlPath) return <OBJWithMTLAsset {...p} mtlPath={mtlPath} texturePath={texturePath} />;
@@ -510,6 +547,8 @@ export default function CarViewer({ compound, wear, prediction, currentLap, onMo
               texturePath={manifest.texturePath}
               compound={compound}
               wear={wearMap}
+              prediction={prediction}
+              currentLap={currentLap}
               onTireCountChange={setTireCount}
               onHoverChange={setHover}
               onReady={() => setModelReady(true)}

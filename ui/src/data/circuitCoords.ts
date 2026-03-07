@@ -58,6 +58,53 @@ const CIRCUIT_ID_MAP: Record<string, CircuitKey> = {
     '81': 'las-vegas',
 };
 
+const CIRCUIT_NAME_ALIASES: Record<CircuitKey, string[]> = {
+    bahrain: ['bahrain', 'sakhir'],
+    jeddah: ['jeddah', 'saudi', 'corniche'],
+    melbourne: ['melbourne', 'albert park', 'australia'],
+    suzuka: ['suzuka', 'japan'],
+    shanghai: ['shanghai', 'china'],
+    miami: ['miami'],
+    imola: ['imola', 'emilia romagna', 'enzo e dino ferrari'],
+    monaco: ['monaco', 'monte carlo'],
+    canada: ['canada', 'montreal', 'villeneuve'],
+    barcelona: ['barcelona', 'catalunya', 'spain'],
+    austria: ['austria', 'red bull ring', 'spielberg'],
+    silverstone: ['silverstone', 'britain', 'british'],
+    hungaroring: ['hungaroring', 'hungary'],
+    spa: ['spa', 'francorchamps', 'belgium'],
+    zandvoort: ['zandvoort', 'netherlands', 'dutch'],
+    monza: ['monza', 'italy', 'italian'],
+    baku: ['baku', 'azerbaijan'],
+    singapore: ['singapore', 'marina bay'],
+    austin: ['austin', 'cota', 'united states', 'usa'],
+    mexico: ['mexico', 'rodriguez'],
+    brazil: ['brazil', 'interlagos', 'sao paulo'],
+    'las-vegas': ['las vegas', 'vegas'],
+    qatar: ['qatar', 'lusail'],
+    'abu-dhabi': ['abu dhabi', 'yas marina', 'uae'],
+};
+
+function normalizeCircuitToken(value: string): string {
+    return value
+        .toLowerCase()
+        .trim()
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ');
+}
+
+function resolveByAlias(raw: string): CircuitKey | null {
+    const text = normalizeCircuitToken(raw);
+    if (!text) return null;
+
+    for (const [key, aliases] of Object.entries(CIRCUIT_NAME_ALIASES)) {
+        const directKey = normalizeCircuitToken(key);
+        if (text === directKey || text.includes(directKey)) return key;
+        if (aliases.some((alias) => text.includes(normalizeCircuitToken(alias)))) return key;
+    }
+    return null;
+}
+
 export const CIRCUIT_PATHS: Record<CircuitKey, CircuitWaypoint[]> = {
 
     // ─────────────────────────────────────────────────────────────────
@@ -391,7 +438,7 @@ function generateCircuitPath(seed: number): CircuitWaypoint[] {
 
 /** Look up circuit path by track ID (name or numeric Kaggle circuit_id) */
 export function getCircuitPath(trackId: string): CircuitWaypoint[] {
-    const key = trackId.toLowerCase().trim();
+    const key = resolveCircuitKey(trackId);
 
     // 1. Direct name match
     if (key in CIRCUIT_PATHS) return CIRCUIT_PATHS[key];
@@ -403,4 +450,19 @@ export function getCircuitPath(trackId: string): CircuitWaypoint[] {
     // 3. Procedurally generate a unique shape from the numeric seed
     const seed = parseInt(key, 10) || key.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
     return generateCircuitPath(seed % 97);
+}
+
+/** Resolve any incoming track id (name or numeric circuit id) to a circuit key. */
+export function resolveCircuitKey(trackId: string, trackName?: string): CircuitKey {
+    const key = trackId.toLowerCase().trim();
+    if (key in CIRCUIT_PATHS) return key;
+    if (trackName) {
+        const byNameAlias = resolveByAlias(trackName);
+        if (byNameAlias) return byNameAlias;
+    }
+    const byIdAlias = resolveByAlias(key);
+    if (byIdAlias) return byIdAlias;
+    const named = CIRCUIT_ID_MAP[key];
+    if (named) return named;
+    return key;
 }

@@ -69,7 +69,16 @@ export default function DegradationChart({
       brakingIntensity.push(Number(Math.min(1, brakeBase + brakeIncrease).toFixed(3)));
     }
 
-    return { laps, lapTimeDeltas, tyreLife, brakingIntensity, pitLap, c2 };
+    return {
+      laps,
+      lapTimeDeltas,
+      tyreLife,
+      brakingIntensity,
+      pitLap,
+      c2,
+      pitWindowStart: prediction.pit_window_start,
+      pitWindowEnd: prediction.pit_window_end,
+    };
   }, [prediction, compound, totalLaps]);
 
   if (!data) {
@@ -87,7 +96,10 @@ export default function DegradationChart({
     <div className="deg-chart-container">
       <div className="deg-chart-header">
         <span className="deg-chart-title">Tyre Degradation</span>
-        <span className="deg-chart-sub">Lap time loss &amp; tyre life over race distance</span>
+        <span className="deg-chart-sub">Predicted lap-time loss vs fresh tyre baseline over race distance</span>
+        <span className="deg-chart-sub">
+          Recommended stop window: L{data.pitWindowStart}–L{data.pitWindowEnd}
+        </span>
       </div>
       <Plot
         data={[
@@ -97,7 +109,7 @@ export default function DegradationChart({
             y: data.lapTimeDeltas.filter((_, i) => data.laps[i] <= data.pitLap),
             type: 'scatter',
             mode: 'lines',
-            name: `${compound.toUpperCase()} pace loss`,
+            name: `${compound.toUpperCase()} stint pace loss`,
             line: { color: color1, width: 2.5 },
             yaxis: 'y',
           },
@@ -107,7 +119,7 @@ export default function DegradationChart({
             y: data.lapTimeDeltas.filter((_, i) => data.laps[i] > data.pitLap),
             type: 'scatter',
             mode: 'lines',
-            name: `${data.c2.toUpperCase()} pace loss`,
+            name: `${data.c2.toUpperCase()} stint pace loss`,
             line: { color: color2, width: 2.5 },
             yaxis: 'y',
           },
@@ -167,7 +179,7 @@ export default function DegradationChart({
             tickfont: { size: 9 },
           },
           yaxis: {
-            title: { text: 'Pace loss (s)', font: { size: 9, color: 'rgba(255,255,255,0.3)' } },
+            title: { text: 'Predicted time loss vs fresh lap (s)', font: { size: 9, color: 'rgba(255,255,255,0.3)' } },
             gridcolor: 'rgba(255,255,255,0.06)',
             zerolinecolor: 'rgba(255,255,255,0.06)',
             tickfont: { size: 9 },
@@ -220,7 +232,7 @@ export default function DegradationChart({
               x: data.pitLap,
               y: 1,
               yref: 'paper',
-              text: `PIT L${data.pitLap}`,
+              text: `OPT PIT L${data.pitLap}`,
               showarrow: false,
               font: { size: 8, color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed' },
               yanchor: 'bottom',

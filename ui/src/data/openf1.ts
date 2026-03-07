@@ -1,17 +1,10 @@
 /**
- * OpenF1 API integration — fetches EXACTLY one clean lap of position data.
- *
- * ROOT CAUSE OF PREVIOUS FAILURE:
- * We were fetching ALL location points for the entire race session
- * (53 laps × ~300 pts/lap = ~16,000 records per endpoint → timeout/OOM).
- *
- * FIX: Use OpenF1's date range filtering to request only the time window
- * of a single clean lap:
- *   /v1/location?session_key=...&driver_number=...&date>=ISO&date<=ISO
- * This returns ~250-400 points — exactly what we need.
+ * OpenF1 integration: resolve a race session for a track, then fetch one clean
+ * lap of 3D position + telemetry for that session.
  */
 
 const BASE = 'https://api.openf1.org/v1';
+const TARGET_YEAR = 2024;
 
 export interface OpenF1Point {
     x: number;        // metres, OpenF1 horizontal
@@ -24,17 +17,40 @@ export interface OpenF1Point {
     date: string;
 }
 
-/** Map track IDs → OpenF1 2024 Race session keys */
+/** Optional hard bindings (fast path). */
 export const TRACK_SESSION_MAP: Record<string, number> = {
-    monza: 9590,  // 2024 Italian GP
-    silverstone: 9558,  // 2024 British GP
+    monza: 9590,
+    silverstone: 9558,
 };
 
-/** Preferred driver number per session (for clean representative laps) */
-const SESSION_DRIVER: Record<number, number> = {
-    9590: 1,   // Monza → Verstappen
-    9558: 44,  // Silverstone → Hamilton
+const TRACK_ALIASES: Record<string, string[]> = {
+    bahrain: ['bahrain', 'sakhir'],
+    jeddah: ['saudi', 'jeddah'],
+    melbourne: ['australia', 'melbourne', 'albert park'],
+    suzuka: ['japan', 'suzuka'],
+    shanghai: ['china', 'shanghai'],
+    miami: ['miami'],
+    imola: ['imola', 'emilia romagna'],
+    monaco: ['monaco'],
+    canada: ['canada', 'montreal', 'villeneuve'],
+    barcelona: ['spain', 'barcelona', 'catalunya'],
+    austria: ['austria', 'red bull ring', 'spielberg'],
+    silverstone: ['britain', 'silverstone', 'british'],
+    hungaroring: ['hungary', 'hungaroring'],
+    spa: ['spa', 'belgium', 'francorchamps'],
+    zandvoort: ['netherlands', 'zandvoort', 'dutch'],
+    monza: ['monza', 'italy', 'italian'],
+    baku: ['azerbaijan', 'baku'],
+    singapore: ['singapore'],
+    austin: ['united states', 'usa', 'austin', 'cota'],
+    mexico: ['mexico'],
+    brazil: ['brazil', 'sao paulo', 'interlagos'],
+    'las-vegas': ['las vegas', 'vegas'],
+    qatar: ['qatar', 'lusail'],
+    'abu-dhabi': ['abu dhabi', 'yas marina', 'uae'],
 };
+
+let raceSessionsCache: RawSession[] | null = null;
 
 async function ofGet<T>(path: string): Promise<T> {
     const url = `${BASE}${path}`;
@@ -67,6 +83,69 @@ interface RawCarData {
     drs: number;
 }
 
+interface RawSession {
+    session_key: number;
+    session_name?: string;
+    meeting_name?: string;
+    country_name?: string;
+    location?: string;
+    circuit_short_name?: string;
+    year?: number;
+}
+
+function resolveAliases(trackId: string): string[] {
+    const key = trackId.toLowerCase().trim();
+    return TRACK_ALIASES[key] ?? [key.replace(/[-_]/g, ' '), key];
+}
+
+async function raceSessions(): Promise<RawSession[]> {
+    if (raceSessionsCache) return raceSessionsCache;
+    const sessions = await ofGet<RawSession[]>(
+        `/sessions?year=${TARGET_YEAR}&session_name=Race`
+    );
+    raceSessionsCache = sessions ?? [];
+    return raceSessionsCache;
+}
+
+async function resolveSessionKey(trackId: string): Promise<number> {
+    const key = trackId.toLowerCase().trim();
+    if (TRACK_SESSION_MAP[key]) return TRACK_SESSION_MAP[key];
+
+    const aliases = resolveAliases(trackId);
+    const sessions = await raceSessions();
+    if (sessions.length === 0) {
+        throw new Error('OpenF1 sessions list is empty');
+    }
+
+    let bestKey = 0;
+    let bestScore = -1;
+    for (const session of sessions) {
+        const blob = [
+            session.meeting_name ?? '',
+            session.country_name ?? '',
+            session.location ?? '',
+            session.circuit_short_name ?? '',
+            session.session_name ?? '',
+        ].join(' ').toLowerCase();
+
+        let score = 0;
+        for (const alias of aliases) {
+            if (alias && blob.includes(alias.toLowerCase())) score += 1;
+        }
+        if (score > bestScore && session.session_key) {
+            bestScore = score;
+            bestKey = session.session_key;
+        }
+    }
+
+    if (bestKey <= 0 || bestScore <= 0) {
+        throw new Error(`No OpenF1 race session match for track '${trackId}'`);
+    }
+
+    TRACK_SESSION_MAP[key] = bestKey;
+    return bestKey;
+}
+
 /**
  * Fetch one clean median lap of 3D position + telemetry data.
  *
@@ -77,12 +156,11 @@ interface RawCarData {
  *  4. Merge by nearest timestamp
  */
 export async function fetchTrack3D(trackId: string): Promise<OpenF1Point[]> {
-    const sessionKey = TRACK_SESSION_MAP[trackId.toLowerCase()] ?? 9590;
-    const driverNumber = SESSION_DRIVER[sessionKey] ?? 1;
+    const sessionKey = await resolveSessionKey(trackId);
 
     // ── Step 1: find a clean lap ────────────────────────────────────
     const laps = await ofGet<RawLap[]>(
-        `/v1/laps?session_key=${sessionKey}&driver_number=${driverNumber}`
+        `/laps?session_key=${sessionKey}`
     );
 
     // Only keep laps with a real duration and reasonable length
@@ -92,6 +170,8 @@ export async function fetchTrack3D(trackId: string): Promise<OpenF1Point[]> {
             && l.lap_number > 2
             && l.lap_duration > 55
             && l.lap_duration < 130
+            && Boolean(l.date_start)
+            && Number.isFinite(l.driver_number)
     );
 
     if (valid.length === 0) {
@@ -101,6 +181,7 @@ export async function fetchTrack3D(trackId: string): Promise<OpenF1Point[]> {
     // Sort by duration and take the 40th-percentile lap (representative pace)
     valid.sort((a, b) => (a.lap_duration ?? 999) - (b.lap_duration ?? 999));
     const lap = valid[Math.floor(valid.length * 0.40)];
+    const driverNumber = lap.driver_number;
 
     // ── Step 2 & 3: fetch position + telemetry for that lap only ────
     const lapStart = new Date(lap.date_start);
@@ -112,8 +193,8 @@ export async function fetchTrack3D(trackId: string): Promise<OpenF1Point[]> {
     const base = `session_key=${sessionKey}&driver_number=${driverNumber}`;
 
     const [locations, carData] = await Promise.all([
-        ofGet<RawLocation[]>(`/v1/location?${base}&date>=${dGte}&date<=${dLte}`),
-        ofGet<RawCarData[]>(`/v1/car_data?${base}&date>=${dGte}&date<=${dLte}`),
+        ofGet<RawLocation[]>(`/location?${base}&date>=${dGte}&date<=${dLte}`),
+        ofGet<RawCarData[]>(`/car_data?${base}&date>=${dGte}&date<=${dLte}`),
     ]);
 
     if (locations.length < 30) {
