@@ -13,7 +13,7 @@ import {
   Vector3,
 } from 'three';
 import { useGLTF } from '@react-three/drei';
-import type { Compound } from '../data/api';
+import type { Compound, Prediction } from '../data/api';
 import {
   useFBXModel,
   useGLTFModel,
@@ -40,6 +40,8 @@ interface CarViewerProps {
     wear_RL?: number;
     wear_RR?: number;
   };
+  prediction?: Prediction | null;
+  currentLap?: number;
   onModelMetaChange?: (meta: {
     modelPath?: string;
     modelType?: string;
@@ -440,7 +442,7 @@ function ResolvedModel({
  * Azimuth clamped to ±140° — stops just before the rear wall blocks the view.
  * Polar: from 11° (eye-level) to 83° (never upside-down).
  */
-export default function CarViewer({ compound, wear, onModelMetaChange }: CarViewerProps) {
+export default function CarViewer({ compound, wear, prediction, currentLap, onModelMetaChange }: CarViewerProps) {
   const { manifest, loading, error } = useModelManifest();
   const [tireCount, setTireCount] = useState(0);
   const [hover, setHover] = useState<TireHoverState | null>(null);
@@ -550,6 +552,9 @@ export default function CarViewer({ compound, wear, onModelMetaChange }: CarView
         tireId={hover?.tireId}
         wearPct={(hover?.wear ?? 0) * 100}
         tempProxyC={hover?.tempProxyC}
+        compound={compound}
+        prediction={prediction}
+        currentLap={currentLap}
       />
     </div>
   );

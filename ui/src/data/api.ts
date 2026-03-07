@@ -204,6 +204,78 @@ export async function getTelemetry(
   return driverTelemetry[String(closestLap)] ?? [];
 }
 
+export interface StrategyOption {
+  strategy: string[];
+  strategy_str: string;
+  pit_laps: number[];
+  total_time: number;
+  total_time_formatted: string;
+  stint_times: number[];
+  pit_costs: number[];
+  warnings: string[];
+}
+
+export interface StrategyResult {
+  circuit: string;
+  driver: string;
+  total_laps: number;
+  mode: string;
+  best_strategy: StrategyOption | null;
+  all_strategies: StrategyOption[];
+  n_strategies_evaluated: number;
+}
+
+export async function reoptimizeStrategy(params: {
+  track: string;
+  driver: string;
+  totalLaps: number;
+  currentLap: number;
+  currentCompound: Compound;
+  currentTyreLife: number;
+  pitsDone: number;
+  compoundsUsed: string[];
+  safetyCar: boolean;
+}): Promise<StrategyResult> {
+  if (USE_BACKEND) {
+    const q = new URLSearchParams({
+      track: params.track,
+      driver: params.driver,
+      total_laps: String(params.totalLaps),
+      current_lap: String(params.currentLap),
+      current_compound: params.currentCompound,
+      current_tyre_life: String(params.currentTyreLife),
+      pits_done: String(params.pitsDone),
+      compounds_used: params.compoundsUsed.join(','),
+      safety_car: String(params.safetyCar),
+    });
+    return fetchJson<StrategyResult>(`/api/strategy/reoptimize?${q}`);
+  }
+
+  // Mock fallback
+  const pitLap = params.safetyCar
+    ? params.currentLap + 1
+    : Math.max(params.currentLap + 5, Math.floor(params.totalLaps * 0.55));
+  const nextCompound = params.currentCompound === 'hard' ? 'medium' : 'hard';
+  return {
+    circuit: params.track,
+    driver: params.driver,
+    total_laps: params.totalLaps,
+    mode: params.safetyCar ? 'safety_car_reopt' : 'mid_race_reopt',
+    best_strategy: {
+      strategy: [params.currentCompound.toUpperCase(), nextCompound.toUpperCase()],
+      strategy_str: `${params.currentCompound.toUpperCase()}-${nextCompound.toUpperCase()}`,
+      pit_laps: [pitLap],
+      total_time: 5400,
+      total_time_formatted: '1:30:00.000',
+      stint_times: [2700, 2700],
+      pit_costs: [25],
+      warnings: [],
+    },
+    all_strategies: [],
+    n_strategies_evaluated: 1,
+  };
+}
+
 export async function getPredictions(
   track: string,
   driver: string,

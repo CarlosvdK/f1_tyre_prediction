@@ -1,0 +1,40 @@
+{
+  "models": {
+    "inlap": {
+      "mae": 18.67504073519621,
+      "model_type": "gradient_boosting",
+      "r2": 0.014883631615392079,
+      "rmse": 109.43684591868052,
+      "task": "regression"
+    },
+    "lap_time": {
+      "mae": 0.3958486181523798,
+      "model_type": "gradient_boosting",
+      "r2": 0.9227899636407346,
+      "rmse": 0.5267965688072169,
+      "task": "regression"
+    },
+    "outlap": {
+      "mae": 2.1163709082053614,
+      "model_type": "random_forest",
+      "r2": -0.7749952826244566,
+      "rmse": 3.0796837008092766,
+      "task": "regression"
+    },
+    "pitstop": {
+      "mae": 2.075127445830581,
+      "model_type": "random_forest",
+      "r2": 0.37293355609488443,
+      "rmse": 3.424559673666541,
+      "task": "regression"
+    },
+    "safety_car": {
+      "f1": 0.0,
+      "model_type": "gradient_boosting",
+      "pr_auc": 0.05205694282679081,
+      "roc_auc": 0.4992023324898228,
+      "task": "classification"
+    }
+  },
+  "timestamp": "2026-03-07T15:12:24.708625"
+}

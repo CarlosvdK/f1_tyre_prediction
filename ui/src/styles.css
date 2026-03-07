@@ -953,6 +953,425 @@ input[type='range']::-webkit-slider-thumb:hover {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   ANALYSIS PANEL — below telem strip (chart + strategy side-by-side)
+   ═══════════════════════════════════════════════════════════════ */
+.analysis-panel {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 0;
+  background: rgba(10, 10, 14, 0.96);
+  border-top: 1px solid var(--div);
+  min-height: 320px;
+  max-height: 420px;
+}
+
+@media (max-width: 1024px) {
+  .analysis-panel {
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+}
+
+/* ── Degradation Chart ──────────────────────────────────────── */
+.deg-chart-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-right: 1px solid var(--div);
+}
+
+.deg-chart-header {
+  padding: 16px var(--pad) 8px;
+  border-bottom: 1px solid var(--div);
+}
+
+.deg-chart-title {
+  font-family: var(--ff-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white);
+  display: block;
+}
+
+.deg-chart-sub {
+  font-family: var(--ff-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  display: block;
+  margin-top: 3px;
+}
+
+.deg-chart-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-family: var(--ff-display);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: var(--white-35);
+}
+
+/* ── Strategy Panel ─────────────────────────────────────────── */
+.strat-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.strat-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px var(--pad) 12px;
+  border-bottom: 1px solid var(--div);
+}
+
+.strat-panel-title {
+  font-family: var(--ff-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--white);
+  display: block;
+}
+
+.strat-panel-sub {
+  font-family: var(--ff-display);
+  font-size: var(--fs-micro);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  display: block;
+  margin-top: 3px;
+}
+
+.strat-panel-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.strat-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--div);
+  border-radius: 4px;
+  color: var(--white);
+  font-family: var(--ff-display);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+
+.strat-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.strat-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.strat-btn-sc {
+  background: rgba(225, 6, 0, 0.15);
+  border-color: rgba(225, 6, 0, 0.4);
+  color: #ff8070;
+}
+
+.strat-btn-sc:hover {
+  background: rgba(225, 6, 0, 0.25);
+  border-color: rgba(225, 6, 0, 0.6);
+}
+
+.sc-icon {
+  background: #e10600;
+  color: #fff;
+  font-size: 0.5rem;
+  font-weight: 900;
+  padding: 2px 4px;
+  border-radius: 2px;
+  margin-right: 6px;
+  letter-spacing: 0.05em;
+}
+
+.sc-badge {
+  background: #e10600;
+  color: #fff;
+  font-size: 0.5rem;
+  font-weight: 900;
+  padding: 2px 5px;
+  border-radius: 2px;
+  margin-right: 6px;
+  letter-spacing: 0.05em;
+}
+
+.strat-current,
+.strat-reopt {
+  padding: 14px var(--pad);
+}
+
+.strat-current-label,
+.strat-reopt-label {
+  font-family: var(--ff-display);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  margin-bottom: 8px;
+}
+
+.strat-reopt-badge {
+  font-family: var(--ff-display);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white-60);
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--div);
+  border-radius: 4px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.strat-bar-large {
+  display: flex;
+  width: 100%;
+  height: 28px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.strat-bar-stint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  font-family: var(--ff-display);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(0, 0, 0, 0.75);
+  min-width: 32px;
+}
+
+.strat-bar-pit {
+  width: 2px;
+  background: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ff-display);
+  font-size: 0.45rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--white-60);
+  padding: 0 4px;
+  white-space: nowrap;
+}
+
+.strat-meta {
+  font-family: var(--ff-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--white-35);
+}
+
+.strat-reopt-best {
+  margin-bottom: 14px;
+}
+
+.strat-alts {
+  border-top: 1px solid var(--div);
+  padding-top: 10px;
+}
+
+.strat-alts-label {
+  font-family: var(--ff-display);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--white-35);
+  margin-bottom: 8px;
+}
+
+.strat-alt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.strat-bar-small {
+  display: flex;
+  width: 100px;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.strat-alt-name {
+  font-family: var(--ff-display);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--white-60);
+  flex: 1;
+}
+
+.strat-alt-delta {
+  font-family: var(--ff-display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--white-35);
+}
+
+/* ── Enhanced Tyre Tooltip ──────────────────────────────────── */
+.tyre-detail-card {
+  min-width: 200px;
+  padding: 14px 18px;
+}
+
+.tyre-detail-card header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+}
+
+.tooltip-tire-id {
+  font-family: var(--ff-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: var(--white);
+}
+
+.tooltip-compound {
+  font-family: var(--ff-display);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.tooltip-wear-section {
+  margin-bottom: 12px;
+}
+
+.tooltip-wear-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  font-family: var(--ff-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--white-60);
+}
+
+.tooltip-wear-header strong {
+  font-size: 0.88rem;
+}
+
+.tooltip-wear-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.tooltip-wear-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width var(--t-med) var(--ease);
+}
+
+.tooltip-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--div);
+}
+
+.tooltip-metric-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--ff-display);
+  font-size: 0.7rem;
+}
+
+.tooltip-metric-row span {
+  color: var(--white-35);
+  font-weight: 600;
+}
+
+.tooltip-metric-row strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.tooltip-risks {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.tooltip-risk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--ff-display);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--white-35);
+}
+
+.tooltip-risk-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.risk-low .tooltip-risk-dot {
+  background: #36e888;
+}
+
+.risk-medium .tooltip-risk-dot {
+  background: #f5c842;
+}
+
+.risk-high .tooltip-risk-dot {
+  background: #e10600;
+  box-shadow: 0 0 6px rgba(225, 6, 0, 0.6);
+}
+
 /* Floating Tyre Life Labels in 3D Space */
 .tyre-life-label {
   font-family: var(--ff-display);

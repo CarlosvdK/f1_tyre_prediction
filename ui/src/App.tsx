@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CarViewer from './components/CarViewer';
+import DegradationChart from './components/DegradationChart';
+import StrategyPanel from './components/StrategyPanel';
 import TrackMap3D from './components/TrackMap3D';
 import {
   getPredictions,
@@ -173,6 +175,8 @@ export default function App() {
             wear_RL: prediction?.wear_RL,
             wear_RR: prediction?.wear_RR,
           }}
+          prediction={prediction}
+          currentLap={lap}
         />
 
         {/* Gradient scrims */}
@@ -340,6 +344,25 @@ export default function App() {
         </div>
       </div>
 
+      {/* ═══════════════════════════════════════════════════════════
+          ANALYSIS PANEL — degradation chart + strategy optimizer
+          ═══════════════════════════════════════════════════════════ */}
+      <div className="analysis-panel">
+        <DegradationChart
+          currentLap={lap}
+          totalLaps={maxLap}
+          prediction={prediction}
+          compound={compound}
+        />
+        <StrategyPanel
+          prediction={prediction}
+          compound={compound}
+          track={track}
+          driver={driver}
+          currentLap={lap}
+          totalLaps={maxLap}
+        />
+      </div>
 
       {(loading || error) && (
         <div className="status-strip">
