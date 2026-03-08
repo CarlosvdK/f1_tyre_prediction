@@ -101,23 +101,23 @@ export default function Tooltip({
 
       {/* Metrics grid */}
       <div className="tooltip-metrics">
-        <div className="tooltip-metric-row">
+        <div className="tooltip-metric-row" title="Overall tyre performance remaining, predicted by the ML wear model based on laps driven, compound, and circuit characteristics">
           <span>Tyre Life</span>
           <strong>{life.toFixed(0)}%</strong>
         </div>
-        <div className="tooltip-metric-row">
+        <div className="tooltip-metric-row" title="Estimated rubber surface temperature — rises with wear as the tyre degrades and generates more friction">
           <span>Surface Temp</span>
           <strong>{temp}°C</strong>
         </div>
-        <div className="tooltip-metric-row">
+        <div className="tooltip-metric-row" title="Internal tyre pressure — increases slightly as wear progresses due to heat build-up in the carcass">
           <span>Pressure</span>
           <strong>{pressure} psi</strong>
         </div>
-        <div className="tooltip-metric-row">
+        <div className="tooltip-metric-row" title="Number of racing laps completed on this set of tyres since the last pit stop">
           <span>Laps Done</span>
           <strong>{lapsUsed}</strong>
         </div>
-        <div className="tooltip-metric-row">
+        <div className="tooltip-metric-row" title="Estimated laps before the tyre hits its performance cliff — based on typical compound lifespan minus laps already driven">
           <span>Est. Remaining</span>
           <strong>{lapsRemaining} laps</strong>
         </div>
@@ -125,11 +125,11 @@ export default function Tooltip({
 
       {/* Risk indicators */}
       <div className="tooltip-risks">
-        <div className={`tooltip-risk risk-${grainRisk.toLowerCase()}`}>
+        <div className={`tooltip-risk risk-${grainRisk.toLowerCase()}`} title="Graining occurs on fresh tyres when the surface isn't up to temperature — small rubber pellets form and reduce grip. Higher risk in early stint laps.">
           <span className="tooltip-risk-dot" />
           Graining: {grainRisk}
         </div>
-        <div className={`tooltip-risk risk-${blisterRisk.toLowerCase()}`}>
+        <div className={`tooltip-risk risk-${blisterRisk.toLowerCase()}`} title="Blistering happens when tyres overheat — gas bubbles form under the surface, causing chunks of rubber to tear off. Higher risk in late stint when wear is high.">
           <span className="tooltip-risk-dot" />
           Blistering: {blisterRisk}
         </div>

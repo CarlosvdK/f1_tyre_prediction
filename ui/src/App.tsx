@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CarViewer from './components/CarViewer';
 import DegradationChart from './components/DegradationChart';
+import InfoTip from './components/InfoTip';
 import TrackMap from './components/TrackMap';
 import {
   getPredictions,
@@ -168,25 +169,6 @@ export default function App() {
   return (
     <div className="f1-app">
 
-      {/* ── Transparent nav — sits visually over the 3D scene via sticky/z-index ── */}
-      <nav className="f1-nav">
-        <div className="nav-logo">
-          <span className="nav-logo-f1">F1</span>
-          <div>
-            <span className="nav-title-main">Tyre Strategy</span>
-            <span className="nav-title-sub">Prediction Dashboard</span>
-          </div>
-        </div>
-        <div className="nav-sep" />
-        <div className="nav-live">
-          <span className="nav-live-dot" />
-          {selectedTrack?.name ?? 'Loading…'}
-        </div>
-        <div className="nav-right">
-          <span className="nav-badge">Lap <strong>{lap} / {maxLap}</strong></span>
-        </div>
-      </nav>
-
       {/* ═══════════════════════════════════════════════════════════
           FULL-BLEED SCENE SHELL
           3D canvas + gradient scrims + overlay controls
@@ -210,34 +192,34 @@ export default function App() {
         <div className="scene-top-scrim" />
         <div className="scene-bottom-scrim" />
 
-        {/* Controls overlay */}
-        <div className="controls-overlay">
-          <div className="ctrl-cell">
-            <span className="ctrl-label">Circuit</span>
-            <select className="ctrl-select" value={track} onChange={(e) => setTrack(e.target.value)}>
-              {tracks.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-            </select>
-          </div>
-          <div className="ctrl-lap">
-            <span className="ctrl-lap-value">Lap {lap}</span>
-            <button
-              type="button"
-              className="play-btn"
-              onClick={() => setIsPlaying((v) => !v)}
-              disabled={laps.length < 2}
-            >
-              {isPlaying ? '⏸ Pause' : '▶ Play'}
-            </button>
-            <input
-              type="range"
-              min={minLap}
-              max={maxLap}
-              step={1}
-              value={lap}
-              onChange={(e) => setLap(Number(e.target.value))}
-              disabled={laps.length === 0}
-            />
-          </div>
+        {/* Lap controls — center bottom */}
+        <div className="controls-center">
+          <span className="ctrl-lap-value">Lap {lap} / {maxLap}</span>
+          <button
+            type="button"
+            className="play-btn"
+            onClick={() => setIsPlaying((v) => !v)}
+            disabled={laps.length < 2}
+          >
+            {isPlaying ? '⏸ Pause' : '▶ Play'}
+          </button>
+          <input
+            type="range"
+            min={minLap}
+            max={maxLap}
+            step={1}
+            value={lap}
+            onChange={(e) => setLap(Number(e.target.value))}
+            disabled={laps.length === 0}
+          />
+        </div>
+
+        {/* Track selector — bottom right */}
+        <div className="controls-track-select">
+          <span className="ctrl-label">Circuit</span>
+          <select className="ctrl-select" value={track} onChange={(e) => setTrack(e.target.value)}>
+            {tracks.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
         </div>
 
         <div className="scene-data-overlays">
@@ -255,7 +237,9 @@ export default function App() {
           <section className="scene-glass-card scene-map-card">
             <header className="scene-card-head">
               <div>
-                <h2 className="scene-card-title">Telemetry Feature Map</h2>
+                <InfoTip text="Circuit map coloured by the selected telemetry feature. Compares the current lap against a baseline lap (5 laps earlier) to highlight where degradation is causing later braking, lower corner speed, or delayed throttle application. Red = more degradation, blue = less.">
+                  <h2 className="scene-card-title">Telemetry Feature Map</h2>
+                </InfoTip>
                 <p className="scene-card-sub">Lap {lap} vs baseline lap {Math.max(1, lap - 5)}</p>
               </div>
               <div className="track-feature-legend">
@@ -280,6 +264,7 @@ export default function App() {
                 baselineTelemetry={baselineTelemetry}
                 feature={MAP_FEATURE}
                 lap={lap}
+                totalLaps={maxLap}
               />
             </div>
           </section>
@@ -299,7 +284,9 @@ export default function App() {
           ═══════════════════════════════════════════════════════════ */}
       <div className="telem-strip">
         <div className="telem-item">
-          <div className="telem-label">Pace Loss / Lap</div>
+          <InfoTip text="Average seconds lost per lap due to tyre degradation. Derived from the ML model's predicted lap time delta and rolling pace slope — higher values mean tyres are wearing faster.">
+            <div className="telem-label">Pace Loss / Lap</div>
+          </InfoTip>
           <div className={`telem-value${!prediction ? ' loading' : ''}`}>
             {prediction ? animPace.toFixed(3) : '—'}
             <span className="telem-unit">s/lap</span>
@@ -307,7 +294,9 @@ export default function App() {
         </div>
 
         <div className="telem-item highlight">
-          <div className="telem-label">Optimal Pit</div>
+          <InfoTip text="The model-recommended lap to pit. Computed by evaluating every possible pit lap across all legal 2-compound combinations and selecting the one that minimises total race time (stint pace + degradation + 24.5s pit penalty).">
+            <div className="telem-label">Optimal Pit</div>
+          </InfoTip>
           <div className={`telem-value${!prediction ? ' loading' : ''}`}>
             {prediction ? `Lap ${prediction.strategy_optimal_pit_lap}` : '—'}
             {prediction && <span className="telem-unit">({prediction.strategy_stint1_laps}+{prediction.strategy_stint2_laps})</span>}
@@ -315,14 +304,18 @@ export default function App() {
         </div>
 
         <div className="telem-item">
-          <div className="telem-label">Time Saved</div>
+          <InfoTip text="Total race time saved by pitting optimally vs. running a no-stop strategy on the same compound. Accounts for cumulative degradation over the full race distance minus the pit stop time cost.">
+            <div className="telem-label">Time Saved</div>
+          </InfoTip>
           <div className={`telem-value${!prediction ? ' loading' : ''}`}>
             {prediction ? prediction.strategy_time_saved_fmt : '—'}
           </div>
         </div>
 
         <div className="telem-item strategy-visual">
-          <div className="telem-label">Race Strategy</div>
+          <InfoTip text="Visual representation of the optimal race strategy. The model tests all valid compound pairs (must use at least 2 different dry compounds per F1 rules) and picks the fastest split. Bar widths show stint lengths proportionally.">
+            <div className="telem-label">Race Strategy</div>
+          </InfoTip>
           <div className={`strategy-bar${!prediction ? ' loading' : ''}`}>
             {prediction ? (
               <>

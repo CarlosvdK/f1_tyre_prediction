@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import Plotly from 'plotly.js-basic-dist';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import type { Prediction, Compound } from '../data/api';
+import InfoTip from './InfoTip';
 
 const Plot = createPlotlyComponent(Plotly);
 
@@ -29,7 +30,7 @@ const DEG_RATES: Record<string, number> = {
 };
 
 export default function DegradationChart({
-  currentLap,
+  currentLap: _currentLap,
   totalLaps,
   prediction,
   compound,
@@ -95,11 +96,15 @@ export default function DegradationChart({
   return (
     <div className="deg-chart-container">
       <div className="deg-chart-header">
-        <span className="deg-chart-title">Tyre Degradation</span>
+        <InfoTip text="Shows how tyre performance drops over the race. The solid lines plot predicted seconds lost per lap compared to a fresh tyre — computed from the compound's degradation rate and a quadratic wear model. The dotted green line tracks remaining tyre life %, and the dashed red line shows braking intensity increasing as grip falls off.">
+          <span className="deg-chart-title">Tyre Degradation</span>
+        </InfoTip>
         <span className="deg-chart-sub">Predicted lap-time loss vs fresh tyre baseline over race distance</span>
-        <span className="deg-chart-sub">
-          Recommended stop window: L{data.pitWindowStart}–L{data.pitWindowEnd}
-        </span>
+        <InfoTip text="The lap range where pitting yields the lowest total race time. Derived from the optimal pit lap ±2 laps to account for track position and traffic.">
+          <span className="deg-chart-sub">
+            Recommended stop window: L{data.pitWindowStart}–L{data.pitWindowEnd}
+          </span>
+        </InfoTip>
       </div>
       <Plot
         data={[
@@ -143,17 +148,6 @@ export default function DegradationChart({
             line: { color: 'rgba(255, 100, 80, 0.5)', width: 1.2, dash: 'dash' },
             yaxis: 'y3',
           },
-          // Current lap marker
-          {
-            x: [currentLap],
-            y: [data.lapTimeDeltas[currentLap - 1] ?? 0],
-            type: 'scatter',
-            mode: 'markers',
-            name: 'Current',
-            marker: { color: '#e10600', size: 10, line: { color: '#fff', width: 2 } },
-            yaxis: 'y',
-            hoverinfo: 'skip',
-          },
           // Pit window
           {
             x: [data.pitLap, data.pitLap],
@@ -177,6 +171,8 @@ export default function DegradationChart({
             gridcolor: 'rgba(255,255,255,0.06)',
             zerolinecolor: 'rgba(255,255,255,0.06)',
             tickfont: { size: 9 },
+            range: [0, totalLaps + 1],
+            fixedrange: true,
           },
           yaxis: {
             title: { text: 'Predicted time loss vs fresh lap (s)', font: { size: 9, color: 'rgba(255,255,255,0.3)' } },
@@ -184,6 +180,8 @@ export default function DegradationChart({
             zerolinecolor: 'rgba(255,255,255,0.06)',
             tickfont: { size: 9 },
             side: 'left',
+            range: [0, Math.max(...data.lapTimeDeltas) * 1.15],
+            fixedrange: true,
           },
           yaxis2: {
             overlaying: 'y',
@@ -209,6 +207,7 @@ export default function DegradationChart({
             bgcolor: 'rgba(0,0,0,0)',
           },
           hovermode: 'x unified',
+          uirevision: 'static',
           hoverlabel: {
             bgcolor: 'rgba(14,14,18,0.9)',
             bordercolor: 'rgba(255,255,255,0.15)',

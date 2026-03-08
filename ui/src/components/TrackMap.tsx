@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import Plotly from 'plotly.js-basic-dist';
 import createPlotlyComponent from 'react-plotly.js/factory';
 import type { FeatureKey, TelemetryPoint, XYPoint } from '../data/api';
@@ -12,6 +12,7 @@ interface TrackMapProps {
   baselineTelemetry: TelemetryPoint[];
   feature: FeatureKey;
   lap: number;
+  totalLaps: number;
 }
 
 interface Transform {
@@ -188,8 +189,8 @@ export default function TrackMap({
   baselineTelemetry,
   feature,
   lap,
+  totalLaps,
 }: TrackMapProps) {
-  const [revealProgress, setRevealProgress] = useState(0);
 
   const prepared = useMemo(() => {
     const safeBase = baselineTelemetry.length > 0 ? baselineTelemetry : telemetry;
@@ -242,23 +243,8 @@ export default function TrackMap({
     };
   }, [outline, telemetry, baselineTelemetry, feature, lap]);
 
-  useEffect(() => {
-    if (!prepared.hasTelemetry || prepared.featurePath.length === 0) {
-      setRevealProgress(0);
-      return;
-    }
-    setRevealProgress(0);
-    const totalMs = 3600;
-    const tickMs = 80;
-    const steps = Math.max(1, Math.ceil(totalMs / tickMs));
-    let step = 0;
-    const id = window.setInterval(() => {
-      step += 1;
-      setRevealProgress(Math.min(1, step / steps));
-      if (step >= steps) window.clearInterval(id);
-    }, tickMs);
-    return () => window.clearInterval(id);
-  }, [lap, feature, telemetry, baselineTelemetry, prepared.hasTelemetry, prepared.featurePath.length]);
+  // Reveal progress based on race position (lap / totalLaps)
+  const revealProgress = totalLaps > 0 ? Math.min(1, lap / totalLaps) : 1;
 
   /* ── Fallback: no XY data ─────────────────────────────────────── */
   if (!prepared.hasTelemetry) {
@@ -294,7 +280,6 @@ export default function TrackMap({
   const totalPoints = prepared.featurePath.length;
   const revealIndex = Math.max(0, Math.floor(revealProgress * Math.max(totalPoints - 1, 0)));
   const visibleCount = Math.max(1, revealIndex + 1);
-  const focusPoint = prepared.featurePath[Math.min(revealIndex, prepared.focusIndex)] ?? prepared.featurePath[0];
   const brakingX = prepared.brakingZones
     .filter((item) => item.index <= revealIndex)
     .map((item) => prepared.featurePath[item.index]?.x)
@@ -372,21 +357,6 @@ export default function TrackMap({
               line: { color: 'rgba(255,200,190,0.5)', width: 1 },
             },
             name: 'Braking zones',
-            hoverinfo: 'skip',
-          },
-          /* ── Car position ─── */
-          {
-            x: [focusPoint?.x ?? 0],
-            y: [focusPoint?.y ?? 0],
-            mode: 'markers',
-            type: 'scatter',
-            marker: {
-              size: 13,
-              color: '#e10600',
-              line: { color: 'rgba(255,255,255,0.7)', width: 2 },
-              symbol: 'circle',
-            },
-            name: 'Position',
             hoverinfo: 'skip',
           },
         ]}

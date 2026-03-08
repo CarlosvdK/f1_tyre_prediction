@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Compound, Prediction, StrategyResult } from '../data/api';
 import { reoptimizeStrategy } from '../data/api';
+import InfoTip from './InfoTip';
 
 interface StrategyPanelProps {
   prediction: Prediction | null;
@@ -66,25 +67,31 @@ export default function StrategyPanel({
     <div className="strat-panel">
       <div className="strat-panel-header">
         <div>
-          <span className="strat-panel-title">Strategy Optimizer</span>
+          <InfoTip text="Evaluates every legal compound combination and pit lap to find the fastest total race time. Uses trained ML models for lap time prediction, pit stop duration, and in/out lap penalties per circuit.">
+            <span className="strat-panel-title">Strategy Optimizer</span>
+          </InfoTip>
           <span className="strat-panel-sub">ML-powered pit strategy</span>
         </div>
         <div className="strat-panel-actions">
-          <button
-            className="strat-btn"
-            onClick={() => handleReoptimize(false)}
-            disabled={loading || !track}
-          >
-            {loading && !safetyCar ? 'Calculating…' : 'Reoptimize'}
-          </button>
-          <button
-            className="strat-btn strat-btn-sc"
-            onClick={() => handleReoptimize(true)}
-            disabled={loading || !track}
-          >
-            <span className="sc-icon">SC</span>
-            {loading && safetyCar ? 'Calculating…' : 'Safety Car'}
-          </button>
+          <InfoTip text="Recalculate the optimal strategy from the current lap forward, factoring in laps already completed and compound already in use.">
+            <button
+              className="strat-btn"
+              onClick={() => handleReoptimize(false)}
+              disabled={loading || !track}
+            >
+              {loading && !safetyCar ? 'Calculating…' : 'Reoptimize'}
+            </button>
+          </InfoTip>
+          <InfoTip text="Trigger a safety car scenario — the model applies a ~12s pit cost discount (pitting under SC is cheaper because the field is neutralised) and re-evaluates whether to pit immediately or stay out.">
+            <button
+              className="strat-btn strat-btn-sc"
+              onClick={() => handleReoptimize(true)}
+              disabled={loading || !track}
+            >
+              <span className="sc-icon">SC</span>
+              {loading && safetyCar ? 'Calculating…' : 'Safety Car'}
+            </button>
+          </InfoTip>
         </div>
       </div>
 

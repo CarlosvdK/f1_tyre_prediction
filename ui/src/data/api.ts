@@ -2,7 +2,7 @@ import predictionsData from './mock/predictions.json';
 import telemetryMonza from './mock/telemetry_monza.json';
 import telemetrySilverstone from './mock/telemetry_silverstone.json';
 import tracksData from './mock/tracks.json';
-import { getCircuitPath, resolveCircuitKey } from './circuitCoords';
+import { getCircuitOutline, resolveCircuitKey } from './circuitCoords';
 import { fetchTrack3D } from './openf1';
 
 export type Compound = 'soft' | 'medium' | 'hard' | 'inter' | 'wet';
@@ -160,9 +160,10 @@ function defaultLapCount(trackId: string): number {
 }
 
 function toOutline(trackId: string): XYPoint[] {
-  return getCircuitPath(trackId).map((point) => ({
-    x: Number((point.x * 34).toFixed(3)),
-    y: Number((point.z * 34).toFixed(3)),
+  const coords = getCircuitOutline(trackId);
+  return coords.map(([x, y]) => ({
+    x: Number((x * 34).toFixed(3)),
+    y: Number((y * 34).toFixed(3)),
   }));
 }
 
@@ -204,25 +205,40 @@ function mergeTracks(primary: Track[], secondary: Track[]): Track[] {
 }
 
 function makeSyntheticTelemetry(track: string, driver: string, lap: number): TelemetryPoint[] {
-  const path = getCircuitPath(track);
-  if (path.length === 0) return [];
+  const coords = getCircuitOutline(track);
+  if (coords.length === 0) return [];
 
   const seed = hashString(`${track}|${driver}`);
   const lapFactor = Math.max(0, (lap - 1) / Math.max(defaultLapCount(track), 1));
   const driverBias = ((seed % 31) - 15) / 250;
   const wavePhase = (seed % 360) * (Math.PI / 180);
+  const totalPoints = coords.length;
 
-  return path.map((point, idx) => {
-    const t = idx / Math.max(path.length - 1, 1);
+  return coords.map(([px, py]: [number, number], idx: number) => {
+    const t = idx / Math.max(totalPoints - 1, 1);
     const wave = Math.sin((t * Math.PI * 6) + wavePhase);
-    const baseSpeed = point.speed * (1 - lapFactor * 0.08);
-    const speed = clamp(baseSpeed + wave * 8 + driverBias * 14, 70, 340);
-    const brake = clamp((point.brake ? 0.78 : 0.08) + lapFactor * 0.14 + Math.max(0, -wave) * 0.06, 0, 1);
-    const throttle = clamp((point.brake ? 0.3 : 0.92) - lapFactor * 0.11 + Math.max(0, wave) * 0.07, 0.05, 1);
+
+    // Synthetic speed/brake based on curvature approximation
+    const prev = coords[(idx - 1 + totalPoints) % totalPoints];
+    const next = coords[(idx + 1) % totalPoints];
+    const dx = next[0] - prev[0];
+    const dy = next[1] - prev[1];
+    const prev2 = coords[(idx - 2 + totalPoints) % totalPoints];
+    const next2 = coords[(idx + 2) % totalPoints];
+    const dx2 = next2[0] - prev2[0];
+    const dy2 = next2[1] - prev2[1];
+    const cross = Math.abs(dx * dy2 - dy * dx2);
+    const curvature = Math.min(1, cross * 40);
+    const isBraking = curvature > 0.3;
+
+    const baseSpeed = isBraking ? 100 + (1 - curvature) * 120 : 250 + (1 - curvature) * 80;
+    const speed = clamp(baseSpeed * (1 - lapFactor * 0.08) + wave * 8 + driverBias * 14, 70, 340);
+    const brake = clamp((isBraking ? 0.6 + curvature * 0.3 : 0.05) + lapFactor * 0.14 + Math.max(0, -wave) * 0.06, 0, 1);
+    const throttle = clamp((isBraking ? 0.3 : 0.92) - lapFactor * 0.11 + Math.max(0, wave) * 0.07, 0.05, 1);
 
     return {
-      x: Number((point.x * 34).toFixed(3)),
-      y: Number((point.z * 34).toFixed(3)),
+      x: Number((px * 34).toFixed(3)),
+      y: Number((py * 34).toFixed(3)),
       speed: Number(speed.toFixed(3)),
       brake: Number(brake.toFixed(3)),
       throttle: Number(throttle.toFixed(3)),
