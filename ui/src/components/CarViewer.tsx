@@ -9,7 +9,6 @@ import {
   Mesh,
   MeshStandardMaterial,
   Object3D,
-  SpotLight,
   Vector3,
 } from 'three';
 import { useGLTF } from '@react-three/drei';
@@ -126,90 +125,42 @@ function RendererSetup() {
 }
 
 /**
- * Camera-relative garage lighting.
- *
- * The key and fill spotlights are repositioned every frame so they always sit
- * at a fixed angular offset FROM THE CAMERA — exactly like a "beauty dish" or
- * "ring light" setup. No matter which way you orbit, the face of the car
- * toward the viewer is always brightly lit, giving consistent visibility.
- *
- * A fixed cool rim light stays at the rear-left to provide separation.
+ * Overhead key with controlled side fills.
  */
 function DynamicGarageLights() {
-  const keyRef = useRef<SpotLight>(null);
-  const fillRef = useRef<SpotLight>(null);
-  const { camera } = useThree();
-
-  useFrame(() => {
-    // Vector from origin to camera (normalised horizontal direction)
-    const camDir = new Vector3(camera.position.x, 0, camera.position.z).normalize();
-    // Right vector (perpendicular to camDir, in the horizontal plane)
-    const right = new Vector3().crossVectors(camDir, new Vector3(0, 1, 0)).normalize();
-
-    // Key: above and slightly to the right of wherever the camera is
-    const keyPos = camDir.clone()
-      .multiplyScalar(2.0)        // push toward camera
-      .addScaledVector(right, 1.4) // slightly right from viewer's POV
-      .setY(5.5);                 // always from ceiling height
-    keyRef.current?.position.copy(keyPos);
-    if (keyRef.current?.target) {
-      keyRef.current.target.position.set(0, 0.4, 0);
-      keyRef.current.target.updateMatrixWorld();
-    }
-
-    // Fill: same horizontal orbit, offset left and slightly dimmer
-    const fillPos = camDir.clone()
-      .multiplyScalar(1.4)
-      .addScaledVector(right, -2.0)
-      .setY(4.8);
-    fillRef.current?.position.copy(fillPos);
-    if (fillRef.current?.target) {
-      fillRef.current.target.position.set(0, 0.4, 0);
-      fillRef.current.target.updateMatrixWorld();
-    }
-  });
-
   return (
     <>
-      {/* Low ambient so the floor stays mostly black */}
-      <ambientLight intensity={0.5} color="#1e2334" />
-
-      {/* Primary key beam — warm tungsten hitting the car from above/right */}
       <spotLight
-        ref={keyRef}
-        position={[2, 5.5, 2]}
-        angle={0.65}
-        intensity={350}
-        penumbra={0.3}
-        color="#ffeac0"
+        position={[0, 7.2, 0]}
+        angle={0.4}
+        intensity={760}
+        penumbra={0.34}
+        color="#fff1d6"
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
         shadow-bias={-0.0001}
         shadow-camera-near={0.5}
-        shadow-camera-far={18}
-        decay={1.6}
-        distance={15}
+        shadow-camera-far={20}
+        decay={1.45}
+        distance={14}
       />
 
-      {/* Fill — cooler, blasting the left side of the car */}
-      <spotLight
-        ref={fillRef}
-        position={[-2, 4.8, 2]}
-        angle={0.7}
-        intensity={200}
-        penumbra={0.5}
-        color="#c0d4ff"
-        castShadow={false}
-        decay={1.8}
-        distance={13}
+      {/* Side fills to bring out bodywork on both flanks */}
+      <pointLight
+        position={[3.9, 1.25, 0]}
+        intensity={74}
+        color="#f8f4ea"
+        distance={5.2}
+        decay={2.0}
       />
-
-      {/* Fixed rim / separation — stays at rear left regardless of camera */}
-      <directionalLight position={[-5, 4, -7]} intensity={4.0} color="#4070c8" />
-
-      {/* Faint deep-tunnel backfill so rear walls aren't totally void */}
-      <pointLight position={[0, 3, -7]} intensity={1.5} color="#1a2040" distance={10} decay={2} />
+      <pointLight
+        position={[-3.9, 1.25, 0]}
+        intensity={74}
+        color="#f8f4ea"
+        distance={5.2}
+        decay={2.0}
+      />
     </>
   );
 }
