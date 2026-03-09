@@ -551,18 +551,19 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .scene-card-title {
   font-family: var(--ff-display);
-  font-size: 0.68rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  color: var(--white);
 }
 
 .scene-card-sub {
   font-family: var(--ff-display);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.12em;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--white-35);
+  color: rgba(255, 255, 255, 0.45);
   margin-top: 4px;
 }
 
@@ -589,11 +590,11 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .scene-chart-card .deg-chart-title {
-  font-size: 0.66rem;
+  font-size: 0.95rem;
 }
 
 .scene-chart-card .deg-chart-sub {
-  font-size: 0.46rem;
+  font-size: 0.6rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -678,6 +679,44 @@ input[type='range']::-webkit-slider-thumb:hover {
 /* Pit window — slightly highlighted */
 .telem-item.highlight .telem-value {
   color: #fff;
+}
+
+/* Circuit picker in telem strip */
+.circuit-picker {
+  position: relative;
+}
+
+.circuit-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  border: none;
+  font-family: var(--ff-display);
+  font-size: clamp(0.88rem, 1.4vw, 1.2rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  cursor: pointer;
+  padding: 0 16px 0 0;
+  outline: none;
+  width: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+  background-size: 10px 6px;
+  transition: color var(--t-fast);
+}
+
+.circuit-select:hover {
+  color: #fff;
+}
+
+.circuit-select option {
+  background: #0e0e12;
+  color: #f5f5f7;
+  font-size: 0.85rem;
+  padding: 6px 10px;
 }
 
 /* Compound tinting */
@@ -1106,6 +1145,7 @@ input[type='range']::-webkit-slider-thumb:hover {
   flex-direction: column;
   height: 100%;
   border-right: 1px solid var(--div);
+  position: relative;
 }
 
 .deg-chart-header {
@@ -1115,9 +1155,9 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-title {
   font-family: var(--ff-display);
-  font-size: 0.72rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--white);
   display: block;
@@ -1125,8 +1165,8 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-sub {
   font-family: var(--ff-display);
-  font-size: var(--fs-micro);
-  letter-spacing: 0.14em;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--white-35);
   display: block;
@@ -1142,6 +1182,100 @@ input[type='range']::-webkit-slider-thumb:hover {
   font-size: 0.7rem;
   letter-spacing: 0.14em;
   color: var(--white-35);
+}
+
+/* ── Two-panel layout for strategy chart ───────────────────── */
+.deg-chart-panels {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.deg-chart-bars {
+  flex: 1;
+  min-height: 0;
+}
+
+.deg-chart-curve {
+  flex: 0.8;
+  min-height: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Strategy method toggle & overlay ──────────────────────── */
+.method-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--ff-display);
+  font-size: 0.55rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.method-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.method-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  background: rgba(9, 11, 16, 0.92);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px 12px;
+  overflow-y: auto;
+}
+
+.method-content {
+  position: relative;
+  max-width: 520px;
+  width: 100%;
+}
+
+.method-close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.65rem;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: all 0.2s;
+}
+.method-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.method-text {
+  font-family: var(--ff-display);
+  font-size: 0.58rem;
+  line-height: 1.65;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.72);
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+  padding-right: 28px;
 }
 
 /* ── Strategy Panel ─────────────────────────────────────────── */

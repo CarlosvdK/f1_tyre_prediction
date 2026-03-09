@@ -10,7 +10,6 @@ import {
   listLaps,
   listTracks,
   type Compound,
-  type FeatureKey,
   type Prediction,
   type TelemetryPoint,
   type Track,
@@ -44,7 +43,6 @@ function useAnimatedValue(target: number, duration = 500): number {
 export default function App() {
   const MODEL_COMPOUND: Compound = 'medium';
   const MODEL_CONDITION: TrackCondition = 'dry';
-  const MAP_FEATURE: FeatureKey = 'degradation_intensity_proxy';
 
   /* ── State ──────────────────────────────────────────────────── */
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -214,14 +212,6 @@ export default function App() {
           />
         </div>
 
-        {/* Track selector — bottom right */}
-        <div className="controls-track-select">
-          <span className="ctrl-label">Circuit</span>
-          <select className="ctrl-select" value={track} onChange={(e) => setTrack(e.target.value)}>
-            {tracks.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-          </select>
-        </div>
-
         <div className="scene-data-overlays">
           <section className="scene-glass-card scene-chart-card">
             <div className="scene-card-body">
@@ -237,23 +227,23 @@ export default function App() {
           <section className="scene-glass-card scene-map-card">
             <header className="scene-card-head">
               <div>
-                <InfoTip text="Circuit map coloured by the selected telemetry feature. Compares the current lap against a baseline lap (5 laps earlier) to highlight where degradation is causing later braking, lower corner speed, or delayed throttle application. Red = more degradation, blue = less.">
-                  <h2 className="scene-card-title">Telemetry Feature Map</h2>
+                <InfoTip text="Shows predicted braking and acceleration zones around the circuit for the current lap. As tyres degrade, braking zones grow longer (thicker red lines) because the driver must brake earlier with less grip. Acceleration zones shrink (thinner green lines) as traction reduces. Compare against the faint fresh-tyre braking outline to see the degradation effect. Hover over any zone for details.">
+                  <h2 className="scene-card-title">Braking &amp; Acceleration Map</h2>
                 </InfoTip>
-                <p className="scene-card-sub">Lap {lap} vs baseline lap {Math.max(1, lap - 5)}</p>
+                <p className="scene-card-sub">Lap {lap} · Stint {lap > (prediction?.strategy_optimal_pit_lap ?? Math.floor(maxLap / 2)) ? 2 : 1} · Stint lap {lap > (prediction?.strategy_optimal_pit_lap ?? Math.floor(maxLap / 2)) ? lap - (prediction?.strategy_optimal_pit_lap ?? Math.floor(maxLap / 2)) : lap}</p>
               </div>
               <div className="track-feature-legend">
                 <span className="feature-legend-item">
-                  <span className="feature-legend-dot" style={{ background: '#1e56c8' }} />
-                  Lower
+                  <span className="feature-legend-dot" style={{ background: '#ff6450' }} />
+                  Braking
                 </span>
                 <span className="feature-legend-item">
-                  <span className="feature-legend-dot" style={{ background: '#dee6f3' }} />
-                  Neutral
+                  <span className="feature-legend-dot" style={{ background: '#36e888' }} />
+                  Throttle
                 </span>
                 <span className="feature-legend-item">
-                  <span className="feature-legend-dot" style={{ background: '#cf2020' }} />
-                  Higher
+                  <span className="feature-legend-dot" style={{ background: 'rgba(255,255,255,0.2)' }} />
+                  Fresh ref
                 </span>
               </div>
             </header>
@@ -262,9 +252,9 @@ export default function App() {
                 outline={selectedTrack?.outline ?? []}
                 telemetry={telemetry}
                 baselineTelemetry={baselineTelemetry}
-                feature={MAP_FEATURE}
                 lap={lap}
                 totalLaps={maxLap}
+                prediction={prediction}
               />
             </div>
           </section>
@@ -345,11 +335,15 @@ export default function App() {
           </div>
         </div>
 
-        <div className="telem-item">
+        <div className="telem-item circuit-picker">
           <div className="telem-label">Circuit</div>
-          <div className="telem-value" style={{ fontSize: 'clamp(0.88rem, 1.4vw, 1.2rem)' }}>
-            {selectedTrack?.name ?? '—'}
-          </div>
+          <select
+            className="circuit-select"
+            value={track}
+            onChange={(e) => setTrack(e.target.value)}
+          >
+            {tracks.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
         </div>
       </div>
 
