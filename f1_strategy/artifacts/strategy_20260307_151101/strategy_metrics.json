@@ -1,0 +1,19 @@
+{
+  "models": {
+    "pitstop": {
+      "mae": 2.0751274458305815,
+      "model_type": "random_forest",
+      "r2": 0.37293355609488443,
+      "rmse": 3.424559673666541,
+      "task": "regression"
+    },
+    "safety_car": {
+      "f1": 0.0,
+      "model_type": "gradient_boosting",
+      "pr_auc": 0.05205694282679081,
+      "roc_auc": 0.4992023324898228,
+      "task": "classification"
+    }
+  },
+  "timestamp": "2026-03-07T15:11:03.869454"
+}

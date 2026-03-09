@@ -25,7 +25,7 @@ import {
     TubeGeometry,
     Vector3,
 } from 'three';
-import { getCircuitPath, type CircuitWaypoint } from '../data/circuitCoords';
+import { getCircuitOutline } from '../data/circuitCoords';
 
 /* ── Speed → Colour ──────────────────────────────────────────────────
    F1 broadcast palette:
@@ -42,9 +42,9 @@ function speedColor(speed: number, lo: number, hi: number): Color {
     return c;
 }
 
-/* ── Expand 40 waypoints → 600-point smooth path ───────────────────
-   Uses CatmullRom for geometry and linearly interpolates speed/brake
-   across segments so colours are continuous.
+/* ── Expand outline coordinates → 600-point smooth path ────────────
+   Real circuit outlines already have ~100 points. We use CatmullRom
+   for 3D smoothing and synthesise speed from local curvature.
    ─────────────────────────────────────────────────────────────────── */
 interface ExpandedPoint {
     pos: Vector3;
@@ -53,26 +53,26 @@ interface ExpandedPoint {
     label?: string;
 }
 
-function expandWaypoints(wps: CircuitWaypoint[], totalPts = 600): ExpandedPoint[] {
-    if (wps.length < 3) return [];
-    const curve = new CatmullRomCurve3(
-        wps.map((p) => new Vector3(p.x, p.y, p.z)),
-        true, 'catmullrom', 0.4,
-    );
+function expandOutline(coords: [number, number][], totalPts = 600): ExpandedPoint[] {
+    if (coords.length < 3) return [];
+    const vectors = coords.map(([x, y]) => new Vector3(x, 0, y));
+    const curve = new CatmullRomCurve3(vectors, true, 'catmullrom', 0.3);
     const positions = curve.getPoints(totalPts - 1);
-    const n = wps.length;
-
     return positions.map((pos, i) => {
-        const t = i / (totalPts - 1);   // 0–1 around the loop
-        const seg = t * (n - 1);            // fractional waypoint index
-        const lo = Math.floor(seg) % n;
-        const hi = Math.ceil(seg) % n;
-        const f = seg - Math.floor(seg);
-        const speed = wps[lo].speed + (wps[hi].speed - wps[lo].speed) * f;
-        const brake = f < 0.5 ? wps[lo].brake : wps[hi].brake;
-        // Only annotate at the closest sample to each waypoint with a label
-        const label = f < 0.015 ? wps[lo].label : undefined;
-        return { pos, speed, brake, label };
+        // Estimate speed from curvature (sharper turn = slower)
+        const prev = positions[(i - 1 + positions.length) % positions.length];
+        const next = positions[(i + 1) % positions.length];
+        const dx = next.x - prev.x;
+        const dz = next.z - prev.z;
+        const prev2 = positions[(i - 2 + positions.length) % positions.length];
+        const next2 = positions[(i + 2) % positions.length];
+        const dx2 = next2.x - prev2.x;
+        const dz2 = next2.z - prev2.z;
+        const cross = Math.abs(dx * dz2 - dz * dx2);
+        const curvature = Math.min(1, cross * 60);
+        const speed = curvature > 0.3 ? 90 + (1 - curvature) * 140 : 240 + (1 - curvature) * 100;
+        const brake = curvature > 0.35;
+        return { pos, speed, brake };
     });
 }
 
@@ -258,8 +258,8 @@ export default function TrackMap3D({ trackId }: { trackId: string }) {
 
     useEffect(() => {
         if (!trackId) return;
-        const wps = getCircuitPath(trackId);
-        const expanded = expandWaypoints(wps, 600);
+        const coords = getCircuitOutline(trackId);
+        const expanded = expandOutline(coords, 600);
         setPts(expanded);
     }, [trackId]);
 

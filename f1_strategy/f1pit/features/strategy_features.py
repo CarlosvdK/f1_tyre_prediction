@@ -38,14 +38,49 @@ LAP_TIME_FEATURES_CATEGORICAL = [
 PITSTOP_FEATURES_NUMERIC: list[str] = []
 PITSTOP_FEATURES_CATEGORICAL = ["GP"]
 
-INLAP_FEATURES_NUMERIC = ["TyreLife", "Stint"]
+INLAP_FEATURES_NUMERIC = ["TyreLife", "Stint", "Position", "RacePercentage"]
 INLAP_FEATURES_CATEGORICAL = ["GP", "Compound"]
 
-OUTLAP_FEATURES_NUMERIC: list[str] = []
+OUTLAP_FEATURES_NUMERIC = ["Stint", "Position", "RacePercentage"]
 OUTLAP_FEATURES_CATEGORICAL = ["GP", "Compound"]
 
 SC_FEATURES_NUMERIC = ["LapNumber"]
 SC_FEATURES_CATEGORICAL = ["GP"]
+
+
+GP_NAME_MAP = {
+    "australian": "australia",
+    "austrian": "austria",
+    "belgian": "belgium",
+    "brazilian": "brazil",
+    "british": "great britain",
+    "canadian": "canada",
+    "chinese": "china",
+    "dutch": "netherlands",
+    "emilia romagna": "imola",
+    "french": "france",
+    "hungarian": "hungary",
+    "italian": "monza",
+    "japanese": "japan",
+    "mexican": "mexico",
+    "mexico city": "mexico",
+    "portuguese": "portugal",
+    "russian": "russia",
+    "saudi arabian": "saudi arabia",
+    "spanish": "spain",
+    "são paulo": "brazil",
+    "tuscan": "monza",
+    "las vegas": "las vegas",
+    "united states": "austin",
+    "70th anniversary": "70th",
+    "styrian": "styria",
+}
+
+
+def _normalize_gp(name: str) -> str:
+    """Normalize a Grand Prix name to match CircuitInfo convention."""
+    key = name.replace("Grand Prix", "").strip().lower()
+    return GP_NAME_MAP.get(key, key)
 
 
 def prepare_lap_time_data(
@@ -60,16 +95,23 @@ def prepare_lap_time_data(
     """
     out = df.copy()
 
-    # Compute LapTimePerKM if not present and Length is available
-    if "LapTimePerKM" not in out.columns and "Length" in out.columns:
-        out["LapTimePerKM"] = out["LapTime"] / out["Length"]
-    elif "LapTimePerKM" not in out.columns:
-        # Try to merge circuit info
-        if circuit_info is not None and not circuit_info.empty:
+    # Compute LapTimePerKM – need circuit Length
+    # Drop any all-NaN Length/LapTimePerKM columns from a prior broken merge
+    for col in ["Length", "LapTimePerKM"]:
+        if col in out.columns and out[col].isna().all():
+            out = out.drop(columns=[col])
+
+    if "LapTimePerKM" not in out.columns:
+        # Merge circuit info using normalized GP names
+        if "Length" not in out.columns and circuit_info is not None and not circuit_info.empty:
             ci = circuit_info[["GP", "Length"]].drop_duplicates()
-            out = out.merge(ci, on="GP", how="left", suffixes=("", "_ci"))
-            if "Length" in out.columns:
-                out["LapTimePerKM"] = out["LapTime"] / out["Length"]
+            out["_gp_key"] = out["GP"].apply(_normalize_gp)
+            ci["_gp_key"] = ci["GP"].str.strip().str.lower()
+            out = out.merge(ci[["_gp_key", "Length"]], on="_gp_key", how="left", suffixes=("", "_ci"))
+            out = out.drop(columns=["_gp_key"], errors="ignore")
+
+        if "Length" in out.columns:
+            out["LapTimePerKM"] = out["LapTime"] / out["Length"]
 
     # Compute RacePercentage
     if "RacePercentage" not in out.columns and "Laps" in out.columns:

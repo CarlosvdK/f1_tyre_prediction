@@ -1,0 +1,8 @@
+{
+  "best_f1_threshold": 0.39560337378251836,
+  "n_rows_evaluated": 8462,
+  "n_rows_total": 8462,
+  "positive_rate": 0.22453320727960294,
+  "pr_auc": 0.8642433404174712,
+  "roc_auc": 0.9469277659250228
+}

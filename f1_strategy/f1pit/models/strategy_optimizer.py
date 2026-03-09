@@ -479,6 +479,170 @@ class StrategyOptimizer:
         )
 
 
+    def reoptimize_mid_race(
+        self,
+        gp: str,
+        driver: str,
+        team: str,
+        total_laps: int,
+        current_lap: int,
+        current_compound: str,
+        current_tyre_life: int,
+        pits_done: int = 0,
+        compounds_used: list[str] | None = None,
+        safety_car: bool = False,
+    ) -> OptimizationResult:
+        """
+        Re-optimize strategy from the current race position.
+
+        When a safety car comes out, pit cost drops (slower pit-in lap is
+        masked by the SC delta, and the field bunches up erasing any gap
+        lost). We model this as a reduced pit penalty.
+
+        Args:
+            current_lap: lap number we are currently on
+            current_compound: tyre compound currently fitted
+            current_tyre_life: laps done on current set
+            pits_done: number of pit stops already completed
+            compounds_used: list of compounds used so far (including current)
+            safety_car: whether a safety car is currently active
+        """
+        if compounds_used is None:
+            compounds_used = [current_compound.upper()]
+        compounds_used = [c.upper() for c in compounds_used]
+        current_compound = current_compound.upper()
+
+        circuit_length = self._get_circuit_length(gp)
+        remaining_laps = total_laps - current_lap + 1
+
+        # Under SC, pit cost is ~10-12s cheaper (no inlap/outlap time loss)
+        sc_pit_discount = 12.0 if safety_car else 0.0
+
+        results: list[StrategyResult] = []
+
+        # Option A: no more stops (only if 2-compound rule already satisfied)
+        used_set = set(compounds_used)
+        if len(used_set) >= 2:
+            time_remaining = self._estimate_stint_time(
+                gp, driver, team, current_compound,
+                current_lap, total_laps, pits_done + 1, total_laps, circuit_length,
+            )
+            warnings = []
+            remaining_on_tyre = remaining_laps + current_tyre_life
+            expected_life = EXPECTED_TYRE_LIFE.get(current_compound, 25)
+            if remaining_on_tyre > expected_life + 5:
+                warnings.append(
+                    f"Extending {current_compound} to {remaining_on_tyre} laps "
+                    f"(expected life: {expected_life})"
+                )
+            results.append(StrategyResult(
+                strategy=list(compounds_used),
+                pit_laps=[],
+                total_time=time_remaining,
+                stint_times=[time_remaining],
+                pit_costs=[],
+                warnings=warnings,
+            ))
+
+        # Option B: 1 more stop with each possible compound
+        for next_compound in DRY_COMPOUNDS:
+            future_used = set(compounds_used) | {next_compound}
+            if len(future_used) < 2:
+                continue
+
+            # Try pit laps from current_lap+2 up to total_laps - MIN_STINT_LAPS
+            best_for_compound: StrategyResult | None = None
+            for pit_lap in range(current_lap + 2, total_laps - self.MIN_STINT_LAPS + 1):
+                # Current stint: current_lap to pit_lap
+                t1 = self._estimate_stint_time(
+                    gp, driver, team, current_compound,
+                    current_lap, pit_lap, pits_done + 1, total_laps, circuit_length,
+                )
+                # Pit cost
+                pit_cost = self._estimate_pit_cost(
+                    gp, current_compound, next_compound,
+                    tyre_life=current_tyre_life + (pit_lap - current_lap),
+                    stint_in=pits_done + 1,
+                ) - sc_pit_discount
+                pit_cost = max(pit_cost, 15.0)  # floor
+                # Next stint
+                t2 = self._estimate_stint_time(
+                    gp, driver, team, next_compound,
+                    pit_lap + 1, total_laps, pits_done + 2, total_laps, circuit_length,
+                )
+                total = t1 + pit_cost + t2
+                if best_for_compound is None or total < best_for_compound.total_time:
+                    best_for_compound = StrategyResult(
+                        strategy=list(compounds_used) + [next_compound],
+                        pit_laps=[pit_lap],
+                        total_time=total,
+                        stint_times=[t1, t2],
+                        pit_costs=[pit_cost],
+                        warnings=[],
+                    )
+            if best_for_compound is not None:
+                results.append(best_for_compound)
+
+        # Option C: 2 more stops (if enough laps remain)
+        if remaining_laps > self.MIN_STINT_LAPS * 3:
+            for c2 in DRY_COMPOUNDS:
+                for c3 in DRY_COMPOUNDS:
+                    future_used = set(compounds_used) | {c2, c3}
+                    if len(future_used) < 2:
+                        continue
+                    # Use expected tyre life to place stops
+                    life1 = min(EXPECTED_TYRE_LIFE.get(current_compound, 25) - current_tyre_life,
+                                remaining_laps - 2 * self.MIN_STINT_LAPS)
+                    life1 = max(life1, self.MIN_STINT_LAPS)
+                    pit1 = current_lap + life1
+                    life2 = min(EXPECTED_TYRE_LIFE.get(c2, 25),
+                                total_laps - pit1 - self.MIN_STINT_LAPS)
+                    life2 = max(life2, self.MIN_STINT_LAPS)
+                    pit2 = pit1 + life2
+                    if pit2 >= total_laps - self.MIN_STINT_LAPS + 1:
+                        continue
+
+                    t1 = self._estimate_stint_time(
+                        gp, driver, team, current_compound,
+                        current_lap, int(pit1), pits_done + 1, total_laps, circuit_length,
+                    )
+                    pc1 = self._estimate_pit_cost(
+                        gp, current_compound, c2,
+                        tyre_life=current_tyre_life + life1, stint_in=pits_done + 1,
+                    ) - sc_pit_discount
+                    pc1 = max(pc1, 15.0)
+                    t2 = self._estimate_stint_time(
+                        gp, driver, team, c2,
+                        int(pit1) + 1, int(pit2), pits_done + 2, total_laps, circuit_length,
+                    )
+                    pc2 = self._estimate_pit_cost(
+                        gp, c2, c3, tyre_life=life2, stint_in=pits_done + 2,
+                    )
+                    t3 = self._estimate_stint_time(
+                        gp, driver, team, c3,
+                        int(pit2) + 1, total_laps, pits_done + 3, total_laps, circuit_length,
+                    )
+                    total = t1 + pc1 + t2 + pc2 + t3
+                    results.append(StrategyResult(
+                        strategy=list(compounds_used) + [c2, c3],
+                        pit_laps=[int(pit1), int(pit2)],
+                        total_time=total,
+                        stint_times=[t1, t2, t3],
+                        pit_costs=[pc1, pc2],
+                        warnings=[],
+                    ))
+
+        results.sort(key=lambda r: r.total_time)
+        best = results[0] if results else None
+
+        return OptimizationResult(
+            circuit=gp, driver=driver, team=team,
+            total_laps=total_laps,
+            mode="safety_car_reopt" if safety_car else "mid_race_reopt",
+            strategies=results, best_strategy=best,
+        )
+
+
 def load_optimizer(model_dir: Path, circuit_info_path: Path | None = None) -> StrategyOptimizer:
     """Load trained models and create an optimizer instance."""
     models = {}

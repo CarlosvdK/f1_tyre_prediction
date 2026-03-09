@@ -601,6 +601,45 @@ def compare_strategies(
     }
 
 
+@app.get("/api/strategy/reoptimize")
+def reoptimize_strategy(
+    track: str = Query(..., description="Grand Prix name (e.g. 'Bahrain')"),
+    driver: str = Query("VER"),
+    team: str = Query("Red Bull Racing"),
+    total_laps: int = Query(57),
+    current_lap: int = Query(..., description="Current lap number"),
+    current_compound: str = Query("medium"),
+    current_tyre_life: int = Query(1),
+    pits_done: int = Query(0),
+    compounds_used: str = Query("", description="Comma-separated compounds used so far"),
+    safety_car: bool = Query(False, description="Is safety car currently active?"),
+) -> dict:
+    """Re-optimize strategy from current race position (e.g. after a safety car)."""
+    optimizer = _get_strategy_optimizer()
+    if optimizer is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Strategy models not trained yet. Run: make strategy-train",
+        )
+
+    used = [c.strip().upper() for c in compounds_used.split(",") if c.strip()] or [current_compound.upper()]
+
+    result = optimizer.reoptimize_mid_race(
+        gp=track,
+        driver=driver,
+        team=team,
+        total_laps=total_laps,
+        current_lap=current_lap,
+        current_compound=current_compound,
+        current_tyre_life=current_tyre_life,
+        pits_done=pits_done,
+        compounds_used=used,
+        safety_car=safety_car,
+    )
+
+    return result.to_dict()
+
+
 @app.get("/api/safety-car/probability")
 def safety_car_probability(
     track: str = Query(..., description="Grand Prix name"),
