@@ -109,33 +109,108 @@ function norm(p: XYPoint, t: Transform): XYPoint {
 /* ── Stint-aware wear fraction ──────────────────────────────── */
 function stintWear(lap: number, pitLap: number, totalLaps: number): number {
   if (lap <= pitLap) {
-    // Stint 1: wear builds from 0 to ~1 over the first stint
     return Math.min(1, lap / Math.max(pitLap, 1));
   }
-  // Stint 2: fresh tyres after pit, wear builds again
   const stintLap = lap - pitLap;
   const stint2Len = totalLaps - pitLap;
   return Math.min(1, stintLap / Math.max(stint2Len, 1));
 }
 
-/* ── Zone extraction ────────────────────────────────────────── */
-interface ZoneSeg { startIdx: number; endIdx: number; type: 'brake' | 'throttle' }
+/* ── Corner detection from telemetry ───────────────────────── */
+interface Corner {
+  apexIdx: number;       // index of speed minimum (the corner apex)
+  brakeStartIdx: number; // where braking begins approaching this corner
+  brakeEndIdx: number;   // apex (end of braking zone)
+  accelStartIdx: number; // apex (start of acceleration zone)
+  accelEndIdx: number;   // where full throttle is reached after corner
+  brakingDist: number;   // meters of braking zone
+  accelDist: number;     // meters of acceleration zone
+}
 
-function extractZones(samples: TelemetryPoint[], type: 'brake' | 'throttle', threshold: number): ZoneSeg[] {
-  const zones: ZoneSeg[] = [];
-  let inZone = false, start = 0, count = 0;
-  for (let i = 0; i < samples.length; i++) {
-    const val = type === 'brake' ? samples[i].brake : samples[i].throttle;
-    if (val >= threshold) {
-      if (!inZone) { inZone = true; start = i; count = 0; }
-      count++;
-    } else if (inZone) {
-      if (count >= 5) zones.push({ startIdx: start, endIdx: i - 1, type });
-      inZone = false;
+function detectCorners(samples: TelemetryPoint[], dist: number[]): Corner[] {
+  const n = samples.length;
+  if (n < 20) return [];
+
+  // Step 1: Find local speed minima (corner apexes)
+  // Use a window to avoid noise
+  const windowSize = Math.max(8, Math.round(n * 0.012));
+  const apexes: number[] = [];
+
+  for (let i = windowSize; i < n - windowSize; i++) {
+    let isMin = true;
+    const sp = samples[i].speed;
+    for (let j = -windowSize; j <= windowSize; j++) {
+      if (j === 0) continue;
+      if (samples[i + j].speed < sp - 2) { isMin = false; break; }
+    }
+    // Must also have braking before it (within a reasonable distance)
+    if (isMin && sp < 280) {
+      // Check there's actual braking in the approach
+      let hasBrake = false;
+      for (let b = Math.max(0, i - Math.round(n * 0.08)); b < i; b++) {
+        if (samples[b].brake > 0.3) { hasBrake = true; break; }
+      }
+      if (hasBrake) apexes.push(i);
     }
   }
-  if (inZone && count >= 5) zones.push({ startIdx: start, endIdx: samples.length - 1, type });
-  return zones;
+
+  // Merge apexes that are too close (keep the one with lowest speed)
+  const minSep = Math.round(n * 0.04);
+  const merged: number[] = [];
+  for (const a of apexes) {
+    if (merged.length > 0 && a - merged[merged.length - 1] < minSep) {
+      const prev = merged[merged.length - 1];
+      if (samples[a].speed < samples[prev].speed) merged[merged.length - 1] = a;
+    } else {
+      merged.push(a);
+    }
+  }
+
+  // Step 2: For each apex, find brake start and throttle recovery
+  const corners: Corner[] = [];
+  const BRAKE_THRESHOLD = 0.25;
+  const THROTTLE_THRESHOLD = 0.75;
+
+  for (const apex of merged) {
+    // Find where braking starts before the apex
+    let brakeStart = apex;
+    for (let i = apex - 1; i >= Math.max(0, apex - Math.round(n * 0.12)); i--) {
+      if (samples[i].brake >= BRAKE_THRESHOLD) {
+        brakeStart = i;
+      } else if (brakeStart !== apex) {
+        break; // Found end of braking zone going backwards
+      }
+    }
+
+    // Find where full throttle is reached after apex
+    let accelEnd = apex;
+    for (let i = apex + 1; i < Math.min(n, apex + Math.round(n * 0.12)); i++) {
+      if (samples[i].throttle >= THROTTLE_THRESHOLD) {
+        accelEnd = i;
+        break;
+      }
+    }
+
+    // Only keep corners with meaningful braking
+    if (brakeStart === apex) continue;
+
+    const brakingDist = dist[apex] - dist[brakeStart];
+    const accelDist = dist[accelEnd] - dist[apex];
+
+    if (brakingDist < 5) continue; // too short to be a real corner
+
+    corners.push({
+      apexIdx: apex,
+      brakeStartIdx: brakeStart,
+      brakeEndIdx: apex,
+      accelStartIdx: apex,
+      accelEndIdx: accelEnd,
+      brakingDist,
+      accelDist: Math.max(accelDist, 0),
+    });
+  }
+
+  return corners;
 }
 
 /* ── Component ──────────────────────────────────────────────── */
@@ -157,7 +232,6 @@ export default function TrackMap({
     const tf = getTransform(outSmooth);
     const normOut = outSmooth.map((p) => norm(p, tf));
 
-    // Tight axis bounds — locked once from outline
     const xs = normOut.map((p) => p.x);
     const ys = normOut.map((p) => p.y);
     const xMin = Math.min(...xs), xMax = Math.max(...xs);
@@ -170,25 +244,63 @@ export default function TrackMap({
       xRange: [xMin - pad, xMax + pad] as [number, number],
       yRange: [yMin - pad, yMax + pad] as [number, number],
     };
-  }, [outline]); // ONLY outline — stable across laps
+  }, [outline]);
 
-  // ── LAP-VARYING TELEMETRY: braking/throttle data changes per lap ──
-  const telData = useMemo(() => {
+  // ── STABLE TELEMETRY POSITIONS: normalized once ──
+  const telBase = useMemo(() => {
     if (!geometry) return null;
     const tel = smooth(resampleTel(telemetry, RESAMPLE_POINTS));
     const hasTel = hasValidXY(tel);
     if (!hasTel) return null;
-
-    // Normalize telemetry positions using the SAME stable transform
     const normTel = tel.map((p) => norm(p, geometry.tf));
-    const brakeZones = extractZones(tel, 'brake', 0.5);
-    const throttleZones = extractZones(tel, 'throttle', 0.8);
-
-    return { normTel, tel, brakeZones, throttleZones };
+    const dist = cumDist(tel); // cumulative distance in data units
+    return { normTel, tel, dist };
   }, [telemetry, geometry]);
 
+  // ── CORNER DETECTION: from base telemetry (stable) ──
+  const baseCorners = useMemo(() => {
+    if (!telBase) return null;
+    return detectCorners(telBase.tel, telBase.dist);
+  }, [telBase]);
+
+  // ── WEAR-ADJUSTED CORNERS: recomputed per lap ──
+  const wornCorners = useMemo(() => {
+    if (!baseCorners || !telBase) return null;
+    const { dist, tel } = telBase;
+    const n = tel.length;
+    const totalDist = dist[n - 1];
+
+    return baseCorners.map((corner, ci) => {
+      // Braking distance grows with wear: up to 25% longer at full wear
+      const wornBrakeDist = corner.brakingDist * (1 + wear * 0.25);
+      // How many more indices does that mean? Scale brakeStart backwards
+      const extraBrake = wornBrakeDist - corner.brakingDist;
+      // Convert distance to index shift
+      const avgSegLen = totalDist / Math.max(n - 1, 1);
+      const extraBrakeIdx = Math.round(extraBrake / Math.max(avgSegLen, 0.01));
+      const wornBrakeStart = Math.max(0, corner.brakeStartIdx - extraBrakeIdx);
+
+      // Acceleration delay grows with wear: up to 20% slower
+      const wornAccelDist = corner.accelDist * (1 + wear * 0.20);
+      const extraAccel = wornAccelDist - corner.accelDist;
+      const extraAccelIdx = Math.round(extraAccel / Math.max(avgSegLen, 0.01));
+      const wornAccelEnd = Math.min(n - 1, corner.accelEndIdx + extraAccelIdx);
+
+      return {
+        ...corner,
+        wornBrakeStart,
+        wornBrakeEnd: corner.brakeEndIdx,
+        wornAccelStart: corner.accelStartIdx,
+        wornAccelEnd,
+        wornBrakeDist: wornBrakeDist,
+        wornAccelDist: wornAccelDist,
+        cornerNum: ci + 1,
+      };
+    });
+  }, [baseCorners, telBase, wear]);
+
   /* ── Fallback ─────────────────────────────────────────────── */
-  if (!geometry || !telData) {
+  if (!geometry || !telBase || !wornCorners) {
     return (
       <div style={{ padding: '16px' }}>
         <div style={{
@@ -203,11 +315,7 @@ export default function TrackMap({
   }
 
   const { normOut, xRange, yRange } = geometry;
-  const { normTel, tel, brakeZones, throttleZones } = telData;
-
-  // Line widths scale with stint wear (fresh = thin, worn = thick)
-  const brakeWidth = 3 + wear * 10; // 3→13px
-  const throttleWidth = 2 + (1 - wear) * 5; // 7→2px
+  const { normTel, tel } = telBase;
 
   const traces: Plotly.Data[] = [];
 
@@ -216,95 +324,106 @@ export default function TrackMap({
     x: normOut.map((p) => p.x),
     y: normOut.map((p) => p.y),
     mode: 'lines', type: 'scatter',
-    line: { color: 'rgba(255,255,255,0.15)', width: 2.5 },
+    line: { color: 'rgba(255,255,255,0.18)', width: 2.5 },
     name: 'Track', hoverinfo: 'skip',
   });
 
-  // 2. Color the entire track by brake/throttle state as a thin baseline
-  // This gives context — green for throttle sections, dim for coasting
-  const trackColors = tel.map((p) => {
-    if (p.brake > 0.5) return 'rgba(255,80,60,0.12)';
-    if (p.throttle > 0.8) return 'rgba(54,232,136,0.08)';
-    return 'rgba(255,255,255,0.04)';
-  });
-  traces.push({
-    x: normTel.map((p) => p.x),
-    y: normTel.map((p) => p.y),
-    mode: 'markers', type: 'scatter',
-    marker: { size: 3, color: trackColors, opacity: 1 },
-    name: 'Telemetry base', showlegend: false, hoverinfo: 'skip',
+  // 2. Fresh-tyre braking reference — faint red at BASE brake positions
+  wornCorners.forEach((c) => {
+    const xs: number[] = [], ys: number[] = [];
+    for (let i = c.brakeStartIdx; i <= c.brakeEndIdx; i++) {
+      if (normTel[i]) { xs.push(normTel[i].x); ys.push(normTel[i].y); }
+    }
+    if (xs.length > 1) {
+      traces.push({
+        x: xs, y: ys, mode: 'lines', type: 'scatter',
+        line: { color: 'rgba(255,100,80,0.12)', width: 4 },
+        showlegend: false, hoverinfo: 'skip',
+      });
+    }
   });
 
-  // 3. Braking zones — RED lines at exact telemetry braking locations
-  brakeZones.forEach((zone, zi) => {
+  // 3. Worn braking zones — RED lines (longer with wear)
+  wornCorners.forEach((c, ci) => {
     const xs: number[] = [], ys: number[] = [], texts: string[] = [];
-    for (let i = zone.startIdx; i <= zone.endIdx; i++) {
+    for (let i = c.wornBrakeStart; i <= c.wornBrakeEnd; i++) {
       if (normTel[i] && tel[i]) {
         xs.push(normTel[i].x); ys.push(normTel[i].y);
         texts.push(
-          `<b>Braking Zone ${zi + 1}</b><br>` +
-          `Brake: ${(tel[i].brake * 100).toFixed(0)}%<br>` +
+          `<b>T${c.cornerNum} — Braking Zone</b><br>` +
+          `Distance: <b>${Math.round(c.wornBrakeDist)}m</b> (fresh: ${Math.round(c.brakingDist)}m)<br>` +
+          `+${Math.round(c.wornBrakeDist - c.brakingDist)}m from tyre wear<br>` +
           `Speed: ${tel[i].speed.toFixed(0)} km/h<br>` +
-          `Stint ${inStint2 ? 2 : 1}, lap ${stintLap}<br>` +
-          `Tyre age: ${wearPct}%`
+          `Stint ${inStint2 ? 2 : 1}, lap ${stintLap} · Wear ${wearPct}%`
         );
       }
     }
-    // Opacity and color intensity increase with wear
-    const r = Math.min(255, 200 + Math.round(wear * 55));
-    const g = Math.max(30, Math.round(80 - wear * 50));
-    const alpha = 0.6 + wear * 0.35;
-    traces.push({
-      x: xs, y: ys, mode: 'lines', type: 'scatter',
-      line: { color: `rgba(${r},${g},40,${alpha})`, width: brakeWidth },
-      name: zi === 0 ? `Braking (stint ${inStint2 ? 2 : 1})` : undefined,
-      showlegend: zi === 0,
-      text: texts, hovertemplate: '%{text}<extra></extra>',
-    });
+    if (xs.length > 1) {
+      // Width scales: 3px fresh → 8px fully worn
+      const w = 3 + wear * 5;
+      const alpha = 0.65 + wear * 0.3;
+      traces.push({
+        x: xs, y: ys, mode: 'lines', type: 'scatter',
+        line: { color: `rgba(255,80,60,${alpha})`, width: w },
+        name: ci === 0 ? 'Braking' : undefined,
+        showlegend: ci === 0,
+        text: texts, hovertemplate: '%{text}<extra></extra>',
+      });
+    }
   });
 
-  // 4. Throttle/acceleration zones — GREEN lines
-  throttleZones.forEach((zone, zi) => {
+  // 4. Acceleration zones — GREEN lines (longer delay with wear)
+  wornCorners.forEach((c, ci) => {
     const xs: number[] = [], ys: number[] = [], texts: string[] = [];
-    for (let i = zone.startIdx; i <= zone.endIdx; i++) {
+    for (let i = c.wornAccelStart; i <= c.wornAccelEnd; i++) {
       if (normTel[i] && tel[i]) {
         xs.push(normTel[i].x); ys.push(normTel[i].y);
         texts.push(
-          `<b>Acceleration Zone ${zi + 1}</b><br>` +
-          `Throttle: ${(tel[i].throttle * 100).toFixed(0)}%<br>` +
+          `<b>T${c.cornerNum} — Acceleration Zone</b><br>` +
+          `Delay: <b>${Math.round(c.wornAccelDist)}m</b> (fresh: ${Math.round(c.accelDist)}m)<br>` +
+          `+${Math.round(c.wornAccelDist - c.accelDist)}m from tyre wear<br>` +
           `Speed: ${tel[i].speed.toFixed(0)} km/h<br>` +
-          `Stint ${inStint2 ? 2 : 1}, lap ${stintLap}<br>` +
-          `Tyre age: ${wearPct}%`
+          `Stint ${inStint2 ? 2 : 1}, lap ${stintLap} · Wear ${wearPct}%`
         );
       }
     }
-    const alpha = 0.4 + (1 - wear) * 0.4;
-    traces.push({
-      x: xs, y: ys, mode: 'lines', type: 'scatter',
-      line: { color: `rgba(54,232,136,${alpha})`, width: throttleWidth },
-      name: zi === 0 ? `Throttle (stint ${inStint2 ? 2 : 1})` : undefined,
-      showlegend: zi === 0,
-      text: texts, hovertemplate: '%{text}<extra></extra>',
-    });
+    if (xs.length > 1) {
+      const w = 2.5 + wear * 4;
+      const alpha = 0.55 + wear * 0.3;
+      traces.push({
+        x: xs, y: ys, mode: 'lines', type: 'scatter',
+        line: { color: `rgba(54,232,136,${alpha})`, width: w },
+        name: ci === 0 ? 'Throttle' : undefined,
+        showlegend: ci === 0,
+        text: texts, hovertemplate: '%{text}<extra></extra>',
+      });
+    }
   });
 
-  // 5. Brake point entry markers (triangles where braking starts)
-  const brakeEntries = brakeZones.map((z) => normTel[z.startIdx]).filter(Boolean);
-  if (brakeEntries.length > 0) {
+  // 5. Corner number labels with braking distance
+  const labelX: number[] = [], labelY: number[] = [], labelText: string[] = [], labelHover: string[] = [];
+  wornCorners.forEach((c) => {
+    const apex = normTel[c.apexIdx];
+    if (!apex) return;
+    labelX.push(apex.x);
+    labelY.push(apex.y);
+    labelText.push(`T${c.cornerNum}`);
+    labelHover.push(
+      `<b>Turn ${c.cornerNum}</b><br>` +
+      `Braking: ${Math.round(c.wornBrakeDist)}m (${wear > 0.01 ? `+${Math.round(c.wornBrakeDist - c.brakingDist)}m` : 'fresh'})<br>` +
+      `Accel delay: ${Math.round(c.wornAccelDist)}m (${wear > 0.01 ? `+${Math.round(c.wornAccelDist - c.accelDist)}m` : 'fresh'})<br>` +
+      `Apex speed: ${tel[c.apexIdx].speed.toFixed(0)} km/h`
+    );
+  });
+  if (labelX.length > 0) {
     traces.push({
-      x: brakeEntries.map((p) => p.x),
-      y: brakeEntries.map((p) => p.y),
-      mode: 'markers', type: 'scatter',
-      marker: {
-        size: 5 + wear * 4,
-        color: `rgba(255,100,80,${0.7 + wear * 0.3})`,
-        symbol: 'triangle-down',
-        line: { color: 'rgba(255,200,190,0.4)', width: 1 },
-      },
-      name: 'Brake points',
-      hovertemplate: brakeEntries.map((_, i) =>
-        `<b>Brake Point ${i + 1}</b><br>Stint ${inStint2 ? 2 : 1}, lap ${stintLap}<br>Tyre age: ${wearPct}%<extra></extra>`
-      ),
+      x: labelX, y: labelY, mode: 'text+markers', type: 'scatter',
+      marker: { size: 4, color: 'rgba(255,255,255,0.5)', symbol: 'circle' },
+      text: labelText,
+      textposition: 'top center',
+      textfont: { size: 12, color: 'rgba(255,255,255,0.6)', family: 'Barlow Condensed, sans-serif' },
+      showlegend: false,
+      hovertemplate: labelHover.map((h) => `${h}<extra></extra>`),
     } as Plotly.Data);
   }
 
@@ -322,17 +441,17 @@ export default function TrackMap({
           showlegend: true,
           legend: {
             orientation: 'h', yanchor: 'bottom', y: 1.01, xanchor: 'right', x: 1,
-            font: { size: 10, color: 'rgba(255,255,255,0.45)', family: 'Barlow Condensed, sans-serif' },
+            font: { size: 13, color: 'rgba(255,255,255,0.55)', family: 'Barlow Condensed, sans-serif' },
             bgcolor: 'rgba(0,0,0,0)',
           },
-          font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif' },
+          font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 13 },
           hovermode: 'closest',
           transition: { duration: 0, easing: 'linear' },
           uirevision: 'brake-map-static',
           hoverlabel: {
             bgcolor: 'rgba(14,14,18,0.95)',
             bordercolor: 'rgba(255,255,255,0.15)',
-            font: { size: 11, family: 'Barlow Condensed', color: '#f5f5f7' },
+            font: { size: 14, family: 'Barlow Condensed', color: '#f5f5f7' },
           },
         }}
         config={{ displayModeBar: false, responsive: true }}

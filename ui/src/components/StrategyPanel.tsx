@@ -1,6 +1,11 @@
 import { useState } from 'react';
-import type { Compound, Prediction, StrategyResult } from '../data/api';
-import { reoptimizeStrategy } from '../data/api';
+import {
+  type Compound,
+  type Prediction,
+  type StrategyResult,
+  reoptimizeStrategy,
+  COMPOUND_COLORS,
+} from '../data/api';
 import InfoTip from './InfoTip';
 
 interface StrategyPanelProps {
@@ -11,19 +16,6 @@ interface StrategyPanelProps {
   currentLap: number;
   totalLaps: number;
 }
-
-const COMPOUND_COLORS: Record<string, string> = {
-  SOFT: '#e10600',
-  MEDIUM: '#ffd400',
-  HARD: '#f5f5f7',
-  INTER: '#00a442',
-  WET: '#0077c8',
-  soft: '#e10600',
-  medium: '#ffd400',
-  hard: '#f5f5f7',
-  inter: '#00a442',
-  wet: '#0077c8',
-};
 
 export default function StrategyPanel({
   prediction,
