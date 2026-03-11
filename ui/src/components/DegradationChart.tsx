@@ -1,263 +1,218 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import Plotly from 'plotly.js-basic-dist';
 import createPlotlyComponent from 'react-plotly.js/factory';
-import type { Prediction, Compound } from '../data/api';
+import {
+  type StrategyResult,
+  type StrategyOption,
+  COMPOUND_COLORS,
+  COMPOUND_COLORS_DIM,
+} from '../data/api';
 
 const Plot = createPlotlyComponent(Plotly);
 
 interface DegradationChartProps {
-  currentLap: number;
   totalLaps: number;
-  prediction: Prediction | null;
-  compound: Compound;
-}
-
-const COMPOUND_COLORS: Record<string, string> = {
-  soft: '#e10600',
-  medium: '#ffd400',
-  hard: '#f5f5f7',
-  inter: '#00a442',
-  wet: '#0077c8',
-};
-
-const COMPOUND_COLORS_DIM: Record<string, string> = {
-  soft: 'rgba(225,6,0,0.55)',
-  medium: 'rgba(255,212,0,0.55)',
-  hard: 'rgba(245,245,247,0.55)',
-  inter: 'rgba(0,164,66,0.55)',
-  wet: 'rgba(0,119,200,0.55)',
-};
-
-const DEG_RATES: Record<string, number> = {
-  soft: 0.045,
-  medium: 0.028,
-  hard: 0.016,
-  inter: 0.035,
-  wet: 0.025,
-};
-
-const PIT_COST_SECONDS = 24.5;
-
-interface StrategyResult {
-  c1: string;
-  c2: string;
-  pitLap: number;
-  /** Total race time (all laps + pit cost) */
-  totalTime: number;
-  /** Degradation loss stint 1 only */
-  degStint1: number;
-  /** Degradation loss stint 2 only */
-  degStint2: number;
-  /** Per-lap pace delta vs fresh tyre */
-  deltas: number[];
-  label: string;
-}
-
-function evaluateStrategies(totalLaps: number, basePace: number): StrategyResult[] {
-  const compounds = ['soft', 'medium', 'hard'];
-  const results: StrategyResult[] = [];
-
-  for (const c1 of compounds) {
-    for (const c2 of compounds) {
-      if (c1 === c2) continue;
-      const r1 = DEG_RATES[c1], r2 = DEG_RATES[c2];
-
-      let bestPit = Math.floor(totalLaps / 2);
-      let bestTotal = Infinity;
-      let bestDeg1 = 0, bestDeg2 = 0;
-      let bestDeltas: number[] = [];
-
-      for (let pit = 5; pit <= totalLaps - 5; pit++) {
-        const deltas: number[] = [];
-        let total = PIT_COST_SECONDS;
-        let deg1 = 0, deg2 = 0;
-
-        for (let l = 1; l <= totalLaps; l++) {
-          const stint2 = l > pit;
-          const sl = stint2 ? l - pit : l;
-          const rate = stint2 ? r2 : r1;
-          const delta = rate * sl + 0.002 * sl * sl;
-          deltas.push(delta);
-          total += basePace + delta;
-          if (stint2) deg2 += delta; else deg1 += delta;
-        }
-
-        if (total < bestTotal) {
-          bestTotal = total; bestPit = pit;
-          bestDeg1 = deg1; bestDeg2 = deg2;
-          bestDeltas = deltas;
-        }
-      }
-
-      results.push({
-        c1, c2, pitLap: bestPit, totalTime: bestTotal,
-        degStint1: bestDeg1, degStint2: bestDeg2,
-        deltas: bestDeltas,
-        label: `${c1[0].toUpperCase()} → ${c2[0].toUpperCase()}`,
-      });
-    }
-  }
-
-  results.sort((a, b) => a.totalTime - b.totalTime);
-  return results;
+  strategyData: StrategyResult | null;
 }
 
 const METHOD_TEXT = [
   'How we calculate the optimal pit strategy:',
   '',
-  '1. Model lap time per compound',
-  '   Each compound has a degradation rate:',
-  '   SOFT = 0.045s/lap · MEDIUM = 0.028s/lap · HARD = 0.016s/lap',
-  '   Per-lap loss: delta = rate × stint_lap + 0.002 × stint_lap²',
+  '1. ML model predicts base lap pace per circuit/driver/team.',
+  '   Trained on ~50,000 real F1 laps (2019-2024).',
   '',
-  '2. Test every valid 2-compound combination',
-  '   F1 rules require at least 2 different dry compounds.',
-  '   We evaluate all 6 possible pairs.',
+  '2. Physics-based tyre degradation (non-linear, accelerating).',
+  '   Circuit-specific degradation factor from TyreStress/Abrasion data.',
+  '   Compound pace offsets: SOFT fastest, HARD slowest.',
+  '   Fuel burn-off: cars get lighter (faster) each lap.',
   '',
-  '3. Sweep every possible pit lap (5 to totalLaps−5)',
-  '   For each pair + pit lap, sum predicted lap times + 24.5s pit cost.',
+  '3. Decision tree enumeration: 1-stop, 2-stop, 3-stop.',
+  '   All legal compound combos tested (F1 rule: use >=2 compounds).',
+  '   Pit cost from ML model + strategic overhead.',
   '',
-  '4. The combo with the lowest total race time wins.',
-  '',
-  'Bar chart: Total degradation cost per strategy.',
-  'Curve: Per-lap pace loss for the optimal strategy —',
-  'notice the drop at the pit lap when fresh tyres go on.',
+  '4. Strategy with lowest total predicted race time wins.',
 ].join('\n');
 
+function formatCompound(comp: string): string {
+  return comp.charAt(0).toUpperCase() + comp.slice(1).toLowerCase();
+}
+
+function stopsLabel(pitLaps: number[]): string {
+  if (pitLaps.length === 0) return 'No stop';
+  if (pitLaps.length === 1) return '1-stop';
+  return `${pitLaps.length}-stop`;
+}
+
+/** Get best strategy per stop count (1-stop, 2-stop, 3-stop) */
+function getBestByStops(strategies: StrategyOption[]): StrategyOption[] {
+  const bestByStops = new Map<number, StrategyOption>();
+  for (const s of strategies) {
+    const stops = s.pit_laps.length;
+    if (!bestByStops.has(stops)) {
+      bestByStops.set(stops, s);
+    }
+  }
+  return Array.from(bestByStops.values())
+    .sort((a, b) => a.total_time - b.total_time)
+    .slice(0, 3);
+}
+
 export default function DegradationChart({
-  currentLap: _currentLap,
   totalLaps,
-  prediction,
-  compound,
+  strategyData,
 }: DegradationChartProps) {
   const [showMethod, setShowMethod] = useState(false);
 
-  // Strategy is a PRE-RACE prediction — computed once from track/compound,
-  // not from the current lap's degradation reading. Use a fixed base pace.
-  const data = useMemo(() => {
-    if (!prediction) return null;
-
-    const basePace = 80; // fixed representative lap time — strategy ranking is independent of this
-    const strategies = evaluateStrategies(totalLaps, basePace);
-    const top6 = strategies.slice(0, 6);
-
-    const optLabel = prediction.strategy_stint1_compound && prediction.strategy_stint2_compound
-      ? `${prediction.strategy_stint1_compound[0].toUpperCase()} → ${prediction.strategy_stint2_compound[0].toUpperCase()}`
-      : top6[0]?.label ?? '';
-
-    // No-stop baseline
-    const noStopRate = DEG_RATES[compound] ?? 0.028;
-    let noStopDeg = 0;
-    for (let l = 1; l <= totalLaps; l++) noStopDeg += noStopRate * l + 0.002 * l * l;
-
-    return { top6, optLabel, noStopDeg };
-    // Only depends on totalLaps and compound — NOT on prediction values that change per lap
-  }, [totalLaps, compound, prediction?.strategy_stint1_compound, prediction?.strategy_stint2_compound]);
-
-  if (!data) {
+  if (!strategyData || !strategyData.best_strategy) {
     return (
       <div className="deg-chart-empty">
-        <span>Select a circuit to view strategy</span>
+        <span>
+          {strategyData === null
+            ? 'Start the backend server for ML-powered strategy predictions'
+            : 'No strategy data available for this circuit'}
+        </span>
       </div>
     );
   }
 
-  const { top6, optLabel } = data;
-  const optimal = top6[0];
-  const laps = Array.from({ length: totalLaps }, (_, i) => i + 1);
+  const best = strategyData.best_strategy;
+  const topStrategies = getBestByStops(strategyData.all_strategies);
+  const bestTime = topStrategies[0]?.total_time ?? 0;
 
-  // ── BAR CHART DATA: horizontal stacked bars ──
-  // Each strategy: stint1 deg (colored) + pit cost (gray) + stint2 deg (colored)
-  const barLabels = top6.map((s) => s.label).reverse(); // reverse for bottom-up
-  const stint1Vals = top6.map((s) => Number(s.degStint1.toFixed(1))).reverse();
-  const pitVals = top6.map(() => PIT_COST_SECONDS).reverse();
-  const stint2Vals = top6.map((s) => Number(s.degStint2.toFixed(1))).reverse();
-  const stint1Colors = top6.map((s) => COMPOUND_COLORS_DIM[s.c1] ?? 'rgba(255,212,0,0.55)').reverse();
-  const stint2Colors = top6.map((s) => COMPOUND_COLORS_DIM[s.c2] ?? 'rgba(245,245,247,0.55)').reverse();
+  // ── TOP: Delta bar chart for best 3 strategies ──
+  const barLabels = topStrategies.map((s) => {
+    const compounds = s.strategy.map((c) => formatCompound(c).charAt(0)).join('-');
+    return `${compounds} (${stopsLabel(s.pit_laps)})`;
+  }).reverse();
 
-  // Identify optimal index in reversed array
-  const optIdxReversed = barLabels.indexOf(optLabel);
+  const barDeltas = topStrategies.map((s) =>
+    Number((s.total_time - bestTime).toFixed(1))
+  ).reverse();
 
-  // Build bar border to highlight optimal
-  const barBorders = barLabels.map((_, i) =>
-    i === optIdxReversed ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0)'
-  );
+  const barColors = topStrategies.map((_, i) =>
+    i === 0 ? 'rgba(54, 232, 136, 0.8)' : 'rgba(255, 255, 255, 0.25)'
+  ).reverse();
 
-  const barTraces: Plotly.Data[] = [
-    {
-      y: barLabels, x: stint1Vals,
-      type: 'bar', orientation: 'h', name: 'Stint 1 deg',
-      marker: { color: stint1Colors, line: { color: barBorders, width: barLabels.map((_, i) => i === optIdxReversed ? 2 : 0) } },
-      hovertemplate: barLabels.map((label, i) =>
-        `<b>${label}</b><br>Stint 1 degradation: ${stint1Vals[i]}s<extra></extra>`
+  const barTrace: Plotly.Data = {
+    y: barLabels,
+    x: barDeltas,
+    type: 'bar',
+    orientation: 'h',
+    marker: { color: barColors },
+    text: barDeltas.map((d) => d === 0 ? 'OPTIMAL' : `+${d.toFixed(1)}s`),
+    textposition: 'outside',
+    textfont: { color: 'rgba(255,255,255,0.7)', size: 13, family: 'Barlow Condensed' },
+    hovertemplate: topStrategies.map((s) => {
+      const delta = s.total_time - bestTime;
+      const compounds = s.strategy.map((c) => formatCompound(c)).join(' → ');
+      const pits = s.pit_laps.length > 0 ? `Pit: ${s.pit_laps.map((l) => `L${l}`).join(', ')}` : 'No pit';
+      return `<b>${compounds}</b> (${stopsLabel(s.pit_laps)})<br>${pits}<br>` +
+        `Total: ${s.total_time_formatted}<br>` +
+        `${delta > 0 ? `+${delta.toFixed(1)}s vs optimal` : 'OPTIMAL'}<extra></extra>`;
+    }).reverse(),
+  };
+
+  // ── Strategy visual bars for top 3 ──
+  const strategyVisuals = topStrategies.map((s, idx) => {
+    const delta = s.total_time - bestTime;
+    const isBest = idx === 0;
+    return (
+      <div key={idx} className={`strat-compare-row${isBest ? ' best' : ''}`}>
+        <div className="strat-compare-rank">{isBest ? 'BEST' : `+${delta.toFixed(1)}s`}</div>
+        <div className="strat-compare-bar">
+          {s.strategy.map((comp, i) => {
+            const stintLaps = i === 0
+              ? (s.pit_laps[0] ?? totalLaps)
+              : i < s.pit_laps.length
+                ? s.pit_laps[i] - s.pit_laps[i - 1]
+                : totalLaps - s.pit_laps[i - 1];
+            return (
+              <div
+                key={i}
+                className="strat-compare-stint"
+                style={{
+                  flex: stintLaps,
+                  background: COMPOUND_COLORS[comp] ?? COMPOUND_COLORS[comp.toLowerCase()] ?? '#888',
+                  opacity: isBest ? 1 : 0.6,
+                }}
+                title={`${formatCompound(comp)} (${stintLaps}L)`}
+              >
+                <span className="strat-compare-label">{formatCompound(comp).charAt(0)}</span>
+              </div>
+            );
+          })}
+        </div>
+        <div className="strat-compare-meta">
+          {stopsLabel(s.pit_laps)}
+          {s.pit_laps.length > 0 && ` · ${s.pit_laps.map((l) => `L${l}`).join(',')}`}
+        </div>
+      </div>
+    );
+  });
+
+  // ── BOTTOM: Per-lap predicted times for optimal strategy ──
+  const lapTimes = best.lap_times ?? [];
+  const hasLapData = lapTimes.length > 0;
+
+  const stintGroups: Map<number, typeof lapTimes> = new Map();
+  for (const lt of lapTimes) {
+    const group = stintGroups.get(lt.stint) ?? [];
+    group.push(lt);
+    stintGroups.set(lt.stint, group);
+  }
+
+  const firstLapTime = lapTimes.length > 0 ? lapTimes[0].time : 0;
+
+  const lineTraces: Plotly.Data[] = [];
+  for (const [, laps] of stintGroups.entries()) {
+    const compound = laps[0]?.compound ?? 'MEDIUM';
+    const col = COMPOUND_COLORS[compound] ?? COMPOUND_COLORS[compound.toLowerCase()] ?? '#ffd400';
+    const colDim = COMPOUND_COLORS_DIM[compound] ?? COMPOUND_COLORS_DIM[compound.toLowerCase()] ?? col;
+
+    const xVals = laps.map((l) => l.lap);
+    const yVals = laps.map((l) => Number((l.time - firstLapTime).toFixed(3)));
+
+    lineTraces.push({
+      x: xVals,
+      y: yVals,
+      type: 'scatter',
+      mode: 'lines',
+      fill: 'tozeroy',
+      fillcolor: colDim.replace('0.55', '0.15'),
+      line: { color: col, width: 2.5 },
+      name: formatCompound(compound),
+      hovertemplate: laps.map((l, i) =>
+        `<b>${formatCompound(compound)}</b> · Lap ${l.lap}<br>` +
+        `${l.time.toFixed(2)}s (${yVals[i] >= 0 ? '+' : ''}${yVals[i].toFixed(2)}s vs L1)<br>` +
+        `Tyre age: ${l.tyre_life} laps<extra></extra>`
       ),
-    } as Plotly.Data,
-    {
-      y: barLabels, x: pitVals,
-      type: 'bar', orientation: 'h', name: 'Pit stop cost',
-      marker: { color: 'rgba(140,140,160,0.25)' },
-      hovertemplate: barLabels.map((label) =>
-        `<b>${label}</b><br>Pit stop: ${PIT_COST_SECONDS}s<extra></extra>`
-      ),
-    } as Plotly.Data,
-    {
-      y: barLabels, x: stint2Vals,
-      type: 'bar', orientation: 'h', name: 'Stint 2 deg',
-      marker: { color: stint2Colors, line: { color: barBorders, width: barLabels.map((_, i) => i === optIdxReversed ? 2 : 0) } },
-      hovertemplate: barLabels.map((label, i) =>
-        `<b>${label}</b><br>Stint 2 degradation: ${stint2Vals[i]}s<extra></extra>`
-      ),
-    } as Plotly.Data,
-  ];
+    } as Plotly.Data);
+  }
 
-  // ── LINE CHART DATA: optimal strategy pace loss curve ──
-  const col1 = COMPOUND_COLORS[optimal.c1] ?? '#ffd400';
-  const col2 = COMPOUND_COLORS[optimal.c2] ?? '#f5f5f7';
-  const col1Dim = COMPOUND_COLORS_DIM[optimal.c1] ?? col1;
-  const col2Dim = COMPOUND_COLORS_DIM[optimal.c2] ?? col2;
-
-  const s1Laps = laps.filter((l) => l <= optimal.pitLap);
-  const s1Deltas = optimal.deltas.filter((_, i) => laps[i] <= optimal.pitLap);
-  const s2Laps = laps.filter((l) => l > optimal.pitLap);
-  const s2Deltas = optimal.deltas.filter((_, i) => laps[i] > optimal.pitLap);
-
-  // Fill area under curve for visual impact
-  const lineTraces: Plotly.Data[] = [
-    // Stint 1 filled area
-    {
-      x: s1Laps, y: s1Deltas,
-      type: 'scatter', mode: 'lines',
-      fill: 'tozeroy', fillcolor: col1Dim.replace('0.55', '0.15'),
-      line: { color: col1, width: 2.5 },
-      name: `${optimal.c1.toUpperCase()}`,
-      hovertemplate: s1Laps.map((l, i) =>
-        `<b>${optimal.c1.toUpperCase()}</b> · Lap ${l}<br>+${s1Deltas[i].toFixed(2)}s vs fresh<extra></extra>`
-      ),
-    } as Plotly.Data,
-    // Stint 2 filled area
-    {
-      x: s2Laps, y: s2Deltas,
-      type: 'scatter', mode: 'lines',
-      fill: 'tozeroy', fillcolor: col2Dim.replace('0.55', '0.15'),
-      line: { color: col2, width: 2.5 },
-      name: `${optimal.c2.toUpperCase()}`,
-      hovertemplate: s2Laps.map((_l, i) =>
-        `<b>${optimal.c2.toUpperCase()}</b> · Stint lap ${s2Laps[i] - optimal.pitLap}<br>+${s2Deltas[i].toFixed(2)}s vs fresh<extra></extra>`
-      ),
-    } as Plotly.Data,
-    // Pit vertical
-    {
-      x: [optimal.pitLap, optimal.pitLap],
-      y: [0, Math.max(...optimal.deltas) * 1.1],
-      type: 'scatter', mode: 'lines',
+  // Pit lap vertical lines
+  for (const pitLap of best.pit_laps) {
+    const maxDelta = lapTimes.length > 0
+      ? Math.max(...lapTimes.map((l) => l.time - firstLapTime)) * 1.1
+      : 5;
+    lineTraces.push({
+      x: [pitLap, pitLap],
+      y: [0, Math.max(maxDelta, 1)],
+      type: 'scatter',
+      mode: 'lines',
       line: { color: 'rgba(255,255,255,0.35)', width: 1.5, dash: 'dash' },
-      name: 'Pit', hoverinfo: 'skip',
-    } as Plotly.Data,
-  ];
+      name: `Pit L${pitLap}`,
+      hoverinfo: 'skip',
+      showlegend: false,
+    } as Plotly.Data);
+  }
 
-  const totalCost = optimal.degStint1 + optimal.degStint2 + PIT_COST_SECONDS;
-  const noStopCost = data.noStopDeg;
-  const timeSaved = noStopCost - totalCost;
+  // Header info
+  const stintSummary = best.strategy
+    .map((c) => formatCompound(c).toUpperCase())
+    .join(' → ');
+  const pitLapsSummary = best.pit_laps.length > 0
+    ? best.pit_laps.map((l) => `L${l}`).join(', ')
+    : 'No pit';
 
   return (
     <div className="deg-chart-container">
@@ -270,10 +225,10 @@ export default function DegradationChart({
           >?</button>
         </div>
         <span className="deg-chart-sub">
-          Total time lost per strategy — stint degradation + pit cost
+          {stopsLabel(best.pit_laps)} · {strategyData.n_strategies_evaluated} strategies evaluated
         </span>
-        <span className="deg-chart-sub" style={{ color: COMPOUND_COLORS[optimal.c1] ?? '#fff', fontWeight: 600 }}>
-          Optimal: {optimal.c1.toUpperCase()} → {optimal.c2.toUpperCase()} · Pit L{optimal.pitLap} · Saves {timeSaved.toFixed(1)}s vs no-stop
+        <span className="deg-chart-sub" style={{ color: COMPOUND_COLORS[best.strategy[0]] ?? COMPOUND_COLORS[best.strategy[0]?.toLowerCase()] ?? '#fff', fontWeight: 600 }}>
+          Optimal: {stintSummary} · Pit {pitLapsSummary} · {best.total_time_formatted}
         </span>
       </div>
 
@@ -286,102 +241,106 @@ export default function DegradationChart({
         </div>
       )}
 
-      {/* Two-panel layout: bar chart top, curve bottom */}
       <div className="deg-chart-panels">
-        {/* ── Bar chart: strategy comparison ── */}
-        <div className="deg-chart-bars">
-          <Plot
-            data={barTraces}
-            layout={{
-              autosize: true,
-              margin: { l: 48, r: 12, t: 4, b: 4 },
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              plot_bgcolor: 'rgba(0,0,0,0)',
-              barmode: 'stack',
-              bargap: 0.45,
-              font: { color: 'rgba(255,255,255,0.55)', family: 'Barlow Condensed, sans-serif', size: 10 },
-              xaxis: {
-                title: { text: 'Total time cost (s)', font: { size: 10, color: 'rgba(255,255,255,0.35)' } },
-                gridcolor: 'rgba(255,255,255,0.06)',
-                zerolinecolor: 'rgba(255,255,255,0.06)',
-                tickfont: { size: 9 },
-                fixedrange: true,
-              },
-              yaxis: {
-                tickfont: { size: 11, color: 'rgba(255,255,255,0.7)' },
-                fixedrange: true,
-              },
-              legend: {
-                orientation: 'h', y: 1.15, x: 0.5, xanchor: 'center',
-                font: { size: 9, color: 'rgba(255,255,255,0.5)' },
-                bgcolor: 'rgba(0,0,0,0)',
-              },
-              showlegend: true,
-              hovermode: 'closest',
-              uirevision: 'bars-static',
-              hoverlabel: {
-                bgcolor: 'rgba(14,14,18,0.95)',
-                bordercolor: 'rgba(255,255,255,0.15)',
-                font: { size: 11, family: 'Barlow Condensed', color: '#f5f5f7' },
-              },
-            }}
-            config={{ displayModeBar: false, responsive: true }}
-            style={{ width: '100%', height: '100%' }}
-            useResizeHandler
-          />
+        {/* ── Top: Strategy comparison (stacked vertically) ── */}
+        <div className="deg-chart-top">
+          <div className="strat-compare-visual">
+            {strategyVisuals}
+          </div>
+          <div className="strat-compare-delta-row">
+            <Plot
+              data={[barTrace]}
+              layout={{
+                autosize: true,
+                margin: { l: 70, r: 50, t: 4, b: 4 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                bargap: 0.4,
+                font: { color: 'rgba(255,255,255,0.55)', family: 'Barlow Condensed, sans-serif', size: 13 },
+                xaxis: {
+                  title: { text: 'Delta vs optimal (s)', font: { size: 12, color: 'rgba(255,255,255,0.4)' } },
+                  gridcolor: 'rgba(255,255,255,0.06)',
+                  zerolinecolor: 'rgba(54,232,136,0.3)',
+                  zerolinewidth: 2,
+                  tickfont: { size: 12 },
+                  fixedrange: true,
+                },
+                yaxis: {
+                  tickfont: { size: 13, color: 'rgba(255,255,255,0.7)' },
+                  fixedrange: true,
+                },
+                showlegend: false,
+                hovermode: 'closest',
+                uirevision: 'bars-static',
+                hoverlabel: {
+                  bgcolor: 'rgba(14,14,18,0.95)',
+                  bordercolor: 'rgba(255,255,255,0.15)',
+                  font: { size: 14, family: 'Barlow Condensed', color: '#f5f5f7' },
+                },
+              }}
+              config={{ displayModeBar: false, responsive: true }}
+              style={{ width: '100%', height: '100%' }}
+              useResizeHandler
+            />
+          </div>
         </div>
 
-        {/* ── Line chart: optimal strategy pace curve ── */}
+        {/* ── Bottom: Per-lap pace for the fastest strategy ── */}
         <div className="deg-chart-curve">
-          <Plot
-            data={lineTraces}
-            layout={{
-              autosize: true,
-              margin: { l: 36, r: 8, t: 4, b: 24 },
-              paper_bgcolor: 'rgba(0,0,0,0)',
-              plot_bgcolor: 'rgba(0,0,0,0)',
-              font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 10 },
-              xaxis: {
-                title: { text: 'Lap', font: { size: 9, color: 'rgba(255,255,255,0.3)' } },
-                gridcolor: 'rgba(255,255,255,0.06)',
-                zerolinecolor: 'rgba(255,255,255,0.06)',
-                tickfont: { size: 8 },
-                range: [0, totalLaps + 1],
-                fixedrange: true,
-              },
-              yaxis: {
-                title: { text: 'Pace loss (s)', font: { size: 9, color: 'rgba(255,255,255,0.3)' } },
-                gridcolor: 'rgba(255,255,255,0.06)',
-                zerolinecolor: 'rgba(255,255,255,0.06)',
-                tickfont: { size: 8 },
-                fixedrange: true,
-                rangemode: 'tozero',
-              },
-              legend: {
-                orientation: 'h', y: 1.18, x: 0.5, xanchor: 'center',
-                font: { size: 9, color: 'rgba(255,255,255,0.5)' },
-                bgcolor: 'rgba(0,0,0,0)',
-              },
-              showlegend: true,
-              hovermode: 'x unified',
-              uirevision: 'curve-static',
-              hoverlabel: {
-                bgcolor: 'rgba(14,14,18,0.95)',
-                bordercolor: 'rgba(255,255,255,0.15)',
-                font: { size: 11, family: 'Barlow Condensed', color: '#f5f5f7' },
-              },
-              annotations: [{
-                x: optimal.pitLap, y: 1, yref: 'paper',
-                text: `PIT L${optimal.pitLap}`,
-                showarrow: false,
-                font: { size: 9, color: 'rgba(255,255,255,0.6)', family: 'Barlow Condensed' },
-                yanchor: 'bottom',
-              }],
-            }}
-            config={{ displayModeBar: false, responsive: true }}
-            style={{ width: '100%', height: '100%' }}
-            useResizeHandler
-          />
+          {hasLapData ? (
+            <Plot
+              data={lineTraces}
+              layout={{
+                autosize: true,
+                margin: { l: 36, r: 8, t: 4, b: 24 },
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 13 },
+                xaxis: {
+                  title: { text: 'Lap', font: { size: 12, color: 'rgba(255,255,255,0.4)' } },
+                  gridcolor: 'rgba(255,255,255,0.06)',
+                  zerolinecolor: 'rgba(255,255,255,0.06)',
+                  tickfont: { size: 11 },
+                  range: [0, totalLaps + 1],
+                  fixedrange: true,
+                },
+                yaxis: {
+                  title: { text: 'Pace delta vs L1 (s)', font: { size: 12, color: 'rgba(255,255,255,0.4)' } },
+                  gridcolor: 'rgba(255,255,255,0.06)',
+                  zerolinecolor: 'rgba(255,255,255,0.06)',
+                  tickfont: { size: 11 },
+                  fixedrange: true,
+                },
+                legend: {
+                  orientation: 'h', y: 1.18, x: 0.5, xanchor: 'center',
+                  font: { size: 12, color: 'rgba(255,255,255,0.55)' },
+                  bgcolor: 'rgba(0,0,0,0)',
+                },
+                showlegend: true,
+                hovermode: 'x unified',
+                uirevision: 'curve-static',
+                hoverlabel: {
+                  bgcolor: 'rgba(14,14,18,0.95)',
+                  bordercolor: 'rgba(255,255,255,0.15)',
+                  font: { size: 14, family: 'Barlow Condensed', color: '#f5f5f7' },
+                },
+                annotations: best.pit_laps.map((pitLap) => ({
+                  x: pitLap, y: 1, yref: 'paper' as const,
+                  text: `PIT L${pitLap}`,
+                  showarrow: false,
+                  font: { size: 12, color: 'rgba(255,255,255,0.65)', family: 'Barlow Condensed' },
+                  yanchor: 'bottom' as const,
+                })),
+              }}
+              config={{ displayModeBar: false, responsive: true }}
+              style={{ width: '100%', height: '100%' }}
+              useResizeHandler
+            />
+          ) : (
+            <div className="deg-chart-empty" style={{ fontSize: '0.85rem' }}>
+              <span>Per-lap predictions available when backend is running</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

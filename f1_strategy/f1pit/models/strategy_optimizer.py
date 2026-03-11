@@ -17,7 +17,6 @@ from pathlib import Path
 from typing import Any
 
 import joblib
-import numpy as np
 import pandas as pd
 
 from f1pit.config import PATHS, RANDOM_SEED
@@ -30,6 +29,28 @@ LOGGER = get_logger(__name__)
 EXPECTED_TYRE_LIFE = {"SOFT": 18, "MEDIUM": 28, "HARD": 40}
 DRY_COMPOUNDS = ["SOFT", "MEDIUM", "HARD"]
 
+# ── Physics-based corrections ──────────────────────────────────────────
+# The ML model confounds fuel burn-off with tyre degradation (trained on
+# filtered quick-laps where TyreLife correlates with lighter fuel load).
+# We correct by: (1) removing the model's flawed TyreLife sensitivity and
+# (2) applying known tyre degradation + fuel burn curves from Pirelli data.
+#
+# Fuel burn-off: ~1.7 kg/lap, ~0.035 s/lap/kg → ~0.06 s/lap faster
+FUEL_EFFECT_PER_LAP = -0.06  # seconds (negative = getting faster)
+#
+# Tyre degradation: base_rate per lap + accelerating component (cliff).
+# Total deg at tyre_life T = sum of (base + accel*(t-grace)) for t > grace.
+# This produces non-linear, accelerating degradation matching real F1 data.
+# Tuned so 2-stop strategies are competitive on high-deg circuits but
+# 1-stop is viable on low-deg circuits (matching real-world F1 outcomes).
+TYRE_DEG_BASE = {"SOFT": 0.10, "MEDIUM": 0.055, "HARD": 0.030}
+TYRE_DEG_ACCEL = {"SOFT": 0.008, "MEDIUM": 0.004, "HARD": 0.002}
+TYRE_DEG_GRACE = {"SOFT": 5, "MEDIUM": 8, "HARD": 14}
+#
+# Compound pace offset vs MEDIUM baseline (per lap, negative = faster):
+# Real F1 deltas: SOFT ~0.8-1.0s faster than MEDIUM, HARD ~0.5-0.7s slower
+COMPOUND_PACE_OFFSET = {"SOFT": -0.85, "MEDIUM": 0.0, "HARD": 0.55}
+
 
 @dataclass
 class StrategyResult:
@@ -40,6 +61,7 @@ class StrategyResult:
     stint_times: list[float]  # estimated time per stint
     pit_costs: list[float]  # estimated cost per pit stop
     warnings: list[str] = field(default_factory=list)
+    lap_times: list[dict] = field(default_factory=list)  # per-lap predicted times
 
 
 @dataclass
@@ -75,6 +97,9 @@ class OptimizationResult:
                 "pit_laps": self.best_strategy.pit_laps,
                 "total_time": round(self.best_strategy.total_time, 3),
                 "total_time_formatted": _format_time(self.best_strategy.total_time),
+                "stint_times": [round(t, 3) for t in self.best_strategy.stint_times],
+                "pit_costs": [round(c, 3) for c in self.best_strategy.pit_costs],
+                "lap_times": self.best_strategy.lap_times,
             }
 
         return {
@@ -120,6 +145,7 @@ class StrategyOptimizer:
         inlap_model: dict[str, Any],
         outlap_model: dict[str, Any],
         circuit_info: pd.DataFrame | None = None,
+        pit_cost_lookup: dict[str, float] | None = None,
     ):
         self.lap_model = lap_time_model["pipeline"]
         self.lap_features = lap_time_model["feature_cols"]
@@ -135,15 +161,167 @@ class StrategyOptimizer:
 
         self.circuit_info = circuit_info
 
-    def _get_circuit_length(self, gp: str) -> float:
-        """Get circuit length in km for LapTimePerKM → LapTime conversion."""
-        if self.circuit_info is not None and not self.circuit_info.empty:
+        # Per-circuit net pit cost from real data (median PitstopT from Pitstops.csv).
+        # Falls back to overall median (23.5s) if circuit not found.
+        self.pit_cost_lookup = pit_cost_lookup or {}
+        self._pit_cost_fallback = 23.5
+
+    def _get_circuit_row(self, gp: str) -> pd.Series | None:
+        """Get circuit info row for a GP."""
+        if self.circuit_info is None or self.circuit_info.empty:
+            return None
+        key = gp.lower().strip()
+        match = self.circuit_info[
+            self.circuit_info["GP"].str.lower().str.strip() == key
+        ]
+        if match.empty:
+            from f1pit.features.strategy_features import _normalize_gp
+            normalized = _normalize_gp(gp)
             match = self.circuit_info[
-                self.circuit_info["GP"].str.lower().str.strip() == gp.lower().strip()
+                self.circuit_info["GP"].str.lower().str.strip() == normalized
             ]
-            if not match.empty and "Length" in match.columns:
-                return float(match.iloc[0]["Length"])
-        return 5.0  # Default fallback
+        return match.iloc[0] if not match.empty else None
+
+    def _get_circuit_length(self, gp: str) -> float:
+        """Get circuit length in km."""
+        row = self._get_circuit_row(gp)
+        if row is not None and "Length" in row.index:
+            return float(row["Length"])
+        return 5.0
+
+    def _get_deg_factor(self, gp: str) -> float:
+        """Get circuit-specific degradation multiplier (0.4–1.4).
+
+        Based on TyreStress (1-5) and Abrasion (1-5) from CircuitInfo.
+        Low-stress circuits like Monaco get ~0.4x, high like Bahrain get ~1.3x.
+        """
+        if not hasattr(self, '_deg_factor_cache'):
+            self._deg_factor_cache = {}
+        if gp in self._deg_factor_cache:
+            return self._deg_factor_cache[gp]
+
+        row = self._get_circuit_row(gp)
+        if row is not None:
+            stress = float(row.get("TyreStress", 3))
+            abrasion = float(row.get("Abrasion", 3))
+            # Weighted blend: stress matters more than abrasion
+            raw = 0.6 * stress + 0.4 * abrasion  # range: 1.0 – 5.0
+            # Map to 0.4 – 1.4 multiplier (midpoint 3.0 → 1.0)
+            factor = 0.15 + raw * 0.25
+        else:
+            factor = 1.0
+
+        self._deg_factor_cache[gp] = factor
+        return factor
+
+    def _predict_lap_times(
+        self,
+        gp: str,
+        driver: str,
+        team: str,
+        total_laps: int,
+        compounds: list[str],
+        pit_laps: list[int],
+    ) -> list[dict]:
+        """Get per-lap predicted times using ML base pace + physics."""
+        circuit_length = self._get_circuit_length(gp)
+
+        if not hasattr(self, '_base_pace_cache'):
+            self._base_pace_cache = {}
+        cache_key = (gp, driver, team, total_laps)
+        if cache_key not in self._base_pace_cache:
+            self._base_pace_cache[cache_key] = self._get_base_pace(
+                gp, driver, team, total_laps, circuit_length,
+            )
+        base_pace = self._base_pace_cache[cache_key]
+        deg_factor = self._get_deg_factor(gp)
+
+        result: list[dict] = []
+        for i, compound in enumerate(compounds):
+            if i == 0:
+                start_lap = 1
+            else:
+                start_lap = pit_laps[i - 1] + 1
+            end_lap = pit_laps[i] if i < len(compounds) - 1 else total_laps
+
+            for j, lap_num in enumerate(range(start_lap, end_lap + 1)):
+                t = self._physics_lap_time(
+                    base_pace, compound, j + 1, lap_num, total_laps, deg_factor,
+                )
+                result.append({
+                    "lap": lap_num,
+                    "time": round(t, 3),
+                    "compound": compound,
+                    "stint": i + 1,
+                    "tyre_life": j + 1,
+                })
+
+        return result
+
+    def _get_base_pace(
+        self,
+        gp: str,
+        driver: str,
+        team: str,
+        total_laps: int,
+        circuit_length: float,
+    ) -> float:
+        """Get base lap time from ML model (fresh tyres, mid-race fuel)."""
+        # Use mid-race conditions with fresh tyres as the baseline
+        row = {
+            "GP": gp, "Driver": driver, "Team": team,
+            "Compound": "MEDIUM",  # Always use MEDIUM as baseline
+            "TyreLife": 5,  # Fresh-ish tyres (avoid outlier at TyreLife=1)
+            "RacePercentage": 0.5,  # Mid-race
+            "Position": 10, "Stint": 1, "LapNumber": total_laps // 2,
+        }
+        pred_df = pd.DataFrame([row])
+        feature_cols = [c for c in self.lap_features if c in pred_df.columns]
+        if not feature_cols:
+            return circuit_length * 18.0
+        try:
+            return float(self.lap_model.predict(pred_df[feature_cols])[0]) * circuit_length
+        except Exception:
+            return circuit_length * 18.0
+
+    def _physics_lap_time(
+        self,
+        base_pace: float,
+        compound: str,
+        tyre_life: int,
+        lap_number: int,
+        total_laps: int,
+        deg_factor: float = 1.0,
+    ) -> float:
+        """
+        Compute a single lap time using ML base pace + physics corrections.
+
+        Corrections applied:
+        1. Compound pace offset (SOFT faster, HARD slower)
+        2. Fuel burn-off (cars get lighter = faster over race)
+        3. Tyre degradation (tyres lose grip = slower, after grace period)
+        """
+        # Start from ML base pace
+        t = base_pace
+
+        # 1. Compound offset
+        t += COMPOUND_PACE_OFFSET.get(compound, 0.0)
+
+        # 2. Fuel effect: mid-race is the baseline (RacePercentage=0.5),
+        #    so adjust relative to that
+        race_pct = lap_number / total_laps
+        fuel_delta = (race_pct - 0.5) * total_laps * FUEL_EFFECT_PER_LAP
+        t += fuel_delta
+
+        # 3. Tyre degradation (non-linear: base + accelerating component)
+        grace = TYRE_DEG_GRACE.get(compound, 10)
+        base_deg = TYRE_DEG_BASE.get(compound, 0.06) * deg_factor
+        accel = TYRE_DEG_ACCEL.get(compound, 0.005) * deg_factor
+        if tyre_life > grace:
+            age = tyre_life - grace
+            t += base_deg * age + accel * age * age
+
+        return t
 
     def _estimate_stint_time(
         self,
@@ -153,88 +331,92 @@ class StrategyOptimizer:
         compound: str,
         start_lap: int,
         end_lap: int,
-        stint_number: int,
+        _stint_number: int,
         total_laps: int,
         circuit_length: float,
     ) -> float:
-        """Estimate total time for a stint by summing predicted lap times."""
+        """Estimate total time for a stint using ML base pace + physics.
+
+        Uses closed-form summation for speed (no per-lap Python loop).
+        """
         n_laps = end_lap - start_lap + 1
         if n_laps <= 0:
             return 0.0
 
-        # Create prediction dataframe
-        rows = []
-        for i, lap_num in enumerate(range(start_lap, end_lap + 1)):
-            rows.append({
-                "GP": gp,
-                "Driver": driver,
-                "Team": team,
-                "Compound": compound,
-                "TyreLife": i + 1,
-                "RacePercentage": lap_num / total_laps,
-                "Position": 10,  # Assume mid-field (no traffic model)
-                "Stint": stint_number,
-                "LapNumber": lap_num,
-            })
-        pred_df = pd.DataFrame(rows)
+        # Cache base pace per call to avoid repeated ML predictions
+        if not hasattr(self, '_base_pace_cache'):
+            self._base_pace_cache = {}
 
-        # Filter to available features
-        feature_cols = [c for c in self.lap_features if c in pred_df.columns]
-        if not feature_cols:
-            # Fallback: rough estimate
-            return n_laps * circuit_length * 18.0  # ~18 sec/km rough average
+        cache_key = (gp, driver, team, total_laps)
+        if cache_key not in self._base_pace_cache:
+            self._base_pace_cache[cache_key] = self._get_base_pace(
+                gp, driver, team, total_laps, circuit_length,
+            )
+        base_pace = self._base_pace_cache[cache_key]
 
-        try:
-            pred_per_km = self.lap_model.predict(pred_df[feature_cols])
-            total_time = float(np.sum(pred_per_km * circuit_length))
-            return total_time
-        except Exception:
-            return n_laps * circuit_length * 18.0
+        # 1. Base pace + compound offset
+        compound_offset = COMPOUND_PACE_OFFSET.get(compound, 0.0)
+        total_time = n_laps * (base_pace + compound_offset)
 
-    def _estimate_pit_cost(
-        self,
-        gp: str,
-        compound_in: str,
-        compound_out: str,
-        tyre_life: int,
-        stint_in: int,
-    ) -> float:
+        # 2. Fuel effect: sum of (lap/total - 0.5) * total * fuel_rate
+        #    = fuel_rate * sum(lap - total/2) for lap in [start..end]
+        #    = fuel_rate * (n*mean_lap - n*total/2)
+        mean_lap = (start_lap + end_lap) / 2.0
+        total_time += FUEL_EFFECT_PER_LAP * n_laps * (mean_lap - total_laps / 2.0)
+
+        # 3. Tyre degradation: sum of (base*k + accel*k^2) for k = max(0, tl-grace)
+        #    Scaled by circuit-specific degradation factor
+        deg_factor = self._get_deg_factor(gp)
+        grace = TYRE_DEG_GRACE.get(compound, 10)
+        base_deg = TYRE_DEG_BASE.get(compound, 0.06) * deg_factor
+        accel_deg = TYRE_DEG_ACCEL.get(compound, 0.005) * deg_factor
+        if n_laps > grace:
+            n_deg = n_laps - grace
+            sum_k = n_deg * (n_deg + 1) // 2
+            sum_k2 = n_deg * (n_deg + 1) * (2 * n_deg + 1) / 6.0
+            total_time += base_deg * sum_k + accel_deg * sum_k2
+
+        return total_time
+
+    def _estimate_pit_cost(self, gp: str, **_kwargs: Any) -> float:
         """
-        Estimate full pit stop cost:
-        pit_cost = inlap_time + pitstop_time + outlap_time
+        Estimate net pit stop time loss (time lost vs staying on track).
+
+        Uses real per-circuit median pit stop times from Pitstops.csv (2019-2024,
+        ~4000 entries). Falls back to ML model prediction, then overall median.
+        In F1 the net pit cost is typically 20-25s depending on circuit.
         """
-        circuit_length = self._get_circuit_length(gp)
+        if not hasattr(self, '_pit_cost_cache'):
+            self._pit_cost_cache: dict[str, float] = {}
+        if gp in self._pit_cost_cache:
+            return self._pit_cost_cache[gp]
 
-        # Pitstop time (pit lane traverse)
-        try:
-            pit_df = pd.DataFrame([{"GP": gp}])
-            pit_cols = [c for c in self.pit_features if c in pit_df.columns]
-            pitstop_time = float(self.pit_model.predict(pit_df[pit_cols])[0])
-        except Exception:
-            pitstop_time = 25.0  # Default ~25 seconds
+        # 1. Try real data lookup (per-circuit median PitstopT)
+        key = gp.lower().strip()
+        cost = None
+        for lookup_gp, lookup_cost in self.pit_cost_lookup.items():
+            if lookup_gp.lower().strip() == key:
+                cost = lookup_cost
+                break
 
-        # Inlap time
-        try:
-            in_df = pd.DataFrame([{
-                "GP": gp, "Compound": compound_in,
-                "TyreLife": tyre_life, "Stint": stint_in,
-            }])
-            in_cols = [c for c in self.inlap_features if c in in_df.columns]
-            inlap_per_km = float(self.inlap_model.predict(in_df[in_cols])[0])
-            inlap_time = inlap_per_km * circuit_length
-        except Exception:
-            inlap_time = circuit_length * 19.0
+        # 2. Fuzzy match on partial GP name
+        if cost is None:
+            for lookup_gp, lookup_cost in self.pit_cost_lookup.items():
+                if key in lookup_gp.lower() or lookup_gp.lower() in key:
+                    cost = lookup_cost
+                    break
 
-        # Outlap time
-        try:
-            out_df = pd.DataFrame([{"GP": gp, "Compound": compound_out}])
-            out_cols = [c for c in self.outlap_features if c in out_df.columns]
-            outlap_per_km = float(self.outlap_model.predict(out_df[out_cols])[0])
-            outlap_time = outlap_per_km * circuit_length
-        except Exception:
-            outlap_time = circuit_length * 19.5
+        # 3. Fall back to ML pitstop model
+        if cost is None:
+            try:
+                pit_df = pd.DataFrame([{"GP": gp}])
+                pit_cols = [c for c in self.pit_features if c in pit_df.columns]
+                cost = float(self.pit_model.predict(pit_df[pit_cols])[0])
+            except Exception:
+                cost = self._pit_cost_fallback
 
-        return inlap_time + pitstop_time + outlap_time
+        self._pit_cost_cache[gp] = cost
+        return cost
 
     def _enumerate_strategies(
         self,
@@ -249,71 +431,71 @@ class StrategyOptimizer:
         - Must use ≥2 different compounds
         - Each stint ≥ MIN_STINT_LAPS
         - 1-3 stops
-        """
-        strategies = []
 
-        for n_stops in range(1, min(max_stops, 3) + 1):
-            self._enumerate_recursive(
-                total_laps=total_laps,
-                n_stops=n_stops,
-                current_compounds=[],
-                current_pit_laps=[],
-                current_lap=1,
-                stop_idx=0,
-                strategies=strategies,
-            )
+        For 1-stop: sweeps every pit lap for each compound pair.
+        For 2-stop: uses even-split timing ± window for each compound triple.
+        For 3-stop: uses even-split timing ± window for each compound quad.
+        """
+        strategies: list[tuple[list[str], list[int]]] = []
+        min_s = self.MIN_STINT_LAPS
+
+        # ── 1-STOP: sweep all pit laps for each compound pair ──
+        for c1 in DRY_COMPOUNDS:
+            for c2 in DRY_COMPOUNDS:
+                if c1 == c2:
+                    continue
+                for pit in range(min_s, total_laps - min_s + 1):
+                    strategies.append(([c1, c2], [pit]))
+
+        if max_stops < 2:
+            return strategies
+
+        # ── 2-STOP: for each compound triple, sweep pit laps ──
+        # Use even split as center, explore ±offset with step
+        even2 = total_laps // 3
+        step2 = 4
+        offset2 = 8
+        for c1 in DRY_COMPOUNDS:
+            for c2 in DRY_COMPOUNDS:
+                for c3 in DRY_COMPOUNDS:
+                    if len({c1, c2, c3}) < 2:
+                        continue
+                    # Compute sensible pit windows for each compound
+                    life1 = min(EXPECTED_TYRE_LIFE.get(c1, 25), even2 + offset2)
+                    life2 = min(EXPECTED_TYRE_LIFE.get(c2, 25), even2 + offset2)
+                    p1_lo = max(min_s, even2 - offset2)
+                    p1_hi = min(total_laps - 2 * min_s, min_s + life1, even2 + offset2)
+                    for p1 in range(p1_lo, p1_hi + 1, step2):
+                        p2_center = p1 + even2
+                        p2_lo = max(p1 + min_s, p2_center - offset2)
+                        p2_hi = min(total_laps - min_s, p1 + life2 + min_s, p2_center + offset2)
+                        for p2 in range(p2_lo, p2_hi + 1, step2):
+                            if total_laps - p2 < min_s:
+                                continue
+                            strategies.append(([c1, c2, c3], [p1, p2]))
+
+        if max_stops < 3:
+            return strategies
+
+        # ── 3-STOP: coarser grid around even split ──
+        even3 = total_laps // 4
+        step3 = 7
+        offset3 = 5
+        for c1 in DRY_COMPOUNDS:
+            for c2 in DRY_COMPOUNDS:
+                for c3 in DRY_COMPOUNDS:
+                    for c4 in DRY_COMPOUNDS:
+                        if len({c1, c2, c3, c4}) < 2:
+                            continue
+                        for p1 in range(max(min_s, even3 - offset3),
+                                        min(total_laps - 3 * min_s, even3 + offset3) + 1, step3):
+                            for p2 in range(max(p1 + min_s, 2 * even3 - offset3),
+                                            min(total_laps - 2 * min_s, 2 * even3 + offset3) + 1, step3):
+                                for p3 in range(max(p2 + min_s, 3 * even3 - offset3),
+                                                min(total_laps - min_s, 3 * even3 + offset3) + 1, step3):
+                                    strategies.append(([c1, c2, c3, c4], [p1, p2, p3]))
 
         return strategies
-
-    def _enumerate_recursive(
-        self,
-        total_laps: int,
-        n_stops: int,
-        current_compounds: list[str],
-        current_pit_laps: list[int],
-        current_lap: int,
-        stop_idx: int,
-        strategies: list[tuple[list[str], list[int]]],
-    ) -> None:
-        """Recursively enumerate strategy combinations."""
-        if stop_idx == n_stops:
-            # Final stint – add each compound option
-            for compound in DRY_COMPOUNDS:
-                final_compounds = current_compounds + [compound]
-                # Check constraint: must use ≥2 different compounds
-                if len(set(final_compounds)) < 2:
-                    continue
-                # Check final stint is long enough
-                final_stint_laps = total_laps - current_lap + 1
-                if final_stint_laps < self.MIN_STINT_LAPS:
-                    continue
-                strategies.append((final_compounds.copy(), current_pit_laps.copy()))
-            return
-
-        # For this stop, try each compound and pit lap
-        remaining_stops = n_stops - stop_idx - 1
-        min_pit_lap = current_lap + self.MIN_STINT_LAPS
-        # Leave room for remaining stints
-        max_pit_lap = total_laps - (remaining_stops + 1) * self.MIN_STINT_LAPS
-
-        for compound in DRY_COMPOUNDS:
-            # Use expected tyre life as the default pit lap
-            expected_life = EXPECTED_TYRE_LIFE.get(compound, 25)
-            pit_lap = min(current_lap + expected_life, max_pit_lap)
-            pit_lap = max(pit_lap, min_pit_lap)
-
-            if pit_lap > max_pit_lap or pit_lap < min_pit_lap:
-                continue
-
-            self._enumerate_recursive(
-                total_laps=total_laps,
-                n_stops=n_stops,
-                current_compounds=current_compounds + [compound],
-                current_pit_laps=current_pit_laps + [int(pit_lap)],
-                current_lap=int(pit_lap) + 1,
-                stop_idx=stop_idx + 1,
-                strategies=strategies,
-            )
 
     def optimize_deterministic(
         self,
@@ -340,6 +522,12 @@ class StrategyOptimizer:
         # Sort by total time
         results.sort(key=lambda r: r.total_time)
         best = results[0] if results else None
+
+        # Populate per-lap predictions for the best strategy
+        if best:
+            best.lap_times = self._predict_lap_times(
+                gp, driver, team, total_laps, best.strategy, best.pit_laps,
+            )
 
         return OptimizationResult(
             circuit=gp, driver=driver, team=team,
@@ -413,6 +601,12 @@ class StrategyOptimizer:
         unique_results.sort(key=lambda r: r.total_time)
         best = unique_results[0] if unique_results else None
 
+        # Populate per-lap predictions for the best strategy
+        if best:
+            best.lap_times = self._predict_lap_times(
+                gp, driver, team, total_laps, best.strategy, best.pit_laps,
+            )
+
         return OptimizationResult(
             circuit=gp, driver=driver, team=team,
             total_laps=total_laps, mode="window",
@@ -434,12 +628,18 @@ class StrategyOptimizer:
         pit_costs = []
         warnings = []
 
-        # Build stint boundaries
-        boundaries = [1] + [p + 1 for p in pit_laps] + [total_laps]
-
+        # Build stint boundaries: pit on lap P means stint ends on P,
+        # next stint starts on P+1.  Total laps must sum to total_laps.
         for i in range(len(compounds)):
-            start_lap = boundaries[i]
-            end_lap = boundaries[i + 1] if i < len(compounds) - 1 else total_laps
+            if i == 0:
+                start_lap = 1
+            else:
+                start_lap = pit_laps[i - 1] + 1
+
+            if i < len(compounds) - 1:
+                end_lap = pit_laps[i]
+            else:
+                end_lap = total_laps
             compound = compounds[i]
 
             # Check if tyre life is exceeded
@@ -460,11 +660,7 @@ class StrategyOptimizer:
 
             # Estimate pit stop cost (if not the last stint)
             if i < len(compounds) - 1:
-                next_compound = compounds[i + 1]
-                pit_cost = self._estimate_pit_cost(
-                    gp, compound, next_compound,
-                    tyre_life=stint_laps, stint_in=i + 1,
-                )
+                pit_cost = self._estimate_pit_cost(gp)
                 pit_costs.append(pit_cost)
 
         total_time = sum(stint_times) + sum(pit_costs)
@@ -635,12 +831,37 @@ class StrategyOptimizer:
         results.sort(key=lambda r: r.total_time)
         best = results[0] if results else None
 
+        # Populate per-lap predictions for the best strategy
+        if best:
+            best.lap_times = self._predict_lap_times(
+                gp, driver, team, total_laps, best.strategy, best.pit_laps,
+            )
+
         return OptimizationResult(
             circuit=gp, driver=driver, team=team,
             total_laps=total_laps,
             mode="safety_car_reopt" if safety_car else "mid_race_reopt",
             strategies=results, best_strategy=best,
         )
+
+
+def _build_pit_cost_lookup(data_processed: Path) -> dict[str, float]:
+    """Build per-circuit net pit cost from real Pitstops.csv data.
+
+    Uses median PitstopT per GP (filtered to <60s to exclude red flags).
+    Returns {GP_name: median_pit_cost_seconds}.
+    """
+    pitstops_path = data_processed / "Pitstops.csv"
+    if not pitstops_path.exists():
+        LOGGER.warning("Pitstops.csv not found at %s, using fallback pit costs", pitstops_path)
+        return {}
+    try:
+        df = pd.read_csv(pitstops_path)
+        clean = df[df["PitstopT"] < 60]  # exclude red flags / extreme outliers
+        return clean.groupby("GP")["PitstopT"].median().to_dict()
+    except Exception as e:
+        LOGGER.warning("Failed to load Pitstops.csv: %s", e)
+        return {}
 
 
 def load_optimizer(model_dir: Path, circuit_info_path: Path | None = None) -> StrategyOptimizer:
@@ -656,12 +877,17 @@ def load_optimizer(model_dir: Path, circuit_info_path: Path | None = None) -> St
     if circuit_info_path and circuit_info_path.exists():
         circuit_info = pd.read_csv(circuit_info_path, index_col=0)
 
+    # Build per-circuit pit cost from real data
+    data_processed = PATHS.data_processed
+    pit_cost_lookup = _build_pit_cost_lookup(data_processed)
+
     return StrategyOptimizer(
         lap_time_model=models["lap_time"],
         pitstop_model=models["pitstop"],
         inlap_model=models["inlap"],
         outlap_model=models["outlap"],
         circuit_info=circuit_info,
+        pit_cost_lookup=pit_cost_lookup,
     )
 
 

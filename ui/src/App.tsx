@@ -4,16 +4,20 @@ import DegradationChart from './components/DegradationChart';
 import InfoTip from './components/InfoTip';
 import TrackMap from './components/TrackMap';
 import {
+  getOptimalStrategy,
   getPredictions,
   getTelemetry,
   listDrivers,
   listLaps,
   listTracks,
+  defaultLapCount,
   type Compound,
   type Prediction,
+  type StrategyResult,
   type TelemetryPoint,
   type Track,
   type TrackCondition,
+  COMPOUND_COLORS,
 } from './data/api';
 
 /* ── Animated number hook ─────────────────────────────────────── */
@@ -40,6 +44,10 @@ function useAnimatedValue(target: number, duration = 500): number {
   return current;
 }
 
+function formatCompound(comp: string): string {
+  return comp.charAt(0).toUpperCase() + comp.slice(1).toLowerCase();
+}
+
 export default function App() {
   const MODEL_COMPOUND: Compound = 'medium';
   const MODEL_CONDITION: TrackCondition = 'dry';
@@ -53,6 +61,7 @@ export default function App() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const [prediction, setPrediction] = useState<Prediction | null>(null);
+  const [strategyData, setStrategyData] = useState<StrategyResult | null>(null);
   const [telemetry, setTelemetry] = useState<TelemetryPoint[]>([]);
   const [baselineTelemetry, setBaselineTelemetry] = useState<TelemetryPoint[]>([]);
   const [loading, setLoading] = useState(false);
@@ -106,6 +115,22 @@ export default function App() {
       .catch((e) => { if (alive) setError(e instanceof Error ? e.message : 'Failed to load laps'); });
     return () => { alive = false; };
   }, [track, driver]);
+
+  // Fetch strategy when track changes (pre-race prediction, not lap-dependent)
+  useEffect(() => {
+    if (!track) return;
+    let alive = true;
+    const totalLaps = defaultLapCount(track);
+    getOptimalStrategy(track, totalLaps)
+      .then((result) => {
+        if (!alive) return;
+        setStrategyData(result);
+      })
+      .catch(() => {
+        if (alive) setStrategyData(null);
+      });
+    return () => { alive = false; };
+  }, [track]);
 
   useEffect(() => {
     if (!track || !driver || !lap) return;
@@ -163,13 +188,32 @@ export default function App() {
   const maxLap = laps[laps.length - 1] ?? 1;
   const minLap = laps[0] ?? 1;
 
+  // Derive strategy info from strategyData (backend ML) for the bottom strip
+  const best = strategyData?.best_strategy ?? null;
+  const stintInfo = best ? best.strategy.map((comp, i) => {
+    const startLap = i === 0 ? 1 : best.pit_laps[i - 1] + 1;
+    const endLap = i < best.pit_laps.length ? best.pit_laps[i] : (strategyData?.total_laps ?? maxLap);
+    return { compound: comp, laps: endLap - startLap + 1 };
+  }) : null;
+
+  // Determine which stint the current lap is in
+  const currentStint = best ? (() => {
+    for (let i = 0; i < best.pit_laps.length; i++) {
+      if (lap <= best.pit_laps[i]) return i + 1;
+    }
+    return best.strategy.length;
+  })() : 1;
+
+  const stintLapNum = best
+    ? (currentStint === 1 ? lap : lap - best.pit_laps[currentStint - 2])
+    : lap;
+
   /* ── Render ─────────────────────────────────────────────────── */
   return (
     <div className="f1-app">
 
-      {/* ═══════════════════════════════════════════════════════════
+      {/* ═════════════════════════════════════��═════════════════════
           FULL-BLEED SCENE SHELL
-          3D canvas + gradient scrims + overlay controls
           ═══════════════════════════════════════════════════════════ */}
       <div className="scene-shell">
 
@@ -216,10 +260,8 @@ export default function App() {
           <section className="scene-glass-card scene-chart-card">
             <div className="scene-card-body">
               <DegradationChart
-                currentLap={lap}
                 totalLaps={maxLap}
-                prediction={prediction}
-                compound={prediction?.strategy_stint1_compound ?? MODEL_COMPOUND}
+                strategyData={strategyData}
               />
             </div>
           </section>
@@ -230,7 +272,7 @@ export default function App() {
                 <InfoTip text="Shows predicted braking and acceleration zones around the circuit for the current lap. As tyres degrade, braking zones grow longer (thicker red lines) because the driver must brake earlier with less grip. Acceleration zones shrink (thinner green lines) as traction reduces. Compare against the faint fresh-tyre braking outline to see the degradation effect. Hover over any zone for details.">
                   <h2 className="scene-card-title">Braking &amp; Acceleration Map</h2>
                 </InfoTip>
-                <p className="scene-card-sub">Lap {lap} · Stint {lap > (prediction?.strategy_optimal_pit_lap ?? Math.floor(maxLap / 2)) ? 2 : 1} · Stint lap {lap > (prediction?.strategy_optimal_pit_lap ?? Math.floor(maxLap / 2)) ? lap - (prediction?.strategy_optimal_pit_lap ?? Math.floor(maxLap / 2)) : lap}</p>
+                <p className="scene-card-sub">Lap {lap} · Stint {currentStint} · Stint lap {stintLapNum}</p>
               </div>
               <div className="track-feature-legend">
                 <span className="feature-legend-item">
@@ -270,7 +312,7 @@ export default function App() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════════
-          BOTTOM TELEMETRY STRIP — one row, all metrics, no cards
+          BOTTOM TELEMETRY STRIP
           ═══════════════════════════════════════════════════════════ */}
       <div className="telem-strip">
         <div className="telem-item">
@@ -284,30 +326,51 @@ export default function App() {
         </div>
 
         <div className="telem-item highlight">
-          <InfoTip text="The model-recommended lap to pit. Computed by evaluating every possible pit lap across all legal 2-compound combinations and selecting the one that minimises total race time (stint pace + degradation + 24.5s pit penalty).">
-            <div className="telem-label">Optimal Pit</div>
+          <InfoTip text="The model-recommended pit lap(s). Computed by the ML strategy optimizer which evaluates all valid compound combinations (1-stop, 2-stop, 3-stop) and selects the one that minimises total predicted race time.">
+            <div className="telem-label">Optimal Pit{best && best.pit_laps.length > 1 ? 's' : ''}</div>
           </InfoTip>
-          <div className={`telem-value${!prediction ? ' loading' : ''}`}>
-            {prediction ? `Lap ${prediction.strategy_optimal_pit_lap}` : '—'}
-            {prediction && <span className="telem-unit">({prediction.strategy_stint1_laps}+{prediction.strategy_stint2_laps})</span>}
+          <div className={`telem-value${!best && !prediction ? ' loading' : ''}`}>
+            {best ? (
+              <>
+                {best.pit_laps.map((l) => `L${l}`).join(', ')}
+                <span className="telem-unit">({best.pit_laps.length}-stop)</span>
+              </>
+            ) : prediction ? (
+              <>
+                Lap {prediction.strategy_optimal_pit_lap}
+                <span className="telem-unit">({prediction.strategy_stint1_laps}+{prediction.strategy_stint2_laps})</span>
+              </>
+            ) : '—'}
           </div>
         </div>
 
         <div className="telem-item">
-          <InfoTip text="Total race time saved by pitting optimally vs. running a no-stop strategy on the same compound. Accounts for cumulative degradation over the full race distance minus the pit stop time cost.">
-            <div className="telem-label">Time Saved</div>
+          <InfoTip text="Total predicted race time for the optimal strategy. Computed by the ML model summing predicted lap times for each stint plus pit stop costs.">
+            <div className="telem-label">Race Time</div>
           </InfoTip>
-          <div className={`telem-value${!prediction ? ' loading' : ''}`}>
-            {prediction ? prediction.strategy_time_saved_fmt : '—'}
+          <div className={`telem-value${!best && !prediction ? ' loading' : ''}`}>
+            {best ? best.total_time_formatted : prediction?.strategy_time_saved_fmt ?? '—'}
           </div>
         </div>
 
         <div className="telem-item strategy-visual">
-          <InfoTip text="Visual representation of the optimal race strategy. The model tests all valid compound pairs (must use at least 2 different dry compounds per F1 rules) and picks the fastest split. Bar widths show stint lengths proportionally.">
+          <InfoTip text="Visual representation of the optimal race strategy from ML model predictions. Supports 1-stop, 2-stop, and 3-stop strategies. Bar widths show stint lengths proportionally.">
             <div className="telem-label">Race Strategy</div>
           </InfoTip>
-          <div className={`strategy-bar${!prediction ? ' loading' : ''}`}>
-            {prediction ? (
+          <div className={`strategy-bar${!best && !prediction ? ' loading' : ''}`}>
+            {stintInfo ? (
+              stintInfo.map((stint, i) => (
+                <div
+                  key={i}
+                  className={`strat-stint bg-${stint.compound.toLowerCase()}`}
+                  style={{
+                    flex: stint.laps,
+                    background: COMPOUND_COLORS[stint.compound] ?? COMPOUND_COLORS[stint.compound.toLowerCase()] ?? '#888',
+                  }}
+                  title={`${formatCompound(stint.compound)} (${stint.laps} laps)`}
+                ></div>
+              ))
+            ) : prediction ? (
               <>
                 <div
                   className={`strat-stint bg-${prediction.strategy_stint1_compound}`}
@@ -323,7 +386,14 @@ export default function App() {
             ) : <div className="strat-stint empty"></div>}
           </div>
           <div className="strategy-labels">
-            {prediction ? (
+            {stintInfo ? (
+              stintInfo.map((stint, i) => (
+                <span key={i}>
+                  {i > 0 && <span style={{ margin: '0 2px' }}>→</span>}
+                  {formatCompound(stint.compound).toUpperCase()}
+                </span>
+              ))
+            ) : prediction ? (
               <>
                 <span>{prediction.strategy_stint1_compound?.toUpperCase()}</span>
                 <span>→</span>
