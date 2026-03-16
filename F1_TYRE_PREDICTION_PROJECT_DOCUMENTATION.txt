@@ -1,0 +1,1448 @@
+================================================================================
+              F1 TYRE PREDICTION & RACE STRATEGY OPTIMISER
+                    FULL PROJECT DOCUMENTATION
+================================================================================
+
+Last updated: March 2026
+Project path: /f1_tyre_prediction/
+
+================================================================================
+TABLE OF CONTENTS
+================================================================================
+
+  1. PROJECT OVERVIEW
+  2. DATA SOURCES & COLLECTION
+  3. DATA CLEANING & FILTERING
+  4. PROCESSED DATASETS & SCHEMAS
+  5. FEATURE ENGINEERING
+  6. MODELS — STRATEGY SUITE (5 MODELS)
+  7. MODEL — PIT-WINDOW CLASSIFIER
+  8. STRATEGY OPTIMISER ENGINE (Physics + ML Hybrid)
+  9. MODEL EVALUATION & SCORES
+  10. BACKEND API (FastAPI)
+  11. FRONTEND VISUALISATIONS (React + Three.js + Plotly)
+  12. USER FLOW & EXPERIENCE
+  13. KNOWN LIMITATIONS & FUTURE WORK
+  14. FILE STRUCTURE REFERENCE
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+This project is an end-to-end F1 tyre strategy prediction system. It combines
+machine learning models trained on ~50,000 real F1 race laps (2019-2024) with
+physics-based tyre degradation modelling to:
+
+  - Predict optimal pit stop strategies for any circuit/driver/team combination
+  - Visualise per-lap tyre degradation and pace evolution
+  - Show real-time 3D tyre wear on an F1 car model
+  - Display braking and acceleration zone changes as tyres degrade
+  - Compare the top 3 strategies (1-stop, 2-stop, 3-stop) with time deltas
+  - Re-optimise strategy mid-race when safety cars deploy
+
+The system has two main components:
+
+  BACKEND:  Python / FastAPI / scikit-learn
+            - 5 ML models for lap time, pit stop, in/out-lap, and safety car
+            - Physics-corrected strategy optimiser
+            - REST API serving predictions
+
+  FRONTEND: React 18 / TypeScript / Plotly.js / Three.js
+            - 3D car viewer with per-tyre wear indicators
+            - Interactive track map with braking/acceleration zones
+            - Strategy comparison charts
+            - Real-time telemetry strip
+
+
+================================================================================
+2. DATA SOURCES & COLLECTION
+================================================================================
+
+The project uses four data sources covering the 2019-2024 F1 seasons.
+
+------------------------------------------------------------------------------
+2.1  FastF1 Library (Primary Source)
+------------------------------------------------------------------------------
+
+Source:     FastF1 Python library (https://api.fastf1.dev/)
+Script:     f1_strategy/f1pit/data/fetch_fastf1.py (507 lines)
+Cache:      data/raw/fastf1_cache/
+
+Data extracted per race session:
+  - Lap-by-lap timing data (lap number, lap time, sector times)
+  - Tyre compound used per lap (SOFT, MEDIUM, HARD)
+  - Tyre life (laps completed on current set)
+  - Pit stop timings (in-time, out-time, duration)
+  - Track status per lap (Green, Yellow, Safety Car, VSC)
+  - Driver position per lap
+  - Stint number
+
+The fetch script processes every race from 2019 to 2024 (up to Singapore GP
+2024), extracting laps from the main race session only (not qualifying/sprint).
+
+Wet races are automatically excluded — if any lap in a session uses WET or
+INTERMEDIATE compounds, the entire session is skipped.
+
+------------------------------------------------------------------------------
+2.2  Kaggle F1 Dataset (Secondary Source)
+------------------------------------------------------------------------------
+
+Dataset:    rohanrao/formula-1-world-championship-1950-2020
+Script:     f1_strategy/f1pit/data/download_kaggle.py
+Storage:    data/raw/kaggle_f1/
+
+Files downloaded:
+  - lap_times.csv       Historical lap timing data
+  - pit_stops.csv       Historical pit stop records
+  - races.csv           Race metadata (dates, circuits, rounds)
+  - results.csv         Race results and final positions
+  - constructors.csv    Team/constructor information
+  - drivers.csv         Driver information
+  - circuits.csv        Circuit coordinates and physical properties
+
+This data is used primarily for the pit-window classification model, which
+requires broader historical context (race IDs, constructor IDs, grid positions).
+
+------------------------------------------------------------------------------
+2.3  Ergast API (Supplementary Source)
+------------------------------------------------------------------------------
+
+Endpoint:   https://api.jolpi.ca/ergast/f1/{year}.json
+Script:     f1_strategy/f1pit/data/fetch_ergast.py
+Cache:      data/raw/ergast_cache/
+
+Provides race schedule metadata: round numbers, circuit coordinates (lat/long),
+race dates. Used to enrich the Kaggle dataset with precise geographic data.
+
+------------------------------------------------------------------------------
+2.4  Pirelli Circuit Information (Manual/Static)
+------------------------------------------------------------------------------
+
+File:       data/CircuitInfo.csv (32 circuits)
+Source:     Pirelli official tyre compound specifications
+
+Contains per-circuit physical characteristics rated on 1-5 scales:
+  - Length (km)         Circuit lap distance
+  - Abrasion            Tyre wear severity
+  - Traction            Grip demands
+  - Braking             Braking intensity
+  - TrackEvo            Track evolution rate (rubber build-up)
+  - Grip                Overall grip level
+  - Lateral             Lateral load demands
+  - Downforce           Aerodynamic downforce dependency
+  - TyreStress          Overall tyre stress factor
+
+These ratings drive the circuit-specific degradation multiplier in the
+strategy optimiser (see Section 8).
+
+
+================================================================================
+3. DATA CLEANING & FILTERING
+================================================================================
+
+Raw data goes through multiple cleaning stages before model training.
+
+------------------------------------------------------------------------------
+3.1  Wet Race Exclusion
+------------------------------------------------------------------------------
+
+Location:   fetch_fastf1.py, lines 48-53
+
+All sessions where any lap uses WET or INTERMEDIATE compounds are excluded
+entirely. The models are trained exclusively on dry-condition races. This is a
+deliberate scope limitation — wet strategy is fundamentally different and would
+require separate modelling.
+
+Dry compounds: SOFT, MEDIUM, HARD
+Wet compounds: WET, INTERMEDIATE (excluded)
+
+------------------------------------------------------------------------------
+3.2  The 107% Rule
+------------------------------------------------------------------------------
+
+Location:   fetch_fastf1.py, lines 56-73
+
+For each race session, the fastest lap time is identified. Only laps within
+107% of that fastest time are retained:
+
+    threshold = fastest_lap_time * 1.07
+
+This removes:
+  - Formation laps
+  - Safety car laps (artificially slow)
+  - Laps affected by crashes, spins, or mechanical failures
+  - Severely off-pace drivers (backmarkers lapped multiple times)
+
+This reduces the dataset from ~93,500 total rows to ~50,000 "quick" laps.
+
+------------------------------------------------------------------------------
+3.3  Tyre Compound Standardisation
+------------------------------------------------------------------------------
+
+Location:   fetch_fastf1.py, lines 140-145
+
+Historical Pirelli compound names are mapped to modern equivalents:
+
+    ULTRASOFT, HYPERSOFT, SUPERSOFT  -->  SOFT
+    SUPERHARD                       -->  HARD
+    SOFT, MEDIUM, HARD              -->  unchanged
+
+This ensures consistency across the 2019-2024 period where Pirelli changed
+their naming convention.
+
+------------------------------------------------------------------------------
+3.4  Pit Stop Duration Filtering
+------------------------------------------------------------------------------
+
+Location:   strategy_features.py, lines 148-149
+
+Valid pit stop range: 10 to 60 seconds.
+
+Removes:
+  - Red flag stops (can be 100s+ or even 600s+)
+  - Drive-through penalties counted as pit stops
+  - Data recording errors
+  - Excessively fast times (timing errors below 10s)
+
+Result: 4,020 valid pit stop records from 2019-2024.
+
+------------------------------------------------------------------------------
+3.5  LapTimePerKM Outlier Removal
+------------------------------------------------------------------------------
+
+Location:   strategy_features.py, lines 129-133
+
+After computing LapTimePerKM (= LapTime / Circuit.Length), extreme outliers
+are removed using quantile-based filtering:
+
+    Keep only rows between 1st and 99th percentile of LapTimePerKM
+
+Applied separately to DryQuickLaps, Inlaps, and Outlaps datasets. This removes
+timing anomalies that would distort model training.
+
+------------------------------------------------------------------------------
+3.6  In-Lap / Out-Lap Separation
+------------------------------------------------------------------------------
+
+Location:   fetch_fastf1.py
+
+Laps are categorised into three groups:
+  1. Normal racing laps    --> DryQuickLaps.csv
+  2. In-laps (pit entry)   --> Inlaps.csv  (3,730 rows)
+  3. Out-laps (pit exit)   --> Outlaps.csv  (3,364 rows)
+
+In-laps are typically 3-8s slower than normal (braking for pit entry).
+Out-laps are typically 15-25s slower (cold tyres, pit exit merge, tyre warm-up).
+These are modelled separately because mixing them with normal laps would bias
+the lap time model.
+
+
+================================================================================
+4. PROCESSED DATASETS & SCHEMAS
+================================================================================
+
+All processed data lives in: data/processed/
+
+------------------------------------------------------------------------------
+4.1  DryQuickLaps.csv  (~50,000 rows, 23 columns)
+------------------------------------------------------------------------------
+
+PRIMARY DATASET for lap time regression model.
+
+Column              Type      Description
+------              ----      -----------
+Driver              str       Driver abbreviation (VER, HAM, NOR, etc.)
+Team                str       Team name (Red Bull Racing, Mercedes, etc.)
+LapNumber           float     Race lap number (1 to N)
+LapTime             float     Lap duration in seconds
+Stint               float     Stint number (1, 2, 3, ...)
+Compound            str       Tyre compound (SOFT, MEDIUM, HARD)
+TyreLife            float     Number of laps on current tyre set
+Position            float     Driver's track position during this lap
+Year                int       Season year (2019-2024)
+GP                  str       Grand Prix full name ("Bahrain Grand Prix")
+Laps                int       Total race laps for this GP
+RacePercentage      float     LapNumber / Laps  (0.0 to 1.0)
+GP_ci               str       GP name for circuit info merge
+Length              float     Circuit length in km
+Abrasion            float     Circuit abrasion rating (1-5)
+Traction            float     Circuit traction rating (1-5)
+Braking             float     Circuit braking rating (1-5)
+TrackEvo            float     Circuit track evolution (1-5)
+Grip                float     Circuit grip rating (1-5)
+Lateral             float     Circuit lateral load (1-5)
+Downforce           float     Circuit downforce (1-5)
+TyreStress          float     Circuit tyre stress (1-5)
+LapTimePerKM        float     LapTime / Length (standardised pace)
+
+Notes:
+  - Filtered by 107% rule (quick laps only)
+  - Excludes in-laps and out-laps
+  - Circuit characteristics merged from CircuitInfo.csv
+
+------------------------------------------------------------------------------
+4.2  Pitstops.csv  (4,020 rows, 5 columns)
+------------------------------------------------------------------------------
+
+Column              Type      Description
+------              ----      -----------
+GP                  str       Grand Prix name
+Circuit             str       Circuit name (same as GP)
+PitstopT            float     Pit stop duration in seconds (10-60s filtered)
+Driver              str       Driver code
+Year                int       Season year
+
+Used to derive per-circuit pit cost in the strategy optimiser. No made-up
+numbers — the median PitstopT per GP is used directly as the net pit cost.
+
+Per-circuit medians (selected):
+  Australia: 18.5s    Austria: 21.7s     Bahrain: 24.9s
+  Britain:   28.9s    Italy:   24.7s     Monaco:  24.3s
+  Singapore: 29.7s    Spain:   22.4s     Overall: 23.5s
+
+------------------------------------------------------------------------------
+4.3  Inlaps.csv  (3,730 rows) / Outlaps.csv  (3,364 rows)
+------------------------------------------------------------------------------
+
+Same schema as DryQuickLaps.csv.
+
+In-laps: laps where the driver enters the pit lane (slower due to pit approach)
+Out-laps: laps where the driver exits the pit lane (slower due to cold tyres)
+
+Used to train the inlap and outlap regression models, which predict the
+additional time cost of these transitional laps.
+
+------------------------------------------------------------------------------
+4.4  Stints.csv  (6,051 rows, 5 columns)
+------------------------------------------------------------------------------
+
+Column              Type      Description
+------              ----      -----------
+Driver              str       Driver code
+Stint               int       Stint number within the race
+Compound            str       Dominant compound in this stint
+GP                  str       Grand Prix name
+Year                int       Season
+StintLength         int       Number of laps in this stint
+
+Aggregated stint-level data. Used for strategy validation and analysis.
+
+------------------------------------------------------------------------------
+4.5  Strategyfull.csv  (6,051 rows, 9 columns)
+------------------------------------------------------------------------------
+
+Column              Type      Description
+------              ----      -----------
+Year                int       Season
+GP                  str       Grand Prix
+Driver              str       Driver code
+Strategy            str       Full compound sequence ("SOFT-HARD", "M-S-M")
+PitStops            int       Number of pit stops
+Stint               str       Stint identifier
+Compound            str       Compound for this stint
+StintLength         int       Laps on this compound
+StintNumber         int       Sequential stint number
+
+Real-world strategy distribution (2019-2024):
+  1-stop:  40.0%
+  2-stop:  37.5%
+  3-stop:  13.0%
+  4+ stop:  4.5%
+  0-stop:   5.0% (red-flag races, shortened races)
+
+Per-circuit examples:
+  Bahrain:  40% 3-stop (high degradation)
+  Monaco:   73% 1-stop (no overtaking)
+  Spain:    71% 2-stop (high TyreStress)
+  Austria:  25% 3-stop (short lap, high stress)
+
+------------------------------------------------------------------------------
+4.6  SafetyCars.csv  (6,668 rows) / SafetyCars2024.csv  (1,253 rows)
+------------------------------------------------------------------------------
+
+Column              Type      Description
+------              ----      -----------
+LapNumber           int       Race lap number
+GP                  str       Grand Prix
+Year                int       Season
+TrackStatus         str       Status code: "1"=clear, "2"=yellow, "4"=SC, "6"=VSC
+Label               str       Human-readable: AllClear, Yellow, SafetyCar, VSC
+
+SafetyCars2024.csv is the 2024 test set for the safety car probability model.
+
+------------------------------------------------------------------------------
+4.7  CircuitInfo.csv  (32 rows, 10 columns)
+------------------------------------------------------------------------------
+
+Contains Pirelli-rated physical characteristics for each circuit. See Section
+2.4 for column descriptions. Key circuits:
+
+  Circuit        Length  Abrasion  TyreStress  Deg Factor*
+  Bahrain        5.4     5         3           1.10
+  Monaco         3.3     1         1           0.40
+  Spain          4.7     4         5           1.30
+  Silverstone    5.9     3         4           1.15
+  Monza          5.8     2         2           0.65
+
+  *Deg Factor = 0.15 + (0.6*TyreStress + 0.4*Abrasion) * 0.25
+   Range: 0.40 (Monaco) to 1.40 (max theoretical)
+
+------------------------------------------------------------------------------
+4.8  Nlaps.csv  (112 rows, 3 columns)
+------------------------------------------------------------------------------
+
+Column              Type      Description
+------              ----      -----------
+GP                  str       Grand Prix name
+Year                int       Season
+Laps                int       Official total race laps
+
+Used to set total_laps for strategy optimisation per circuit.
+
+------------------------------------------------------------------------------
+4.9  lap_level.parquet  (~250,000 rows, 20+ columns)
+------------------------------------------------------------------------------
+
+Unified lap-level table built from Kaggle dataset (build_tables.py). Joins
+lap_times, pit_stops, races, results, circuits, drivers, and Ergast metadata.
+
+Key columns:
+  race_id, driver_id, lap_number, lap_time_seconds, lap_time_rank_in_lap,
+  lap_time_rank_pct, lap_field_size, pit_lap_flag, year, round, name,
+  circuit_id, country, constructor_id, grid, positionOrder
+
+Used exclusively for the pit-window classification model (Section 7).
+
+
+================================================================================
+5. FEATURE ENGINEERING
+================================================================================
+
+Features are engineered at two levels: lap-level (for all models) and
+stint-level (for strategy-specific features).
+
+------------------------------------------------------------------------------
+5.1  Lap-Level Features (Strategy Models)
+------------------------------------------------------------------------------
+
+Source:  f1_strategy/f1pit/features/strategy_features.py
+
+Feature             Formula / Source                  Used By
+-------             ----------------                  -------
+LapTimePerKM        LapTime / Circuit.Length           lap_time, inlap, outlap
+RacePercentage      LapNumber / TotalLaps              lap_time, inlap, outlap
+TyreLife            Laps on current tyre set (raw)     lap_time, inlap
+Position            Track position during lap (raw)    lap_time, inlap, outlap
+Stint               Stint number, 1-indexed (raw)      lap_time, inlap, outlap
+GP                  Grand Prix name (categorical)      All 5 models
+Driver              Driver code (categorical)          lap_time
+Team                Team name (categorical)            lap_time
+Compound            Tyre compound (categorical)        lap_time, inlap, outlap
+LapNumber           Lap number in race (raw)           safety_car
+
+LapTimePerKM is the primary target for regression models. It normalises lap
+times by circuit length so the model can generalise across circuits of
+different lengths (e.g., Monaco 3.3km vs Spa 7.0km).
+
+RacePercentage captures fuel load effects — cars start heavy (~110kg fuel)
+and get lighter (~0.06s/lap faster) as fuel burns off.
+
+------------------------------------------------------------------------------
+5.2  Pit-Window Features (Classification Model)
+------------------------------------------------------------------------------
+
+Source:  f1_strategy/f1pit/features/engineer.py
+
+All features computed using ONLY prior laps (no future data leakage).
+
+PACE TRAJECTORY FEATURES:
+  rolling_mean_lap_time_last_3     Average of prior 3 lap times
+  rolling_mean_lap_time_last_5     Average of prior 5 lap times
+  rolling_std_lap_time_last_5      Volatility of pace over last 5 laps
+  rolling_mean_slope_last_3        Trend in pace deterioration (positive = slowing)
+  lap_time_delta_prev_lap          Change from immediately prior lap
+  lap_time_delta_from_rolling_mean Deviation from rolling 3-lap average
+  lap_time_delta_from_personal_best Gap to best lap time in current stint
+
+STINT-BASED FEATURES:
+  stint_number                     Cumulative stint count
+  laps_since_last_pit              Laps into current stint
+  last_pit_lap                     Lap number of most recent pit stop
+  pit_count_so_far                 Number of pits completed (stint_number - 1)
+  best_lap_in_stint_so_far         Best lap time in current stint (prior only)
+
+RACE CONTEXT FEATURES:
+  lap_number_norm                  Normalised: lap_number / race_total_laps
+  laps_remaining                   race_total_laps - lap_number
+  laps_remaining_norm              Normalised remaining laps
+  lap_field_size                   Number of drivers on track this lap
+  lap_time_rank_in_lap             Absolute position rank on this lap
+  lap_time_rank_pct                Percentile rank (1.0 = slowest driver)
+
+LOCATION FEATURES:
+  lat, long                        Circuit coordinates
+  ergast_lat, ergast_long          Coordinates from Ergast API
+
+CATEGORICAL FEATURES:
+  year, circuit_id, country, ergast_country, constructor_id
+
+TARGET VARIABLES:
+  pit_soon                         Binary: will pit within next k=3 laps?
+  laps_to_pit                      Regression: laps until next pit (capped at 25)
+  next_pit_lap                     Lap number of next pit stop
+
+Leakage prevention is enforced in leakage_checks.py. Banned patterns include
+positionorder, points, and any direct target leakage.
+
+------------------------------------------------------------------------------
+5.3  Circuit-Derived Features (Strategy Optimiser)
+------------------------------------------------------------------------------
+
+Source:  strategy_optimizer.py, _get_deg_factor()
+
+The strategy optimiser derives a circuit-specific degradation multiplier
+from CircuitInfo.csv:
+
+  raw = 0.6 * TyreStress + 0.4 * Abrasion     (range: 1.0 to 5.0)
+  deg_factor = 0.15 + raw * 0.25                (range: 0.40 to 1.40)
+
+This multiplier scales tyre degradation rates so that:
+  - Low-stress circuits (Monaco: 0.40x) favour 1-stop strategies
+  - High-stress circuits (Spain: 1.30x) favour 2-3 stop strategies
+
+
+================================================================================
+6. MODELS — STRATEGY SUITE (5 MODELS)
+================================================================================
+
+Source:  f1_strategy/f1pit/models/strategy_models.py
+Artifacts: f1_strategy/artifacts/strategy_latest/
+
+All 5 models follow the same training framework:
+  - Train set: 2019-2023 seasons
+  - Test set:  2024 season (temporal holdout)
+  - Algorithm: Random Forest vs Gradient Boosting auto-selection
+  - Refit: After selection, best model is retrained on ALL data (2019-2024)
+  - Random seed: 42
+
+Preprocessing pipeline (identical for all models):
+  - Numeric features:  MedianImputer --> StandardScaler
+  - Categorical features: MostFrequentImputer --> OneHotEncoder
+  - Combined via ColumnTransformer
+
+------------------------------------------------------------------------------
+6.1  Lap Time Model (LapTimePerKM)
+------------------------------------------------------------------------------
+
+Task:           Regression
+Target:         LapTimePerKM (seconds per km)
+Source Data:    DryQuickLaps.csv (~50,000 rows)
+
+Numeric Features (4):
+  RacePercentage, TyreLife, Position, Stint
+
+Categorical Features (4):
+  GP, Driver, Team, Compound
+
+Algorithm:      Gradient Boosting (auto-selected over RF)
+Hyperparameters:
+  n_estimators=300, learning_rate=0.05, max_depth=5,
+  min_samples_leaf=10, subsample=0.8
+
+This is the CORE model. It provides base lap pace for the strategy optimiser.
+A single prediction (fresh MEDIUM tyres, mid-race fuel, position 10) is used
+as the baseline; physics corrections are applied on top (see Section 8).
+
+Known limitation: the model's TyreLife coefficient is INVERTED — it predicts
+tyres getting faster with age due to survivorship bias (slow/worn tyres pit
+early, only fast laps on old tyres remain in the dataset) and fuel load
+confounding (older tyres correlate with lighter cars). This is corrected in
+the strategy optimiser by using the model only for base pace and applying
+physics-based degradation separately.
+
+------------------------------------------------------------------------------
+6.2  Pit Stop Model (PitstopT)
+------------------------------------------------------------------------------
+
+Task:           Regression
+Target:         PitstopT (pit stop duration in seconds)
+Source Data:    PitstopsWithTeams.csv (4,020 rows, filtered 10-60s)
+
+Categorical Features (1):
+  GP (Grand Prix name)
+
+Algorithm:      Random Forest (auto-selected)
+Hyperparameters:
+  n_estimators=300, min_samples_leaf=5, max_depth=15
+
+This model predicts pit stop duration per circuit. However, it has been
+SUPERSEDED by direct real-data lookup from Pitstops.csv in the strategy
+optimiser. The ML model now serves only as a fallback when a circuit is
+not found in the historical data.
+
+The real data approach uses per-circuit median PitstopT:
+  - 34 circuits with real medians (18.5s to 31.2s)
+  - Overall median fallback: 23.5s
+  - No arbitrary overhead or escalating penalties
+
+------------------------------------------------------------------------------
+6.3  In-Lap Model
+------------------------------------------------------------------------------
+
+Task:           Regression
+Target:         LapTimePerKM (in-lap pace, typically 3-8s slower than normal)
+Source Data:    Inlaps.csv (3,730 rows)
+
+Numeric Features (4):
+  TyreLife, Stint, Position, RacePercentage
+
+Categorical Features (2):
+  GP, Compound
+
+Algorithm:      Gradient Boosting (auto-selected)
+Same hyperparameters as lap time model.
+
+Not currently used in the strategy optimiser (pit cost uses real data instead).
+Retained for potential future use in more detailed pit window modelling.
+
+------------------------------------------------------------------------------
+6.4  Out-Lap Model
+------------------------------------------------------------------------------
+
+Task:           Regression
+Target:         LapTimePerKM (out-lap pace, typically 15-25s slower)
+Source Data:    Outlaps.csv (3,364 rows)
+
+Numeric Features (3):
+  Stint, Position, RacePercentage
+  (Note: TyreLife is NOT used — out-laps always have TyreLife=1)
+
+Categorical Features (2):
+  GP, Compound
+
+Algorithm:      Gradient Boosting (auto-selected)
+Same hyperparameters as lap time model.
+
+Not currently used in the strategy optimiser. Same rationale as in-lap model.
+
+------------------------------------------------------------------------------
+6.5  Safety Car Model
+------------------------------------------------------------------------------
+
+Task:           Binary Classification
+Target:         SafetyCar (1 if TrackStatus is SC or VSC, else 0)
+Source Data:    SafetyCars.csv (6,668 rows)
+
+Numeric Features (1):
+  LapNumber
+
+Categorical Features (1):
+  GP
+
+Algorithm:      Gradient Boosting (auto-selected)
+Hyperparameters:
+  n_estimators=300, learning_rate=0.05, max_depth=3,
+  min_samples_leaf=10, subsample=0.8
+
+This model performs poorly (ROC-AUC 0.499, essentially random). Safety car
+deployments are inherently unpredictable — they depend on crashes, weather
+changes, and debris that cannot be predicted from lap number and circuit alone.
+
+The model is retained in the API for informational probability overlays but
+does not influence strategy optimisation.
+
+
+================================================================================
+7. MODEL — PIT-WINDOW CLASSIFIER
+================================================================================
+
+Source:  f1_strategy/f1pit/models/train.py
+         f1_strategy/f1pit/features/engineer.py
+
+This is a separate model from the strategy suite. It predicts whether a
+driver SHOULD pit within the next k=3 laps.
+
+------------------------------------------------------------------------------
+7.1  Task Definition
+------------------------------------------------------------------------------
+
+Binary classification:
+  pit_soon = 1  if the driver pits within the next 3 laps
+  pit_soon = 0  otherwise
+
+Positive rate: ~22.26% (imbalanced, but not extreme)
+
+------------------------------------------------------------------------------
+7.2  Data Source
+------------------------------------------------------------------------------
+
+lap_level.parquet (~8,462 rows after filtering)
+
+Built from Kaggle + Ergast data, with extensive feature engineering applied
+(see Section 5.2). This is a DIFFERENT data pipeline from the strategy models.
+
+------------------------------------------------------------------------------
+7.3  Feature Set
+------------------------------------------------------------------------------
+
+25 numeric features + 5 categorical features = 30 total features
+(See Section 5.2 for the complete list)
+
+Key feature groups:
+  - Pace trajectory (rolling means, slopes, deltas) — detect tyre cliff
+  - Stint age (laps_since_last_pit, pit_count) — how old are the tyres
+  - Race progress (laps_remaining, lap_number_norm) — late-race pits are risky
+  - Position context (rank, field size) — front-runners pit at different times
+
+------------------------------------------------------------------------------
+7.4  Cross-Validation Strategy
+------------------------------------------------------------------------------
+
+Method:  GroupKFold (n_splits=5)
+Groups:  (race_id, driver_id) pairs
+
+This prevents data leakage: laps from the same driver in the same race never
+appear in both train and validation folds.
+
+Alternative: Season holdout mode (train on years < holdout_year, test on
+holdout_year). Used for final model evaluation.
+
+------------------------------------------------------------------------------
+7.5  Algorithms Compared
+------------------------------------------------------------------------------
+
+Three model configurations are compared via cross-validation:
+
+Config A (default, 3 models):
+  1. Logistic Regression (max_iter=1000, class_weight='balanced')
+  2. Random Forest (n_estimators=300, min_samples_leaf=2,
+                    class_weight='balanced_subsample')
+  3. Gradient Boosting (n_estimators=300, learning_rate=0.05, max_depth=3,
+                        min_samples_leaf=20, subsample=0.8)
+
+Config B (safe_models, no OpenMP conflicts):
+  1. Decision Tree (max_depth=8, min_samples_leaf=25, class_weight='balanced')
+  2. AdaBoost (base: DecisionTree depth=2, n_estimators=250, lr=0.05)
+  3. Gaussian Naive Bayes (no hyperparameters)
+
+Class imbalance handling:
+  - RF uses class_weight='balanced_subsample' internally
+  - GB and AdaBoost use sample_weight = compute_sample_weight('balanced', y)
+  - Logistic Regression uses class_weight='balanced'
+
+Selection metric: PR-AUC (averaged across CV folds)
+Secondary metric: strategy_precision_at_top3
+
+------------------------------------------------------------------------------
+7.6  Best Model Results
+------------------------------------------------------------------------------
+
+Selected: AdaBoost (Config B, season holdout 2020)
+
+  ROC-AUC:              0.935
+  PR-AUC:               0.817
+  F1 Score:             0.735
+  Precision:            0.747
+  Recall:               0.723
+  Brier Score:          0.128
+  Strategy@Top3:        1.000 (perfect)
+  Best F1 threshold:    0.593
+
+Confusion matrix (2,857 evaluated rows):
+  True Positives:   460
+  False Positives:  156
+  True Negatives:   2,065
+  False Negatives:  176
+
+Interpretation: when the model predicts a driver should pit (with >59.3%
+confidence), it is correct 74.7% of the time. It catches 72.3% of all
+actual pit windows.
+
+------------------------------------------------------------------------------
+7.7  Preprocessing Pipeline
+------------------------------------------------------------------------------
+
+Same structure as strategy models:
+  - Numeric: MedianImputer --> StandardScaler
+  - Categorical: MostFrequentImputer --> OneHotEncoder (handle_unknown='ignore')
+  - Combined via sklearn ColumnTransformer
+
+
+================================================================================
+8. STRATEGY OPTIMISER ENGINE
+================================================================================
+
+Source:  f1_strategy/f1pit/models/strategy_optimizer.py
+
+This is the core decision engine. It combines the ML lap time model with
+physics-based corrections to evaluate thousands of possible pit strategies
+and find the optimal one.
+
+------------------------------------------------------------------------------
+8.1  Architecture: ML Base Pace + Physics Corrections
+------------------------------------------------------------------------------
+
+The strategy optimiser does NOT rely solely on the ML model. Instead:
+
+  1. ML model provides BASE PACE per circuit/driver/team
+     - Single prediction using fresh MEDIUM tyres at mid-race fuel
+     - Cached per (GP, driver, team, total_laps) combination
+
+  2. Physics-based corrections applied on top:
+     a) Compound pace offset (SOFT is faster, HARD is slower)
+     b) Fuel burn-off (cars get lighter each lap)
+     c) Non-linear tyre degradation (accelerating with age)
+     d) Circuit-specific degradation factor
+
+This hybrid approach is necessary because the ML model has an inverted
+degradation signal (see Section 6.1 Known Limitation).
+
+------------------------------------------------------------------------------
+8.2  Physics Model: Lap Time Calculation
+------------------------------------------------------------------------------
+
+For any lap, the predicted time is:
+
+  lap_time = base_pace
+           + compound_offset
+           + fuel_delta
+           + tyre_degradation
+
+Where:
+
+  COMPOUND PACE OFFSET (seconds per lap vs MEDIUM baseline):
+    SOFT:    -0.85 s/lap  (faster than MEDIUM)
+    MEDIUM:   0.00 s/lap  (baseline)
+    HARD:    +0.55 s/lap  (slower than MEDIUM)
+
+    Source: Real F1 data shows SOFT is 0.8-1.0s faster, HARD is 0.5-0.7s
+    slower. These are within the established range.
+
+  FUEL BURN-OFF:
+    fuel_delta = (race_pct - 0.5) * total_laps * (-0.06)
+
+    Cars start with ~110kg fuel, burning ~1.7 kg/lap. Each kg burned makes
+    the car ~0.035s/lap faster. This gives -0.06 s/lap fuel correction.
+    The baseline is mid-race (RacePercentage = 0.5), so early laps are
+    slightly slower (heavy) and late laps are slightly faster (light).
+
+  TYRE DEGRADATION (non-linear, compound-specific):
+
+    Each compound has three parameters:
+                        SOFT      MEDIUM    HARD
+    base_deg (s/lap):   0.10      0.055     0.030
+    accel (s/lap^2):    0.008     0.004     0.002
+    grace (laps):       5         8         14
+
+    For tyre_life > grace:
+      age = tyre_life - grace
+      degradation = (base_deg * age + accel * age^2) * deg_factor
+
+    The grace period models the initial phase where tyres are in their
+    operating window. After the grace period, degradation starts and
+    ACCELERATES (the age^2 term), modelling the "tyre cliff" effect.
+
+    deg_factor is circuit-specific (see next section).
+
+------------------------------------------------------------------------------
+8.3  Circuit-Specific Degradation Factor
+------------------------------------------------------------------------------
+
+Each circuit has a degradation multiplier (0.4 to 1.4) derived from Pirelli's
+TyreStress and Abrasion ratings in CircuitInfo.csv:
+
+  raw = 0.6 * TyreStress + 0.4 * Abrasion    (range: 1.0 to 5.0)
+  deg_factor = 0.15 + raw * 0.25               (range: 0.40 to 1.40)
+
+Examples:
+  Monaco (stress=1, abrasion=1):    deg_factor = 0.40  (very low deg)
+  Monza (stress=2, abrasion=2):     deg_factor = 0.65  (low deg)
+  Bahrain (stress=3, abrasion=5):   deg_factor = 1.10  (high deg)
+  Spain (stress=5, abrasion=4):     deg_factor = 1.30  (very high deg)
+
+This is why Bahrain often shows 2-3 stop strategies while Monaco rarely
+needs more than 1 stop.
+
+------------------------------------------------------------------------------
+8.4  Pit Cost: Real Data, No Made-Up Numbers
+------------------------------------------------------------------------------
+
+The net time cost of a pit stop is derived entirely from real data:
+
+  Source: Pitstops.csv (4,020 entries, 2019-2024)
+  Method: Per-circuit median PitstopT (filtered to <60s)
+  Fallback chain:
+    1. Exact GP name match in real data
+    2. Fuzzy/partial GP name match
+    3. ML pitstop model prediction
+    4. Overall median: 23.5s
+
+There is NO arbitrary overhead added. The escalating penalty that was
+previously in the code (+3s per additional stop) has been REMOVED. Each
+pit stop costs the same for a given circuit, reflecting real-world data.
+
+Per-circuit pit costs (selected):
+  Australia: 18.5s (shortest pit lane)
+  Austria: 21.7s
+  Bahrain: 24.9s
+  Britain: 28.9s (long pit lane)
+  Singapore: 29.7s (street circuit, long pit lane)
+  France: 31.2s (longest)
+
+------------------------------------------------------------------------------
+8.5  Strategy Enumeration
+------------------------------------------------------------------------------
+
+The optimiser evaluates ALL legal tyre strategies:
+
+  F1 RULES:
+    - Must use at least 2 different dry compounds per race
+    - Maximum 3 pit stops (practical limit)
+    - Each stint must be at least 5 laps
+
+  1-STOP STRATEGIES:
+    - Every compound pair (S-M, S-H, M-S, M-H, H-S, H-M)
+    - Every possible pit lap swept (5 to total_laps-5)
+    - ~288 strategies per circuit
+
+  2-STOP STRATEGIES:
+    - Every compound triple (S-M-H, M-S-S, etc.) where >=2 unique
+    - Pit laps explored around even-split centres (±8 laps, step 4)
+    - ~512 strategies per circuit
+
+  3-STOP STRATEGIES:
+    - Every compound quad where >=2 unique
+    - Coarser grid around even-split (±5 laps, step 7)
+    - ~624 strategies per circuit
+
+  TOTAL: ~1,400 strategies evaluated per circuit in ~0.06 seconds.
+
+The speed comes from:
+  - Closed-form summation for stint times (no per-lap Python loops)
+  - Caching of base pace and pit cost per GP
+  - Pre-computed degradation via sum_k and sum_k2 formulas
+
+------------------------------------------------------------------------------
+8.6  Stint Time Calculation (Closed-Form)
+------------------------------------------------------------------------------
+
+Instead of iterating over every lap in a stint, the optimiser uses closed-form
+summation for O(1) time per stint:
+
+  total_time = n_laps * (base_pace + compound_offset)         [base]
+             + fuel_rate * n_laps * (mean_lap - total_laps/2)  [fuel]
+             + base_deg * sum_k + accel_deg * sum_k2           [degradation]
+
+  Where:
+    sum_k  = n_deg * (n_deg + 1) / 2
+    sum_k2 = n_deg * (n_deg + 1) * (2*n_deg + 1) / 6
+    n_deg  = max(0, n_laps - grace)
+
+This evaluates in constant time regardless of stint length.
+
+------------------------------------------------------------------------------
+8.7  Mid-Race Re-Optimisation
+------------------------------------------------------------------------------
+
+The optimiser can re-optimise strategy mid-race given current state:
+  - Current lap, compound, tyre life, pits completed
+  - Safety car flag (reduces pit cost by ~12s)
+
+Under safety car, pit cost drops because:
+  - The field is bunched up (gap lost to traffic is erased)
+  - In-lap time loss is masked by everyone going slow
+  - Out-lap cold-tyre disadvantage is reduced at SC speeds
+
+A minimum pit cost floor of 15s is enforced to prevent unrealistically
+cheap stops.
+
+
+================================================================================
+9. MODEL EVALUATION & SCORES
+================================================================================
+
+------------------------------------------------------------------------------
+9.1  Strategy Models (Latest Run: 2026-03-07)
+------------------------------------------------------------------------------
+
+Artifacts: f1_strategy/artifacts/strategy_20260307_151844/
+
+Train: 2019-2023    Test: 2024 (temporal holdout)
+
+  Model         Algorithm   R-squared   MAE        RMSE
+  -----         ---------   ---------   ---        ----
+  Lap Time      GB          0.913       0.356      0.451   s/km
+  Pitstop       RF          0.373       2.075      3.425   seconds
+  Inlap         GB          0.505       1.482      2.103   s/km
+  Outlap        GB          0.151       1.444      2.306   s/km
+
+  Model         Algorithm   ROC-AUC    PR-AUC     F1
+  -----         ---------   -------    ------     --
+  Safety Car    GB          0.499      0.052      0.000
+
+Interpretation:
+
+  LAP TIME (R^2 = 0.913):
+    Strong model. Explains 91.3% of variance in normalised lap times.
+    Average prediction error is 0.356 s/km, which translates to ~1.8s
+    on a typical 5km circuit. This is the model that drives the strategy
+    optimiser, and its accuracy is sufficient for strategy comparison
+    (relative pace between strategies, not absolute lap time).
+
+  PITSTOP (R^2 = 0.373):
+    Moderate model. Captures circuit-level variation in pit stop times
+    but has high residual variance from individual stop variation (slow
+    releases, unsafe releases, red flag stops). NOW SUPERSEDED by direct
+    real-data lookup from Pitstops.csv.
+
+  INLAP (R^2 = 0.505):
+    Moderate model. In-lap times have high variance because drivers lift
+    off at different points depending on pit window strategy. Retained
+    for potential future use.
+
+  OUTLAP (R^2 = 0.151):
+    Weak model. Out-lap times are highly variable — drivers may push
+    immediately or manage cold tyres depending on track position and
+    traffic. Not currently used in strategy optimisation.
+
+  SAFETY CAR (ROC-AUC = 0.499):
+    Essentially random. Safety car events are inherently unpredictable.
+    Retained for informational display only.
+
+------------------------------------------------------------------------------
+9.2  Pit-Window Classifier (Latest Run: 2026-03-05)
+------------------------------------------------------------------------------
+
+Artifacts: f1_strategy/artifacts/20260305_164740/
+
+  Model              ROC-AUC    PR-AUC    F1       Precision  Recall
+  -----              -------    ------    --       ---------  ------
+  AdaBoost*          0.935      0.817     0.735    0.747      0.723
+  Decision Tree      0.926      0.813     0.752    0.739      0.766
+  Gaussian NB        0.896      0.745     0.647    0.591      0.714
+
+  * = Selected model
+
+Additional metrics for AdaBoost:
+  Brier Score:              0.128 (well-calibrated probabilities)
+  Strategy Precision@Top3:  1.000 (perfect ranking of pit candidates)
+  Optimal Threshold:        0.593
+
+The pit-window classifier has strong discriminative power (AUC 0.935) for
+identifying when a driver is about to pit within the next 3 laps.
+
+------------------------------------------------------------------------------
+9.3  Strategy Optimiser Validation
+------------------------------------------------------------------------------
+
+The strategy optimiser was validated against real strategy distributions
+from Strategyfull.csv:
+
+  Circuit         Model Optimal   Real Most Common   Match?
+  -------         -------------   ----------------   ------
+  Bahrain         2-stop          2-stop (40% 3-st)  Yes
+  Britain         2-stop          1-stop / 2-stop    Yes
+  Spain           3-stop          2-stop (17% 3-st)  Close
+  Italy           2-stop          1-stop              Close
+  Abu Dhabi       2-stop          2-stop              Yes
+  Singapore       2-stop          1-stop / 2-stop    Yes
+  Austria         3-stop          2-stop (25% 3-st)  Close
+
+The model correctly identifies 2-stop as competitive at high-degradation
+circuits and shows 1-stop close behind at circuits with high pit costs.
+Where it predicts 3-stop, real data confirms 3-stop is used 13-40% of the
+time at those circuits.
+
+Note: the model optimises for pure pace only. It does not model track
+position value (e.g., Monaco where overtaking is nearly impossible makes
+1-stop dominant regardless of pace advantage). This is a known limitation.
+
+
+================================================================================
+10. BACKEND API (FastAPI)
+================================================================================
+
+Source:  f1_strategy/f1pit/api/server.py
+
+The FastAPI server loads all 5 strategy models plus circuit info at startup
+and exposes REST endpoints for the frontend.
+
+------------------------------------------------------------------------------
+10.1  Endpoints
+------------------------------------------------------------------------------
+
+GET /api/tracks
+  Returns list of available circuits with track outline coordinates.
+  Response: [{id, name, outline: [{x, y}, ...]}]
+
+GET /api/drivers?track={track}
+  Returns list of drivers available for the selected track.
+  Response: [driver_code1, driver_code2, ...]
+
+GET /api/laps?track={track}&driver={driver}
+  Returns available lap numbers for that driver/track.
+  Response: [1, 2, 3, ...]
+
+GET /api/telemetry?track={track}&driver={driver}&lap={lap}
+  Returns ~800-point telemetry trace (resampled for rendering).
+  Response: [{x, y, speed, brake, throttle}, ...]
+  speed: km/h, brake/throttle: 0-1 normalised
+
+GET /api/predictions?track={track}&driver={driver}&lap={lap}
+                    &compound={compound}&conditions={conditions}
+  Returns per-lap predictions:
+    sec_per_lap_increase:     degradation rate (s/lap)
+    pit_window_start/end:     pit window bounds
+    tyre_life_pct:            remaining tyre life (0-100)
+    wear_FL/FR/RL/RR:         per-tyre wear (0-1)
+    strategy_optimal_pit_lap: recommended pit lap
+    strategy_stint*_compound: compound per stint
+    strategy_stint*_laps:     laps per stint
+
+GET /api/strategy/optimal?track={gp}&driver={driver}
+                         &team={team}&total_laps={total}
+  Returns full strategy optimisation result:
+    best_strategy:            optimal strategy details + per-lap times
+    all_strategies:           ranked list of all evaluated strategies
+    n_strategies_evaluated:   count (~1,400)
+
+GET /api/strategy/reoptimize?track=...&current_lap=...&safety_car=...
+  Mid-race strategy re-optimisation with current race state.
+
+GET /api/safety-car/probability?track={gp}&total_laps={total}
+  Lap-by-lap safety car deployment probability (0-1).
+
+
+================================================================================
+11. FRONTEND VISUALISATIONS
+================================================================================
+
+Source:  ui/src/
+Stack:   React 18 + TypeScript + Plotly.js + Three.js (React Three Fiber)
+
+The frontend is a broadcast-style overlay dashboard with a full-screen 3D
+car at centre and glass-morphism card overlays for data visualisation.
+
+------------------------------------------------------------------------------
+11.1  3D Car Viewer (CarViewer.tsx)
+------------------------------------------------------------------------------
+
+Technology: Three.js / React Three Fiber / Canvas
+Position: Centre of screen, fills entire viewport
+
+Displays:
+  - F1 car 3D model (GLTF format)
+  - 4 floating tyre wear labels (FL, FR, RL, RR) showing:
+      * Tyre ID
+      * Wear percentage (0-100% life remaining)
+      * Temperature proxy (84-160C, colour-coded red=worn, green=fresh)
+      * Wear progress bar with dynamic gradient
+  - 3D leader lines from each tyre to its label
+  - Live strategy chip overlay (pit window, target lap, pace loss)
+  - Interactive: drag to rotate (limited horizontal/vertical range)
+  - Studio lighting: overhead key + side fills + contact shadow
+
+Wear is calculated per-tyre from the prediction API (0-1 normalised).
+
+------------------------------------------------------------------------------
+11.2  Track Map with Braking/Acceleration Zones (TrackMap.tsx)
+------------------------------------------------------------------------------
+
+Technology: Plotly.js scatter plot + corner detection algorithm
+Position: Upper-right glass card overlay
+
+Displays:
+  - Circuit outline (thin white line from telemetry coordinates)
+  - Braking zones (RED, thickness increases with tyre wear)
+      * Fresh-tyre reference shown as faint comparison
+      * Hover: braking distance, distance increase from wear, speed
+  - Acceleration zones (GREEN, extent decreases with tyre wear)
+      * Hover: acceleration delay, distance recovered, speed
+  - Corner labels (T1, T2, etc.) at apex points
+      * Hover: braking/accel distances and apex speed
+
+Wear-aware dynamics:
+  - Braking zones expand up to 25% with full tyre wear
+  - Acceleration zones shrink/delay up to 20%
+  - Updates as user scrubs through laps
+
+Corner detection algorithm:
+  1. Find local speed minima (corner apexes)
+  2. Detect braking (brake pedal > 0.25) before each apex
+  3. Detect throttle recovery (> 0.75) after each apex
+  4. Filter by minimum braking distance (5m)
+  5. Apply wear correction to brake start and accel end indices
+
+------------------------------------------------------------------------------
+11.3  Race Strategy Chart (DegradationChart.tsx)
+------------------------------------------------------------------------------
+
+Technology: Plotly.js horizontal bar + line chart
+Position: Upper-left glass card overlay
+
+TOP SECTION — Strategy Comparison:
+  Shows top 3 strategies (best per stop count: 1-stop, 2-stop, 3-stop).
+
+  Visual stint bars:
+    - Coloured blocks proportional to stint lengths
+    - SOFT = Red (#e10600), MEDIUM = Yellow (#ffd400), HARD = White (#f5f5f7)
+    - Best strategy at full opacity, alternatives dimmed
+
+  Horizontal delta bar chart:
+    - Best strategy labelled "OPTIMAL" (green bar)
+    - Alternatives show "+X.Xs" delta (grey bars)
+    - Hover: full compound sequence, pit laps, total time, delta
+
+  Metadata per strategy:
+    - Stop count (1-stop, 2-stop, 3-stop)
+    - Pit lap numbers (L24, L42, etc.)
+
+BOTTOM SECTION — Per-Lap Pace Curve:
+  Shows predicted lap-by-lap pace for the optimal strategy.
+
+  - Line traces per compound (coloured by compound)
+  - Filled area under each curve (semi-transparent)
+  - X-axis: Lap number (1 to total_laps)
+  - Y-axis: Pace delta vs Lap 1 (seconds)
+  - Vertical dashed lines at pit laps with "PIT L{n}" annotations
+  - Hover: lap time, tyre age, compound name
+
+Header:
+  - Strategy summary ("SOFT -> MEDIUM -> HARD")
+  - Stop count and number of strategies evaluated
+  - Total race time formatted
+
+Method toggle (?):
+  - Opens modal explaining the ML + physics strategy model
+  - Describes: ML base pace, physics degradation, compound offsets,
+    fuel burn, circuit-specific factors, enumeration method
+
+------------------------------------------------------------------------------
+11.4  Bottom Telemetry Strip
+------------------------------------------------------------------------------
+
+Technology: HTML/CSS with animated values
+Position: Fixed footer, 72px height
+
+Displays (left to right):
+  1. Pace Loss / Lap:     Degradation rate (s/lap)
+  2. Optimal Pit(s):      Recommended pit laps ("L24" or "L24, L42")
+  3. Race Time:           Total predicted race duration
+  4. Race Strategy:       Visual stint bar (coloured, proportional)
+  5. Circuit Picker:      Dropdown to select circuit
+
+------------------------------------------------------------------------------
+11.5  Lap Playback Controls
+------------------------------------------------------------------------------
+
+Technology: HTML range slider + play/pause button
+Position: Centre-bottom of 3D scene
+
+  - Lap counter: "Lap {current} / {max}"
+  - Play/Pause: cycles through laps at 900ms intervals
+  - Slider: drag to select any lap
+  - All visualisations update synchronously
+
+------------------------------------------------------------------------------
+11.6  Python-Side Visualisations (Training Only)
+------------------------------------------------------------------------------
+
+Source:  f1_strategy/f1pit/viz/plots.py
+
+Generated during model training/evaluation (not in live UI):
+  - Precision-Recall curves
+  - ROC curves
+  - Calibration curves (reliability diagrams)
+  - Confusion matrix heatmaps
+  - Feature importance bar charts (permutation-based)
+
+
+================================================================================
+12. USER FLOW & EXPERIENCE
+================================================================================
+
+  1. User opens the app
+     --> Fetches track list, populates circuit picker
+     --> Loads default circuit
+
+  2. User selects a circuit
+     --> Fetches available drivers for that track
+     --> Triggers strategy optimisation (ML models evaluate ~1,400 strategies)
+     --> Populates driver dropdown
+     --> Strategy chart and telemetry strip update
+
+  3. User selects a driver
+     --> Fetches available lap numbers
+     --> Populates lap slider
+
+  4. User selects a lap (or presses Play)
+     --> Fetches predictions (wear, pace, pit window)
+     --> Fetches telemetry for current lap + baseline comparison
+     --> 3D car: tyre wear labels update (colour, percentage, temperature)
+     --> Track map: braking zones expand, acceleration zones shrink
+     --> Telemetry strip: pace loss, pit window, race time update
+
+  5. User plays through laps
+     --> All visualisations update in sync at 900ms intervals
+     --> Wear increases progressively
+     --> Braking zones grow (visible on map)
+     --> Pace curve shows degradation building
+
+  6. User interacts
+     --> Drag 3D car to rotate
+     --> Hover track map corners for braking/accel details
+     --> Hover strategy bars for pit timing and delta info
+     --> Hover pace curve for per-lap tyre age and lap time
+     --> Click "?" for strategy methodology explanation
+
+
+================================================================================
+13. KNOWN LIMITATIONS & FUTURE WORK
+================================================================================
+
+  1. DRY CONDITIONS ONLY
+     The model is trained exclusively on dry races. Wet/intermediate strategy
+     requires fundamentally different modelling (different tyre compounds,
+     different degradation physics, crossover points for switching to slicks).
+
+  2. NO TRACK POSITION MODEL
+     The strategy optimiser finds the fastest strategy in pure pace terms.
+     It does not model the value of track position. At circuits where
+     overtaking is very difficult (Monaco, Hungary, Singapore), teams
+     often choose suboptimal-pace strategies to maintain position. Adding
+     a position-loss model per circuit would improve real-world accuracy.
+
+  3. ML DEGRADATION INVERSION
+     The lap time model has an inverted TyreLife coefficient due to
+     survivorship bias in the training data (only quick laps on old tyres
+     remain after the 107% filter) and fuel/tyre confounding. This is
+     corrected by the physics model, but ideally the training data would
+     be augmented to break this correlation.
+
+  4. SAFETY CAR MODEL IS INEFFECTIVE
+     Safety car events are inherently random (crashes, debris, weather).
+     The current model (ROC-AUC 0.499) performs no better than random.
+     A more sophisticated approach might use historical incident rates,
+     weather forecasts, or track-specific risk factors.
+
+  5. OUTLAP MODEL IS WEAK
+     R-squared of 0.151 means the model explains very little out-lap
+     variance. Drivers have wildly different out-lap strategies depending
+     on traffic, tyre warming needs, and undercut attempts. Currently
+     not used in the optimiser.
+
+  6. STATIC TYRE PARAMETERS
+     The degradation constants (TYRE_DEG_BASE, TYRE_DEG_ACCEL, TYRE_DEG_GRACE)
+     and compound offsets (COMPOUND_PACE_OFFSET) are calibrated values, not
+     derived from a specific data source. A future improvement would be to
+     fit these parameters from real lap time data per compound per circuit.
+
+  7. NO TRAFFIC / DIRTY AIR MODELLING
+     The strategy optimiser assumes clean air for all laps. In reality,
+     following another car costs 0.5-1.5s/lap due to aerodynamic wake
+     (dirty air). This particularly affects whether an undercut/overcut
+     strategy is viable.
+
+  8. FUEL LOAD IS APPROXIMATE
+     The fuel burn rate (-0.06 s/lap) is a well-known F1 engineering
+     approximation but varies by circuit (high-fuel circuits like Spa
+     burn more per lap). Ideally this would be circuit-specific.
+
+
+================================================================================
+14. FILE STRUCTURE REFERENCE
+================================================================================
+
+f1_tyre_prediction/
+|
+|-- data/
+|   |-- raw/
+|   |   |-- fastf1_cache/           FastF1 telemetry cache
+|   |   |-- kaggle_f1/              Kaggle CSV downloads
+|   |   |-- ergast_cache/           Ergast API cache
+|   |
+|   |-- processed/
+|   |   |-- DryQuickLaps.csv        ~50k quick racing laps (primary dataset)
+|   |   |-- Inlaps.csv             3,730 pit entry laps
+|   |   |-- Outlaps.csv            3,364 pit exit laps
+|   |   |-- Pitstops.csv           4,020 pit stop durations
+|   |   |-- PitstopsWithTeams.csv  Pit stops with team info
+|   |   |-- Stints.csv             6,051 stint records
+|   |   |-- Strategyfull.csv       6,051 strategy records
+|   |   |-- SafetyCars.csv         6,668 track status records
+|   |   |-- SafetyCars2024.csv     1,253 records (2024 test set)
+|   |   |-- Nlaps.csv              112 records (total laps per GP)
+|   |
+|   |-- CircuitInfo.csv            32 circuits (Pirelli characteristics)
+|   |-- venv/                      Python virtual environment
+|
+|-- f1_strategy/
+|   |-- f1pit/
+|   |   |-- api/
+|   |   |   |-- server.py           FastAPI backend (endpoints)
+|   |   |
+|   |   |-- data/
+|   |   |   |-- fetch_fastf1.py     FastF1 data collection
+|   |   |   |-- download_kaggle.py  Kaggle data download
+|   |   |   |-- fetch_ergast.py     Ergast API fetch
+|   |   |   |-- build_tables.py     Build lap_level.parquet
+|   |   |
+|   |   |-- features/
+|   |   |   |-- strategy_features.py  Feature eng for strategy models
+|   |   |   |-- engineer.py           Feature eng for pit-window classifier
+|   |   |   |-- leakage_checks.py     Feature leakage prevention
+|   |   |
+|   |   |-- models/
+|   |   |   |-- strategy_models.py    Train 5 strategy models
+|   |   |   |-- strategy_optimizer.py Physics + ML strategy engine
+|   |   |   |-- train.py             Train pit-window classifier
+|   |   |   |-- evaluate.py          Model evaluation & slicing
+|   |   |   |-- predict.py           Inference/scoring pipeline
+|   |   |
+|   |   |-- viz/
+|   |   |   |-- plots.py            Training visualisations (PR, ROC, etc.)
+|   |   |
+|   |   |-- utils/
+|   |   |   |-- io.py               JSON read/write utilities
+|   |   |   |-- logging.py          Logging configuration
+|   |   |
+|   |   |-- config.py              Paths, constants, random seed
+|   |
+|   |-- artifacts/
+|   |   |-- strategy_latest/        Symlink to latest strategy models
+|   |   |   |-- lap_time_model.joblib
+|   |   |   |-- pitstop_model.joblib
+|   |   |   |-- inlap_model.joblib
+|   |   |   |-- outlap_model.joblib
+|   |   |   |-- safety_car_model.joblib
+|   |   |   |-- strategy_metrics.json
+|   |   |
+|   |   |-- 20260305_164740/        Pit-window classifier artifacts
+|   |   |   |-- model.joblib
+|   |   |   |-- metrics.json
+|   |   |   |-- evaluation_summary.json
+|   |   |   |-- predictions.parquet
+|   |
+|   |-- tests/
+|       |-- test_strategy_models.py  Unit tests
+|
+|-- ui/
+    |-- src/
+    |   |-- App.tsx                  Main React component
+    |   |-- components/
+    |   |   |-- CarViewer.tsx         3D car + tyre wear
+    |   |   |-- TrackMap.tsx          Braking/acceleration map
+    |   |   |-- DegradationChart.tsx  Strategy comparison + pace curve
+    |   |
+    |   |-- data/
+    |   |   |-- api.ts               API client, types, constants
+    |   |
+    |   |-- styles.css               Full CSS design system
+    |
+    |-- package.json
+    |-- vite.config.ts
+
+
+================================================================================
+END OF DOCUMENT
+================================================================================
