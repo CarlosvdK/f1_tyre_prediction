@@ -1,14 +1,36 @@
 import { Color, Mesh, MeshStandardMaterial, Object3D } from 'three';
 import type { Compound } from '../data/api';
 
-const tireKeywords = ['tire', 'tyre', 'wheel', 'pirelli', 'sidewall', 'stripe', 'rim'];
+const tireKeywords = ['tire', 'tyre', 'slick', 'sidewall', 'pirelli'];
+const fallbackTireKeywords = ['wheel'];
 const accentKeywords = ['stripe', 'logo', 'pirelli', 'sidewall', 'marking', 'line'];
+const tireExclusionKeywords = [
+  'rim',
+  'hub',
+  'flask',
+  'fix_roue',
+  'brake',
+  'disc',
+  'caliper',
+  'susp',
+  'arm',
+  'intake',
+  'sticker',
+  'logo',
+  'tube',
+  'camera',
+  'hud',
+  'display',
+  'steer',
+];
 
 export type WheelId = 'FL' | 'FR' | 'RL' | 'RR' | 'UNKNOWN';
 
 export interface TireMeshEntry {
   id: WheelId;
   mesh: Mesh;
+  layerIndex: number;
+  layerCount: number;
   allMaterials: MeshStandardMaterial[];
   accentMaterials: MeshStandardMaterial[];
   baseMaterials: MeshStandardMaterial[];
@@ -36,7 +58,30 @@ function toMaterialArray(material: unknown): MeshStandardMaterial[] {
   return list.filter(
     (item): item is MeshStandardMaterial =>
       Boolean(item) && item instanceof MeshStandardMaterial,
-  );
+    );
+}
+
+function ensureUniqueMaterials(mesh: Mesh): MeshStandardMaterial[] {
+  const original = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+  const next = original.map((material) => {
+    if (!(material instanceof MeshStandardMaterial)) {
+      return material;
+    }
+    if (material.userData.__tire_unique_clone) {
+      return material;
+    }
+
+    const clone = material.clone();
+    clone.name = material.name;
+    clone.userData = {
+      ...material.userData,
+      __tire_unique_clone: true,
+    };
+    return clone;
+  });
+
+  mesh.material = Array.isArray(mesh.material) ? next : next[0];
+  return toMaterialArray(mesh.material);
 }
 
 function captureMaterialDefaults(material: MeshStandardMaterial): void {
@@ -47,7 +92,23 @@ function captureMaterialDefaults(material: MeshStandardMaterial): void {
   material.userData.__tire_defaults = {
     color: material.color.clone(),
     roughness: material.roughness,
+    metalness: material.metalness,
+    envMapIntensity: material.envMapIntensity,
   };
+}
+
+function getNameChain(object: Object3D): string[] {
+  const names: string[] = [];
+  let current: Object3D | null = object;
+
+  while (current) {
+    if (current.name) {
+      names.push(current.name);
+    }
+    current = current.parent;
+  }
+
+  return names;
 }
 
 function getWheelId(name: string, fallbackIndex: number): WheelId {
@@ -83,6 +144,20 @@ function lerp(start: number, end: number, t: number): number {
   return start + (end - start) * t;
 }
 
+function getLayerIndex(name: string): number {
+  const subMatch = name.match(/sub(\d+)/i);
+  if (subMatch) {
+    return Number(subMatch[1]);
+  }
+
+  const numberedTyre = name.match(/tyre_[a-z]+(\d+)/i);
+  if (numberedTyre) {
+    return Number(numberedTyre[1]) - 1;
+  }
+
+  return 0;
+}
+
 export function findTireMeshes(root: Object3D): TireMeshEntry[] {
   const found: TireMeshEntry[] = [];
   const used = new Set<string>();
@@ -92,13 +167,21 @@ export function findTireMeshes(root: Object3D): TireMeshEntry[] {
       return;
     }
 
-    const materials = toMaterialArray(child.material);
+    const nameChain = getNameChain(child).map((name) => name.toLowerCase());
+    const chainBundle = nameChain.join(' ');
+    const localBundle = nameChain.slice(0, 4).join(' ');
+    const materials = ensureUniqueMaterials(child);
     if (materials.length === 0) {
       return;
     }
 
-    const bundleName = `${child.name} ${materials.map((mat) => mat.name).join(' ')}`.toLowerCase();
-    const matchesTire = tireKeywords.some((key) => bundleName.includes(key));
+    const bundleName = `${chainBundle} ${materials.map((mat) => mat.name).join(' ')}`.toLowerCase();
+    const matchesCoreTire = tireKeywords.some((key) => localBundle.includes(key));
+    const matchesWheelPosition = /(front|rear|left|right|fl|fr|rl|rr|lf|rf|lr)/.test(localBundle);
+    const matchesFallback =
+      fallbackTireKeywords.some((key) => localBundle.includes(key)) && matchesWheelPosition;
+    const excluded = tireExclusionKeywords.some((key) => localBundle.includes(key));
+    const matchesTire = (matchesCoreTire || matchesFallback) && !excluded;
     if (!matchesTire) {
       return;
     }
@@ -119,10 +202,28 @@ export function findTireMeshes(root: Object3D): TireMeshEntry[] {
     found.push({
       id: getWheelId(bundleName, found.length),
       mesh: child,
+      layerIndex: getLayerIndex(localBundle),
+      layerCount: 1,
       allMaterials: materials,
       accentMaterials,
       baseMaterials: materials,
     });
+  });
+
+  const grouped = new Map<WheelId, TireMeshEntry[]>();
+  found.forEach((entry) => {
+    const bucket = grouped.get(entry.id) ?? [];
+    bucket.push(entry);
+    grouped.set(entry.id, bucket);
+  });
+
+  grouped.forEach((entries) => {
+    entries
+      .sort((left, right) => left.layerIndex - right.layerIndex)
+      .forEach((entry, index, all) => {
+        entry.layerIndex = index;
+        entry.layerCount = all.length;
+      });
   });
 
   return found;
@@ -135,16 +236,29 @@ export function applyCompoundAndWear(
 ): void {
   const compoundColor = new Color(compoundColorHex[compound]);
   const dustColor = new Color('#6b625a');
+  const scrubColor = new Color('#413934');
+  const heatColor = new Color('#8d5f43');
 
   tires.forEach((tire) => {
     const wear =
       tire.id === 'UNKNOWN'
         ? 0.2
         : clamp01(wearByWheel[tire.id as keyof TireWearMap] ?? 0.2);
-    const targetMaterials = tire.accentMaterials.length > 0 ? tire.accentMaterials : tire.baseMaterials;
+    const layerOffset = tire.layerCount > 1
+      ? tire.layerIndex / Math.max(tire.layerCount - 1, 1)
+      : 0;
+    const layerWear = clamp01(wear * lerp(0.86, 1.12, layerOffset));
+    const wornAccent = compoundColor.clone().lerp(dustColor, clamp01(wear * 0.88));
 
-    targetMaterials.forEach((material) => {
-      material.color.copy(compoundColor);
+    tire.accentMaterials.forEach((material) => {
+      const defaults = material.userData.__tire_defaults as
+        | { color: Color; roughness: number; metalness: number; envMapIntensity: number }
+        | undefined;
+
+      material.color.copy(wornAccent);
+      material.roughness = lerp(Math.max(defaults?.roughness ?? 0.52, 0.52), 0.95, wear);
+      material.metalness = lerp(defaults?.metalness ?? 0.03, 0.02, wear);
+      material.envMapIntensity = lerp(defaults?.envMapIntensity ?? 0.12, 0.04, wear);
 
       // Desaturate and remap the underlying painted texture so we can cleanly tint it 
       // with our F1 compound color without muddying into orange or brown.
@@ -190,22 +304,26 @@ export function applyCompoundAndWear(
 
     tire.baseMaterials.forEach((material) => {
       const defaults = material.userData.__tire_defaults as
-        | { color: Color; roughness: number }
+        | { color: Color; roughness: number; metalness: number; envMapIntensity: number }
         | undefined;
       if (!defaults) {
         return;
       }
 
       const hasSeparateAccent = tire.accentMaterials.length > 0;
-      const baseColor = hasSeparateAccent ? defaults.color.clone() : compoundColor.clone();
-      baseColor.multiplyScalar(1 - wear * 0.18);
-      baseColor.lerp(dustColor, wear * 0.22);
+      const baseColor = defaults.color.clone();
+      const layerDust = dustColor.clone().lerp(scrubColor, layerOffset * 0.75);
+      baseColor.multiplyScalar(1 - layerWear * 0.18);
+      baseColor.lerp(layerDust, layerWear * 0.34);
+      baseColor.lerp(heatColor, Math.max(0, layerWear - 0.58) * (0.12 + layerOffset * 0.14));
 
       if (!hasSeparateAccent || !tire.accentMaterials.includes(material)) {
         material.color.copy(baseColor);
       }
 
-      material.roughness = lerp(Math.max(defaults.roughness, 0.36), 0.97, wear);
+      material.roughness = lerp(Math.max(defaults.roughness, 0.36), 0.97, layerWear);
+      material.metalness = lerp(defaults.metalness, 0.01, layerWear);
+      material.envMapIntensity = lerp(defaults.envMapIntensity, 0.05, layerWear);
       material.needsUpdate = true;
     });
   });

@@ -48,6 +48,47 @@ function formatCompound(comp: string): string {
   return comp.charAt(0).toUpperCase() + comp.slice(1).toLowerCase();
 }
 
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function toCompound(value: string | undefined | null): Compound | null {
+  if (!value) return null;
+  const normalized = value.toLowerCase();
+  if (normalized === 'soft' || normalized === 'medium' || normalized === 'hard' || normalized === 'inter' || normalized === 'wet') {
+    return normalized;
+  }
+  if (normalized === 'intermediate') return 'inter';
+  return null;
+}
+
+const EXPECTED_TYRE_LIFE: Record<Compound, number> = {
+  soft: 18,
+  medium: 28,
+  hard: 40,
+  inter: 24,
+  wet: 30,
+};
+
+function buildWearFromStint(compound: Compound, lapsOnTyre: number) {
+  const expectedLife = EXPECTED_TYRE_LIFE[compound] ?? 28;
+  const progress = clamp(lapsOnTyre / Math.max(expectedLife, 1), 0, 1);
+  const curve = Math.pow(progress, compound === 'soft' ? 1.08 : compound === 'hard' ? 1.34 : 1.2);
+  const baseWear = clamp(0.05 + (curve * 0.88), 0.03, 0.98);
+  const frontBias = compound === 'soft' ? 0.06 : 0.04;
+  const rearBias = compound === 'hard' ? -0.03 : -0.015;
+
+  return {
+    tyreLifePct: clamp(100 - (curve * 100), 3, 100),
+    wear: {
+      wear_FL: clamp(baseWear + frontBias + 0.018, 0.03, 0.99),
+      wear_FR: clamp(baseWear + frontBias + 0.036, 0.03, 0.99),
+      wear_RL: clamp(baseWear + rearBias - 0.02, 0.03, 0.97),
+      wear_RR: clamp(baseWear + rearBias, 0.03, 0.98),
+    },
+  };
+}
+
 export default function App() {
   const MODEL_COMPOUND: Compound = 'medium';
   const MODEL_CONDITION: TrackCondition = 'dry';
@@ -208,6 +249,39 @@ export default function App() {
     ? (currentStint === 1 ? lap : lap - best.pit_laps[currentStint - 2])
     : lap;
 
+  const viewerTyreState = useMemo(() => {
+    if (best) {
+      const lapSnapshot = best.lap_times?.find((item) => item.lap === lap);
+      const strategyCompound = toCompound(
+        lapSnapshot?.compound ?? best.strategy[currentStint - 1] ?? MODEL_COMPOUND,
+      ) ?? MODEL_COMPOUND;
+      const lapsOnTyre = Math.max(1, lapSnapshot?.tyre_life ?? stintLapNum);
+      const visualWear = buildWearFromStint(strategyCompound, lapsOnTyre);
+
+      return {
+        compound: strategyCompound,
+        lapsOnTyre,
+        tyreLifePct: visualWear.tyreLifePct,
+        wear: visualWear.wear,
+      };
+    }
+
+    const fallbackWear = {
+      wear_FL: prediction?.wear_FL ?? 0.2,
+      wear_FR: prediction?.wear_FR ?? 0.2,
+      wear_RL: prediction?.wear_RL ?? 0.2,
+      wear_RR: prediction?.wear_RR ?? 0.2,
+    };
+    const fallbackCompound = toCompound(prediction?.strategy_stint1_compound) ?? MODEL_COMPOUND;
+
+    return {
+      compound: fallbackCompound,
+      lapsOnTyre: lap,
+      tyreLifePct: prediction?.tyre_life_pct ?? 100 - ((((fallbackWear.wear_FL + fallbackWear.wear_FR + fallbackWear.wear_RL + fallbackWear.wear_RR) / 4) * 100)),
+      wear: fallbackWear,
+    };
+  }, [MODEL_COMPOUND, best, currentStint, lap, prediction, stintLapNum]);
+
   /* ── Render ─────────────────────────────────────────────────── */
   return (
     <div className="f1-app">
@@ -219,15 +293,12 @@ export default function App() {
 
         {/* Full-bleed 3D */}
         <CarViewer
-          compound={MODEL_COMPOUND}
-          wear={{
-            wear_FL: prediction?.wear_FL,
-            wear_FR: prediction?.wear_FR,
-            wear_RL: prediction?.wear_RL,
-            wear_RR: prediction?.wear_RR,
-          }}
+          compound={viewerTyreState.compound}
+          wear={viewerTyreState.wear}
           prediction={prediction}
           currentLap={lap}
+          lapsOnTire={viewerTyreState.lapsOnTyre}
+          tyreLifePct={viewerTyreState.tyreLifePct}
         />
 
         {/* Gradient scrims */}

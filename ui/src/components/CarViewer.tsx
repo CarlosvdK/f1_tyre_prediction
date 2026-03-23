@@ -28,6 +28,7 @@ import {
   normalizeWearMap,
   type TireMeshEntry,
   type TireWearMap,
+  type WheelId,
 } from '../three/tireStyling';
 import Tooltip from './Tooltip';
 
@@ -41,6 +42,8 @@ interface CarViewerProps {
   };
   prediction?: Prediction | null;
   currentLap?: number;
+  lapsOnTire?: number;
+  tyreLifePct?: number;
   onModelMetaChange?: (meta: {
     modelPath?: string;
     modelType?: string;
@@ -60,7 +63,17 @@ interface ModelAssetProps {
   onReady: () => void;
 }
 
+interface TireVisualGroup {
+  id: WheelId;
+  center: Vector3;
+  size: Vector3;
+  axleAxis: 'x' | 'z';
+  radius: number;
+  width: number;
+}
+
 const tireMaterialPattern = /(tire|tyre|wheel|rim|sidewall|pirelli)/i;
+const wheelOrder: WheelId[] = ['FL', 'FR', 'RL', 'RR'];
 
 function configureMeshShadows(root: Object3D): void {
   root.traverse((child) => {
@@ -111,6 +124,46 @@ function normalizeObject(root: Object3D): Object3D {
   configureMeshShadows(root);
   tuneVehicleMaterials(root);
   return root;
+}
+
+function buildTireVisualGroups(root: Object3D, tires: TireMeshEntry[]): TireVisualGroup[] {
+  const grouped = new Map<WheelId, TireMeshEntry[]>();
+
+  tires.forEach((entry) => {
+    if (entry.id === 'UNKNOWN') {
+      return;
+    }
+
+    const list = grouped.get(entry.id) ?? [];
+    list.push(entry);
+    grouped.set(entry.id, list);
+  });
+
+  return Array.from(grouped.entries())
+    .map(([id, entries]) => {
+      const bounds = new Box3();
+      entries.forEach((entry) => bounds.expandByObject(entry.mesh));
+
+      const center = bounds.getCenter(new Vector3());
+      const size = bounds.getSize(new Vector3());
+      const axleAxis = size.x < size.z ? 'x' : 'z';
+      const radius = axleAxis === 'x'
+        ? Math.max(size.y, size.z) * 0.5
+        : Math.max(size.x, size.y) * 0.5;
+      const width = axleAxis === 'x' ? size.x : size.z;
+
+      root.worldToLocal(center);
+
+      return {
+        id,
+        center,
+        size,
+        axleAxis,
+        radius,
+        width,
+      };
+    })
+    .sort((left, right) => wheelOrder.indexOf(left.id) - wheelOrder.indexOf(right.id));
 }
 
 /* ── Renderer setup ─────────────────────────────────────────────── */
@@ -202,20 +255,10 @@ function ModelInstance({
   const holderRef = useRef<Group>(null);
   const normalized = useMemo(() => normalizeObject(object), [object]);
   const tires = useMemo(() => findTireMeshes(normalized), [normalized]);
+  const tireGroups = useMemo(() => buildTireVisualGroups(normalized, tires), [normalized, tires]);
   const hoverState = useTireRaycastHover(tires, wear);
 
-  // Filter down to EXACTLY 4 main wheels by taking the first mesh matched per WheelId (FL, FR, RL, RR)
-  const uniqueTires = useMemo(() => {
-    const map = new Map<string, TireMeshEntry>();
-    for (const t of tires) {
-      if (t.id !== 'UNKNOWN' && !map.has(t.id)) {
-        map.set(t.id, t);
-      }
-    }
-    return Array.from(map.values());
-  }, [tires]);
-
-  useEffect(() => { onTireCountChange(uniqueTires.length); onReady(); }, [onTireCountChange, onReady, uniqueTires.length]);
+  useEffect(() => { onTireCountChange(tireGroups.length); onReady(); }, [onTireCountChange, onReady, tireGroups.length]);
   useEffect(() => { applyCompoundAndWear(tires, compound, wear); }, [tires, compound, wear]);
   useEffect(() => { onHoverChange(hoverState); }, [hoverState, onHoverChange]);
 
@@ -227,7 +270,7 @@ function ModelInstance({
   return (
     <group ref={holderRef}>
       <primitive object={normalized} />
-      {uniqueTires.map((t) => {
+      {tireGroups.map((t) => {
         const w = wear[t.id as keyof TireWearMap] ?? 0.2;
         const lifePct = Math.max(0, Math.round((1 - w) * 100));
 
@@ -236,15 +279,8 @@ function ModelInstance({
         const g = lifePct > 50 ? 255 : Math.round(lifePct * 5.1);
         const color = `rgb(${r}, ${g}, 0)`;
 
-        t.mesh.updateMatrixWorld();
-        const bbox = new Box3().setFromObject(t.mesh);
-        const center = new Vector3();
-        bbox.getCenter(center);
-
-        // Measure bounding box to see which axis is narrowest (that's the axle)
-        const size = bbox.getSize(new Vector3());
-
-        normalized.worldToLocal(center);
+        const center = t.center.clone();
+        const size = t.size;
 
         let tx = center.x;
         let tz = center.z;
@@ -430,7 +466,15 @@ function ResolvedModel({
  * Azimuth clamped to ±140° — stops just before the rear wall blocks the view.
  * Polar: from 11° (eye-level) to 83° (never upside-down).
  */
-export default function CarViewer({ compound, wear, prediction, currentLap, onModelMetaChange }: CarViewerProps) {
+export default function CarViewer({
+  compound,
+  wear,
+  prediction,
+  currentLap,
+  lapsOnTire,
+  tyreLifePct,
+  onModelMetaChange,
+}: CarViewerProps) {
   const { manifest, loading, error } = useModelManifest();
   const [tireCount, setTireCount] = useState(0);
   const [hover, setHover] = useState<TireHoverState | null>(null);
@@ -541,10 +585,13 @@ export default function CarViewer({ compound, wear, prediction, currentLap, onMo
         visible={Boolean(hover)}
         tireId={hover?.tireId}
         wearPct={(hover?.wear ?? 0) * 100}
+        wearByTire={wearMap}
         tempProxyC={hover?.tempProxyC}
         compound={compound}
         prediction={prediction}
         currentLap={currentLap}
+        lapsOnTire={lapsOnTire}
+        tyreLifePct={tyreLifePct}
       />
     </div>
   );

@@ -4,10 +4,13 @@ interface TooltipProps {
   visible: boolean;
   tireId?: string;
   wearPct?: number;
+  wearByTire?: Partial<Record<'FL' | 'FR' | 'RL' | 'RR', number>>;
   tempProxyC?: number;
   compound?: Compound;
   prediction?: Prediction | null;
   currentLap?: number;
+  lapsOnTire?: number;
+  tyreLifePct?: number;
 }
 
 const COMPOUND_LABELS: Record<string, string> = {
@@ -41,27 +44,30 @@ export default function Tooltip({
   visible,
   tireId,
   wearPct,
+  wearByTire,
   tempProxyC,
   compound,
   prediction,
   currentLap,
+  lapsOnTire,
+  tyreLifePct,
 }: TooltipProps) {
   if (!visible || !tireId) return null;
 
   const wear = wearPct ?? 0;
   const temp = tempProxyC ?? 0;
-  const life = prediction?.tyre_life_pct ?? (100 - wear);
+  const life = tyreLifePct ?? prediction?.tyre_life_pct ?? (100 - wear);
   const compLabel = COMPOUND_LABELS[compound ?? 'medium'] ?? 'MEDIUM';
   const expectedLife = EXPECTED_LIFE[compound ?? 'medium'] ?? 28;
-  const lapsUsed = currentLap ?? 1;
+  const lapsUsed = lapsOnTire ?? currentLap ?? 1;
   const lapsRemaining = Math.max(0, Math.round(expectedLife - lapsUsed));
 
   // Get per-tyre wear from prediction
   const tireWearMap: Record<string, number> = {
-    FL: prediction?.wear_FL ?? wear / 100,
-    FR: prediction?.wear_FR ?? wear / 100,
-    RL: prediction?.wear_RL ?? wear / 100,
-    RR: prediction?.wear_RR ?? wear / 100,
+    FL: wearByTire?.FL ?? prediction?.wear_FL ?? wear / 100,
+    FR: wearByTire?.FR ?? prediction?.wear_FR ?? wear / 100,
+    RL: wearByTire?.RL ?? prediction?.wear_RL ?? wear / 100,
+    RR: wearByTire?.RR ?? prediction?.wear_RR ?? wear / 100,
   };
   const thisWear = tireWearMap[tireId] ?? wear / 100;
   const thisWearPct = thisWear * 100;
