@@ -131,12 +131,15 @@ class StrategyOptimizer:
     Uses decision-tree logic: starting compound → first pit → second pit → ...
     Rules:
     - Must use at least 2 different compounds (F1 regulation)
-    - Maximum 3 pit stops (practical limit)
+    - Pit stops capped by available tyre sets (sets - 1)
     - Each stint must be at least 5 laps
     """
 
     MIN_STINT_LAPS = 5
-    MAX_PIT_STOPS = 3
+    # Default available sets for the race (after practice/qualifying).
+    # Each driver gets ~13 dry sets per weekend; typically 2-3 usable sets
+    # remain for the race, making 3-stop strategies unrealistic.
+    DEFAULT_RACE_SETS = 3
 
     def __init__(
         self,
@@ -146,6 +149,7 @@ class StrategyOptimizer:
         outlap_model: dict[str, Any],
         circuit_info: pd.DataFrame | None = None,
         pit_cost_lookup: dict[str, float] | None = None,
+        race_sets: int | None = None,
     ):
         self.lap_model = lap_time_model["pipeline"]
         self.lap_features = lap_time_model["feature_cols"]
@@ -160,6 +164,8 @@ class StrategyOptimizer:
         self.outlap_features = outlap_model["feature_cols"]
 
         self.circuit_info = circuit_info
+        self.race_sets = race_sets if race_sets is not None else self.DEFAULT_RACE_SETS
+        self.max_pit_stops = max(1, self.race_sets - 1)
 
         # Per-circuit net pit cost from real data (median PitstopT from Pitstops.csv).
         # Falls back to overall median (23.5s) if circuit not found.
@@ -421,7 +427,7 @@ class StrategyOptimizer:
     def _enumerate_strategies(
         self,
         total_laps: int,
-        max_stops: int = 3,
+        max_stops: int | None = None,
     ) -> list[tuple[list[str], list[int]]]:
         """
         Enumerate all valid tyre strategies.
@@ -430,12 +436,14 @@ class StrategyOptimizer:
         Rules:
         - Must use ≥2 different compounds
         - Each stint ≥ MIN_STINT_LAPS
-        - 1-3 stops
+        - Stops capped by available tyre sets (self.max_pit_stops)
 
         For 1-stop: sweeps every pit lap for each compound pair.
         For 2-stop: uses even-split timing ± window for each compound triple.
         For 3-stop: uses even-split timing ± window for each compound quad.
         """
+        if max_stops is None:
+            max_stops = self.max_pit_stops
         strategies: list[tuple[list[str], list[int]]] = []
         min_s = self.MIN_STINT_LAPS
 
@@ -714,6 +722,9 @@ class StrategyOptimizer:
         # Under SC, pit cost is ~10-12s cheaper (no inlap/outlap time loss)
         sc_pit_discount = 12.0 if safety_car else 0.0
 
+        # Cap further stops by available tyre sets
+        max_remaining_stops = self.max_pit_stops - pits_done
+
         results: list[StrategyResult] = []
 
         # Option A: no more stops (only if 2-compound rule already satisfied)
@@ -741,46 +752,47 @@ class StrategyOptimizer:
             ))
 
         # Option B: 1 more stop with each possible compound
-        for next_compound in DRY_COMPOUNDS:
-            future_used = set(compounds_used) | {next_compound}
-            if len(future_used) < 2:
-                continue
+        if max_remaining_stops >= 1:
+            for next_compound in DRY_COMPOUNDS:
+                future_used = set(compounds_used) | {next_compound}
+                if len(future_used) < 2:
+                    continue
 
-            # Try pit laps from current_lap+2 up to total_laps - MIN_STINT_LAPS
-            best_for_compound: StrategyResult | None = None
-            for pit_lap in range(current_lap + 2, total_laps - self.MIN_STINT_LAPS + 1):
-                # Current stint: current_lap to pit_lap
-                t1 = self._estimate_stint_time(
-                    gp, driver, team, current_compound,
-                    current_lap, pit_lap, pits_done + 1, total_laps, circuit_length,
-                )
-                # Pit cost
-                pit_cost = self._estimate_pit_cost(
-                    gp, current_compound, next_compound,
-                    tyre_life=current_tyre_life + (pit_lap - current_lap),
-                    stint_in=pits_done + 1,
-                ) - sc_pit_discount
-                pit_cost = max(pit_cost, 15.0)  # floor
-                # Next stint
-                t2 = self._estimate_stint_time(
-                    gp, driver, team, next_compound,
-                    pit_lap + 1, total_laps, pits_done + 2, total_laps, circuit_length,
-                )
-                total = t1 + pit_cost + t2
-                if best_for_compound is None or total < best_for_compound.total_time:
-                    best_for_compound = StrategyResult(
-                        strategy=list(compounds_used) + [next_compound],
-                        pit_laps=[pit_lap],
-                        total_time=total,
-                        stint_times=[t1, t2],
-                        pit_costs=[pit_cost],
-                        warnings=[],
+                # Try pit laps from current_lap+2 up to total_laps - MIN_STINT_LAPS
+                best_for_compound: StrategyResult | None = None
+                for pit_lap in range(current_lap + 2, total_laps - self.MIN_STINT_LAPS + 1):
+                    # Current stint: current_lap to pit_lap
+                    t1 = self._estimate_stint_time(
+                        gp, driver, team, current_compound,
+                        current_lap, pit_lap, pits_done + 1, total_laps, circuit_length,
                     )
-            if best_for_compound is not None:
-                results.append(best_for_compound)
+                    # Pit cost
+                    pit_cost = self._estimate_pit_cost(
+                        gp, current_compound, next_compound,
+                        tyre_life=current_tyre_life + (pit_lap - current_lap),
+                        stint_in=pits_done + 1,
+                    ) - sc_pit_discount
+                    pit_cost = max(pit_cost, 15.0)  # floor
+                    # Next stint
+                    t2 = self._estimate_stint_time(
+                        gp, driver, team, next_compound,
+                        pit_lap + 1, total_laps, pits_done + 2, total_laps, circuit_length,
+                    )
+                    total = t1 + pit_cost + t2
+                    if best_for_compound is None or total < best_for_compound.total_time:
+                        best_for_compound = StrategyResult(
+                            strategy=list(compounds_used) + [next_compound],
+                            pit_laps=[pit_lap],
+                            total_time=total,
+                            stint_times=[t1, t2],
+                            pit_costs=[pit_cost],
+                            warnings=[],
+                        )
+                if best_for_compound is not None:
+                    results.append(best_for_compound)
 
-        # Option C: 2 more stops (if enough laps remain)
-        if remaining_laps > self.MIN_STINT_LAPS * 3:
+        # Option C: 2 more stops (if enough laps remain and tyre sets allow)
+        if remaining_laps > self.MIN_STINT_LAPS * 3 and max_remaining_stops >= 2:
             for c2 in DRY_COMPOUNDS:
                 for c3 in DRY_COMPOUNDS:
                     future_used = set(compounds_used) | {c2, c3}
@@ -864,7 +876,11 @@ def _build_pit_cost_lookup(data_processed: Path) -> dict[str, float]:
         return {}
 
 
-def load_optimizer(model_dir: Path, circuit_info_path: Path | None = None) -> StrategyOptimizer:
+def load_optimizer(
+    model_dir: Path,
+    circuit_info_path: Path | None = None,
+    race_sets: int | None = None,
+) -> StrategyOptimizer:
     """Load trained models and create an optimizer instance."""
     models = {}
     for name in ["lap_time", "pitstop", "inlap", "outlap"]:
@@ -888,6 +904,7 @@ def load_optimizer(model_dir: Path, circuit_info_path: Path | None = None) -> St
         outlap_model=models["outlap"],
         circuit_info=circuit_info,
         pit_cost_lookup=pit_cost_lookup,
+        race_sets=race_sets,
     )
 
 
@@ -899,6 +916,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--team", type=str, default="Red Bull Racing")
     parser.add_argument("--total_laps", type=int, required=True)
     parser.add_argument("--mode", type=str, default="deterministic", choices=["deterministic", "window"])
+    parser.add_argument("--race_sets", type=int, default=3,
+                        help="Dry tyre sets available for the race (max stops = sets - 1)")
     parser.add_argument("--output", type=str, default="")
     return parser.parse_args()
 
@@ -907,7 +926,7 @@ def main() -> None:
     args = parse_args()
 
     circuit_info_path = PATHS.data_circuit_info
-    optimizer = load_optimizer(Path(args.model_dir), circuit_info_path)
+    optimizer = load_optimizer(Path(args.model_dir), circuit_info_path, race_sets=args.race_sets)
 
     if args.mode == "deterministic":
         result = optimizer.optimize_deterministic(

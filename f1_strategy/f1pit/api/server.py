@@ -520,16 +520,15 @@ def _local_dev() -> None:
 
 # ── Strategy endpoints (use new strategy models) ─────────────────────────
 
-@lru_cache(maxsize=1)
-def _get_strategy_optimizer():
-    """Lazily load the strategy optimizer with trained models."""
+def _get_strategy_optimizer(race_sets: int | None = None):
+    """Load the strategy optimizer with trained models."""
     from f1pit.models.strategy_optimizer import load_optimizer
     model_dir = PATHS.artifacts / "strategy_latest"
     circuit_info_path = PATHS.data_circuit_info
     if not model_dir.exists():
         return None
     try:
-        return load_optimizer(model_dir, circuit_info_path)
+        return load_optimizer(model_dir, circuit_info_path, race_sets=race_sets)
     except Exception:
         return None
 
@@ -553,8 +552,9 @@ def get_optimal_strategy(
     team: str = Query("Red Bull Racing"),
     total_laps: int = Query(57),
     mode: str = Query("deterministic", description="deterministic or window"),
+    race_sets: int = Query(3, description="Dry tyre sets available for the race (caps max stops to sets-1)"),
 ) -> dict:
-    optimizer = _get_strategy_optimizer()
+    optimizer = _get_strategy_optimizer(race_sets=race_sets)
     if optimizer is None:
         raise HTTPException(
             status_code=503,
@@ -579,9 +579,10 @@ def compare_strategies(
     driver: str = Query("VER"),
     team: str = Query("Red Bull Racing"),
     total_laps: int = Query(57),
+    race_sets: int = Query(3, description="Dry tyre sets available for the race (caps max stops to sets-1)"),
 ) -> dict:
     """Compare deterministic and window strategies side-by-side."""
-    optimizer = _get_strategy_optimizer()
+    optimizer = _get_strategy_optimizer(race_sets=race_sets)
     if optimizer is None:
         raise HTTPException(
             status_code=503,
@@ -613,9 +614,10 @@ def reoptimize_strategy(
     pits_done: int = Query(0),
     compounds_used: str = Query("", description="Comma-separated compounds used so far"),
     safety_car: bool = Query(False, description="Is safety car currently active?"),
+    race_sets: int = Query(3, description="Dry tyre sets available for the race (caps max stops to sets-1)"),
 ) -> dict:
     """Re-optimize strategy from current race position (e.g. after a safety car)."""
-    optimizer = _get_strategy_optimizer()
+    optimizer = _get_strategy_optimizer(race_sets=race_sets)
     if optimizer is None:
         raise HTTPException(
             status_code=503,
