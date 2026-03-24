@@ -43,18 +43,19 @@ function stopsLabel(pitLaps: number[]): string {
   return `${pitLaps.length}-stop`;
 }
 
-/** Get best strategy per stop count (1-stop, 2-stop, 3-stop) */
-function getBestByStops(strategies: StrategyOption[]): StrategyOption[] {
-  const bestByStops = new Map<number, StrategyOption>();
-  for (const s of strategies) {
-    const stops = s.pit_laps.length;
-    if (!bestByStops.has(stops)) {
-      bestByStops.set(stops, s);
-    }
+/** Get the top 3 strategies by total time, deduplicating identical compound sequences */
+function getTop3(strategies: StrategyOption[]): StrategyOption[] {
+  const seen = new Set<string>();
+  const result: StrategyOption[] = [];
+  const sorted = [...strategies].sort((a, b) => a.total_time - b.total_time);
+  for (const s of sorted) {
+    const key = s.strategy_str;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    result.push(s);
+    if (result.length === 3) break;
   }
-  return Array.from(bestByStops.values())
-    .sort((a, b) => a.total_time - b.total_time)
-    .slice(0, 3);
+  return result;
 }
 
 export default function DegradationChart({
@@ -76,41 +77,10 @@ export default function DegradationChart({
   }
 
   const best = strategyData.best_strategy;
-  const topStrategies = getBestByStops(strategyData.all_strategies);
+  const topStrategies = getTop3(strategyData.all_strategies);
   const bestTime = topStrategies[0]?.total_time ?? 0;
 
-  // ── TOP: Delta bar chart for best 3 strategies ──
-  const barLabels = topStrategies.map((s) => {
-    const compounds = s.strategy.map((c) => formatCompound(c).charAt(0)).join('-');
-    return `${compounds} (${stopsLabel(s.pit_laps)})`;
-  }).reverse();
-
-  const barDeltas = topStrategies.map((s) =>
-    Number((s.total_time - bestTime).toFixed(1))
-  ).reverse();
-
-  const barColors = topStrategies.map((_, i) =>
-    i === 0 ? 'rgba(54, 232, 136, 0.8)' : 'rgba(255, 255, 255, 0.25)'
-  ).reverse();
-
-  const barTrace: Plotly.Data = {
-    y: barLabels,
-    x: barDeltas,
-    type: 'bar',
-    orientation: 'h',
-    marker: { color: barColors },
-    text: barDeltas.map((d) => d === 0 ? 'OPTIMAL' : `+${d.toFixed(1)}s`),
-    textposition: 'outside',
-    textfont: { color: 'rgba(255,255,255,0.7)', size: 13, family: 'Barlow Condensed' },
-    hovertemplate: topStrategies.map((s) => {
-      const delta = s.total_time - bestTime;
-      const compounds = s.strategy.map((c) => formatCompound(c)).join(' → ');
-      const pits = s.pit_laps.length > 0 ? `Pit: ${s.pit_laps.map((l) => `L${l}`).join(', ')}` : 'No pit';
-      return `<b>${compounds}</b> (${stopsLabel(s.pit_laps)})<br>${pits}<br>` +
-        `Total: ${s.total_time_formatted}<br>` +
-        `${delta > 0 ? `+${delta.toFixed(1)}s vs optimal` : 'OPTIMAL'}<extra></extra>`;
-    }).reverse(),
-  };
+  const RANK_LABELS = ['1st', '2nd', '3rd'];
 
   // ── Strategy visual bars for top 3 ──
   const strategyVisuals = topStrategies.map((s, idx) => {
@@ -118,7 +88,7 @@ export default function DegradationChart({
     const isBest = idx === 0;
     return (
       <div key={idx} className={`strat-compare-row${isBest ? ' best' : ''}`}>
-        <div className="strat-compare-rank">{isBest ? 'BEST' : `+${delta.toFixed(1)}s`}</div>
+        <div className="strat-compare-rank">{RANK_LABELS[idx]}</div>
         <div className="strat-compare-bar">
           {s.strategy.map((comp, i) => {
             const stintLaps = i === 0
@@ -142,10 +112,7 @@ export default function DegradationChart({
             );
           })}
         </div>
-        <div className="strat-compare-meta">
-          {stopsLabel(s.pit_laps)}
-          {s.pit_laps.length > 0 && ` · ${s.pit_laps.map((l) => `L${l}`).join(',')}`}
-        </div>
+        <div className="strat-compare-delta">{isBest ? '' : `+${delta.toFixed(1)}s`}</div>
       </div>
     );
   });
@@ -242,46 +209,43 @@ export default function DegradationChart({
       )}
 
       <div className="deg-chart-panels">
-        {/* ── Top: Strategy comparison (stacked vertically) ── */}
+        {/* ── Top: Strategy comparison (top 3) ── */}
         <div className="deg-chart-top">
           <div className="strat-compare-visual">
             {strategyVisuals}
           </div>
-          <div className="strat-compare-delta-row">
-            <Plot
-              data={[barTrace]}
-              layout={{
-                autosize: true,
-                margin: { l: 70, r: 50, t: 4, b: 4 },
-                paper_bgcolor: 'rgba(0,0,0,0)',
-                plot_bgcolor: 'rgba(0,0,0,0)',
-                bargap: 0.4,
-                font: { color: 'rgba(255,255,255,0.55)', family: 'Barlow Condensed, sans-serif', size: 13 },
-                xaxis: {
-                  title: { text: 'Delta vs optimal (s)', font: { size: 12, color: 'rgba(255,255,255,0.4)' } },
-                  gridcolor: 'rgba(255,255,255,0.06)',
-                  zerolinecolor: 'rgba(54,232,136,0.3)',
-                  zerolinewidth: 2,
-                  tickfont: { size: 12 },
-                  fixedrange: true,
-                },
-                yaxis: {
-                  tickfont: { size: 13, color: 'rgba(255,255,255,0.7)' },
-                  fixedrange: true,
-                },
-                showlegend: false,
-                hovermode: 'closest',
-                uirevision: 'bars-static',
-                hoverlabel: {
-                  bgcolor: 'rgba(14,14,18,0.95)',
-                  bordercolor: 'rgba(255,255,255,0.15)',
-                  font: { size: 14, family: 'Barlow Condensed', color: '#f5f5f7' },
-                },
-              }}
-              config={{ displayModeBar: false, responsive: true }}
-              style={{ width: '100%', height: '100%' }}
-              useResizeHandler
-            />
+
+          <div className="strat-breakdown">
+            {best.strategy.map((comp, i) => {
+              const stintLaps = i === 0
+                ? (best.pit_laps[0] ?? totalLaps)
+                : i < best.pit_laps.length
+                  ? best.pit_laps[i] - best.pit_laps[i - 1]
+                  : totalLaps - best.pit_laps[i - 1];
+              const stintTime = best.stint_times[i];
+              const mins = Math.floor(stintTime / 60);
+              const secs = (stintTime % 60).toFixed(1);
+              return (
+                <div key={i} className="strat-breakdown-row">
+                  <span
+                    className="strat-breakdown-dot"
+                    style={{ background: COMPOUND_COLORS[comp] ?? COMPOUND_COLORS[comp.toLowerCase()] ?? '#888' }}
+                  />
+                  <span className="strat-breakdown-compound">{formatCompound(comp)}</span>
+                  <span className="strat-breakdown-detail">{stintLaps}L</span>
+                  <span className="strat-breakdown-detail">{mins}:{secs.padStart(4, '0')}</span>
+                  {i < best.pit_laps.length && (
+                    <span className="strat-breakdown-pit">Pit L{best.pit_laps[i]}</span>
+                  )}
+                </div>
+              );
+            })}
+            <div className="strat-breakdown-total">
+              Total: {best.total_time_formatted}
+              {best.pit_costs.length > 0 && (
+                <span> · Pit cost: {best.pit_costs.reduce((a, b) => a + b, 0).toFixed(1)}s</span>
+              )}
+            </div>
           </div>
         </div>
 

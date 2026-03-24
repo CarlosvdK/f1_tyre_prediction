@@ -1155,7 +1155,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-title {
   font-family: var(--ff-display);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1165,7 +1165,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-sub {
   font-family: var(--ff-display);
-  font-size: 0.78rem;
+  font-size: 0.88rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--white-35);
@@ -1193,18 +1193,17 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .deg-chart-top {
-  flex: 1;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 .strat-compare-visual {
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  padding: 10px 12px 6px;
-  gap: 8px;
+  padding: 14px 16px 10px;
+  gap: 10px;
 }
 
 .strat-compare-row {
@@ -1218,9 +1217,9 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .strat-compare-rank {
-  flex: 0 0 52px;
+  flex: 0 0 48px;
   font-family: var(--ff-display);
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1234,7 +1233,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 .strat-compare-bar {
   flex: 1;
   display: flex;
-  height: 28px;
+  height: 36px;
   border-radius: 4px;
   overflow: hidden;
   gap: 1px;
@@ -1249,7 +1248,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .strat-compare-label {
   font-family: var(--ff-display);
-  font-size: 0.65rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.75);
   letter-spacing: 0.05em;
@@ -1264,14 +1263,74 @@ input[type='range']::-webkit-slider-thumb:hover {
   white-space: nowrap;
 }
 
+.strat-compare-delta {
+  flex: 0 0 56px;
+  font-family: var(--ff-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--white-35);
+  text-align: left;
+}
+
 .strat-compare-delta-row {
   flex: 1;
   min-height: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+/* ── Best strategy breakdown ──────────────────────────────── */
+.strat-breakdown {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.strat-breakdown-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--white-55);
+}
+
+.strat-breakdown-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.strat-breakdown-compound {
+  font-weight: 600;
+  color: var(--white-70);
+  min-width: 60px;
+}
+
+.strat-breakdown-detail {
+  color: var(--white-35);
+}
+
+.strat-breakdown-pit {
+  color: #36e888;
+  font-weight: 600;
+}
+
+.strat-breakdown-total {
+  font-family: var(--ff-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--white-35);
+  margin-top: 4px;
+  padding-left: 19px;
+}
+
 .deg-chart-curve {
-  flex: 0.8;
+  flex: 1;
   min-height: 0;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

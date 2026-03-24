@@ -12,6 +12,7 @@ Implements three modes:
 from __future__ import annotations
 
 import argparse
+import itertools
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -25,30 +26,25 @@ from f1pit.utils.logging import get_logger
 
 LOGGER = get_logger(__name__)
 
-# ── Expected tyre life per compound (Pirelli estimates) ─────────────────
-EXPECTED_TYRE_LIFE = {"SOFT": 18, "MEDIUM": 28, "HARD": 40}
+# ── Expected tyre life per compound (median stint lengths from Stints.csv) ──
+EXPECTED_TYRE_LIFE = {"SOFT": 14, "MEDIUM": 18, "HARD": 26}
 DRY_COMPOUNDS = ["SOFT", "MEDIUM", "HARD"]
 
 # ── Physics-based corrections ──────────────────────────────────────────
-# The ML model confounds fuel burn-off with tyre degradation (trained on
-# filtered quick-laps where TyreLife correlates with lighter fuel load).
-# We correct by: (1) removing the model's flawed TyreLife sensitivity and
-# (2) applying known tyre degradation + fuel burn curves from Pirelli data.
+# Fuel effect is NOT applied as a separate correction — the ML model
+# already captures it via RacePercentage, and our per-circuit deg rates
+# are computed from real stints where fuel burn-off happens naturally.
 #
-# Fuel burn-off: ~1.7 kg/lap, ~0.035 s/lap/kg → ~0.06 s/lap faster
-FUEL_EFFECT_PER_LAP = -0.06  # seconds (negative = getting faster)
-#
-# Tyre degradation: base_rate per lap + accelerating component (cliff).
-# Total deg at tyre_life T = sum of (base + accel*(t-grace)) for t > grace.
-# This produces non-linear, accelerating degradation matching real F1 data.
-# Tuned so 2-stop strategies are competitive on high-deg circuits but
-# 1-stop is viable on low-deg circuits (matching real-world F1 outcomes).
-TYRE_DEG_BASE = {"SOFT": 0.10, "MEDIUM": 0.055, "HARD": 0.030}
-TYRE_DEG_ACCEL = {"SOFT": 0.008, "MEDIUM": 0.004, "HARD": 0.002}
-TYRE_DEG_GRACE = {"SOFT": 5, "MEDIUM": 8, "HARD": 14}
-#
-# Compound pace offset vs MEDIUM baseline (per lap, negative = faster):
-# Real F1 deltas: SOFT ~0.8-1.0s faster than MEDIUM, HARD ~0.5-0.7s slower
+# Tyre degradation: per-circuit, per-compound rates loaded from
+# data/processed/DegradationRates.csv (built by scripts/build_deg_table.py).
+# Computed from 91,955 real F1 laps (2019-2024): fuel-corrected median
+# degradation rate per stint, grouped by circuit and compound.
+# Fallback global medians when a circuit/compound combo is missing:
+FALLBACK_DEG_RATE = {"SOFT": 0.046, "MEDIUM": 0.059, "HARD": 0.056}
+# Compound pace offset vs MEDIUM baseline (per lap, negative = faster).
+# Cannot be reliably derived from race data (confounded with fuel load,
+# track position, and dirty air). Values from Pirelli technical data
+# and qualifying-vs-race practice session analysis.
 COMPOUND_PACE_OFFSET = {"SOFT": -0.85, "MEDIUM": 0.0, "HARD": 0.55}
 
 
@@ -144,24 +140,13 @@ class StrategyOptimizer:
     def __init__(
         self,
         lap_time_model: dict[str, Any],
-        pitstop_model: dict[str, Any],
-        inlap_model: dict[str, Any],
-        outlap_model: dict[str, Any],
         circuit_info: pd.DataFrame | None = None,
         pit_cost_lookup: dict[str, float] | None = None,
         race_sets: int | None = None,
+        deg_rates: pd.DataFrame | None = None,
     ):
         self.lap_model = lap_time_model["pipeline"]
         self.lap_features = lap_time_model["feature_cols"]
-
-        self.pit_model = pitstop_model["pipeline"]
-        self.pit_features = pitstop_model["feature_cols"]
-
-        self.inlap_model = inlap_model["pipeline"]
-        self.inlap_features = inlap_model["feature_cols"]
-
-        self.outlap_model = outlap_model["pipeline"]
-        self.outlap_features = outlap_model["feature_cols"]
 
         self.circuit_info = circuit_info
         self.race_sets = race_sets if race_sets is not None else self.DEFAULT_RACE_SETS
@@ -171,6 +156,22 @@ class StrategyOptimizer:
         # Falls back to overall median (23.5s) if circuit not found.
         self.pit_cost_lookup = pit_cost_lookup or {}
         self._pit_cost_fallback = 23.5
+
+        # Per-circuit, per-compound degradation rates (s/lap) from real data.
+        # Built by scripts/build_deg_table.py from DryQuickLaps.csv.
+        self._deg_rate_lookup: dict[tuple[str, str], float] = {}
+        if deg_rates is not None and not deg_rates.empty:
+            from f1pit.features.strategy_features import _normalize_gp
+            for _, row in deg_rates.iterrows():
+                compound = row["Compound"].upper().strip()
+                rate = float(row["deg_rate"])
+                # Store under both raw lowercase AND normalized key so lookups
+                # succeed regardless of which GP name format the caller uses.
+                raw_key = row["GP"].lower().strip()
+                self._deg_rate_lookup[(raw_key, compound)] = rate
+                norm_key = _normalize_gp(row["GP"])
+                if norm_key != raw_key:
+                    self._deg_rate_lookup[(norm_key, compound)] = rate
 
     def _get_circuit_row(self, gp: str) -> pd.Series | None:
         """Get circuit info row for a GP."""
@@ -195,30 +196,31 @@ class StrategyOptimizer:
             return float(row["Length"])
         return 5.0
 
-    def _get_deg_factor(self, gp: str) -> float:
-        """Get circuit-specific degradation multiplier (0.4–1.4).
+    def _get_deg_rate(self, gp: str, compound: str) -> float:
+        """Get per-lap degradation rate (s/lap) for a circuit + compound.
 
-        Based on TyreStress (1-5) and Abrasion (1-5) from CircuitInfo.
-        Low-stress circuits like Monaco get ~0.4x, high like Bahrain get ~1.3x.
+        Looks up the real data-derived rate from DegradationRates.csv.
+        Falls back to the global median for that compound if no data exists.
         """
-        if not hasattr(self, '_deg_factor_cache'):
-            self._deg_factor_cache = {}
-        if gp in self._deg_factor_cache:
-            return self._deg_factor_cache[gp]
+        comp = compound.upper().strip()
 
-        row = self._get_circuit_row(gp)
-        if row is not None:
-            stress = float(row.get("TyreStress", 3))
-            abrasion = float(row.get("Abrasion", 3))
-            # Weighted blend: stress matters more than abrasion
-            raw = 0.6 * stress + 0.4 * abrasion  # range: 1.0 – 5.0
-            # Map to 0.4 – 1.4 multiplier (midpoint 3.0 → 1.0)
-            factor = 0.15 + raw * 0.25
-        else:
-            factor = 1.0
+        # Try raw lowercase key
+        raw_key = (gp.lower().strip(), comp)
+        if raw_key in self._deg_rate_lookup:
+            return self._deg_rate_lookup[raw_key]
 
-        self._deg_factor_cache[gp] = factor
-        return factor
+        # Try normalized GP name (e.g. "British Grand Prix" → "great britain")
+        from f1pit.features.strategy_features import _normalize_gp
+        norm_key = (_normalize_gp(gp), comp)
+        if norm_key in self._deg_rate_lookup:
+            return self._deg_rate_lookup[norm_key]
+
+        fallback = FALLBACK_DEG_RATE.get(comp, 0.055)
+        LOGGER.warning(
+            "No circuit-specific deg rate for %s/%s — using fallback %.4f",
+            gp, comp, fallback,
+        )
+        return fallback
 
     def _predict_lap_times(
         self,
@@ -233,14 +235,13 @@ class StrategyOptimizer:
         circuit_length = self._get_circuit_length(gp)
 
         if not hasattr(self, '_base_pace_cache'):
-            self._base_pace_cache = {}
+            self._base_pace_cache: dict[tuple, float] = {}
         cache_key = (gp, driver, team, total_laps)
         if cache_key not in self._base_pace_cache:
             self._base_pace_cache[cache_key] = self._get_base_pace(
                 gp, driver, team, total_laps, circuit_length,
             )
         base_pace = self._base_pace_cache[cache_key]
-        deg_factor = self._get_deg_factor(gp)
 
         result: list[dict] = []
         for i, compound in enumerate(compounds):
@@ -250,9 +251,10 @@ class StrategyOptimizer:
                 start_lap = pit_laps[i - 1] + 1
             end_lap = pit_laps[i] if i < len(compounds) - 1 else total_laps
 
+            deg_rate = self._get_deg_rate(gp, compound)
             for j, lap_num in enumerate(range(start_lap, end_lap + 1)):
                 t = self._physics_lap_time(
-                    base_pace, compound, j + 1, lap_num, total_laps, deg_factor,
+                    base_pace, compound, j + 1, deg_rate,
                 )
                 result.append({
                     "lap": lap_num,
@@ -272,12 +274,11 @@ class StrategyOptimizer:
         total_laps: int,
         circuit_length: float,
     ) -> float:
-        """Get base lap time from ML model (fresh tyres, mid-race fuel)."""
-        # Use mid-race conditions with fresh tyres as the baseline
+        """Get base lap time from ML model (MEDIUM compound baseline)."""
         row = {
             "GP": gp, "Driver": driver, "Team": team,
-            "Compound": "MEDIUM",  # Always use MEDIUM as baseline
-            "TyreLife": 5,  # Fresh-ish tyres (avoid outlier at TyreLife=1)
+            "Compound": "MEDIUM",
+            "TyreLife": 3,  # Fresh tyres (avoid outlap at TyreLife=1)
             "RacePercentage": 0.5,  # Mid-race
             "Position": 10, "Stint": 1, "LapNumber": total_laps // 2,
         }
@@ -295,38 +296,18 @@ class StrategyOptimizer:
         base_pace: float,
         compound: str,
         tyre_life: int,
-        lap_number: int,
-        total_laps: int,
-        deg_factor: float = 1.0,
+        deg_rate: float = 0.055,
     ) -> float:
         """
-        Compute a single lap time using ML base pace + physics corrections.
+        Compute a single lap time from ML base pace + compound offset + deg.
 
-        Corrections applied:
-        1. Compound pace offset (SOFT faster, HARD slower)
-        2. Fuel burn-off (cars get lighter = faster over race)
-        3. Tyre degradation (tyres lose grip = slower, after grace period)
+        base_pace is the MEDIUM baseline from the ML model.
+        Compound offset adjusts for softs being faster / hards slower.
+        deg_rate is the per-circuit, per-compound linear degradation (s/lap).
         """
-        # Start from ML base pace
-        t = base_pace
-
-        # 1. Compound offset
-        t += COMPOUND_PACE_OFFSET.get(compound, 0.0)
-
-        # 2. Fuel effect: mid-race is the baseline (RacePercentage=0.5),
-        #    so adjust relative to that
-        race_pct = lap_number / total_laps
-        fuel_delta = (race_pct - 0.5) * total_laps * FUEL_EFFECT_PER_LAP
-        t += fuel_delta
-
-        # 3. Tyre degradation (non-linear: base + accelerating component)
-        grace = TYRE_DEG_GRACE.get(compound, 10)
-        base_deg = TYRE_DEG_BASE.get(compound, 0.06) * deg_factor
-        accel = TYRE_DEG_ACCEL.get(compound, 0.005) * deg_factor
-        if tyre_life > grace:
-            age = tyre_life - grace
-            t += base_deg * age + accel * age * age
-
+        t = base_pace + COMPOUND_PACE_OFFSET.get(compound, 0.0)
+        if tyre_life > 1:
+            t += deg_rate * (tyre_life - 1)
         return t
 
     def _estimate_stint_time(
@@ -349,9 +330,9 @@ class StrategyOptimizer:
         if n_laps <= 0:
             return 0.0
 
-        # Cache base pace per call to avoid repeated ML predictions
+        # Cache base pace to avoid repeated ML predictions
         if not hasattr(self, '_base_pace_cache'):
-            self._base_pace_cache = {}
+            self._base_pace_cache: dict[tuple, float] = {}
 
         cache_key = (gp, driver, team, total_laps)
         if cache_key not in self._base_pace_cache:
@@ -361,26 +342,13 @@ class StrategyOptimizer:
         base_pace = self._base_pace_cache[cache_key]
 
         # 1. Base pace + compound offset
-        compound_offset = COMPOUND_PACE_OFFSET.get(compound, 0.0)
-        total_time = n_laps * (base_pace + compound_offset)
+        total_time = n_laps * (base_pace + COMPOUND_PACE_OFFSET.get(compound, 0.0))
 
-        # 2. Fuel effect: sum of (lap/total - 0.5) * total * fuel_rate
-        #    = fuel_rate * sum(lap - total/2) for lap in [start..end]
-        #    = fuel_rate * (n*mean_lap - n*total/2)
-        mean_lap = (start_lap + end_lap) / 2.0
-        total_time += FUEL_EFFECT_PER_LAP * n_laps * (mean_lap - total_laps / 2.0)
-
-        # 3. Tyre degradation: sum of (base*k + accel*k^2) for k = max(0, tl-grace)
-        #    Scaled by circuit-specific degradation factor
-        deg_factor = self._get_deg_factor(gp)
-        grace = TYRE_DEG_GRACE.get(compound, 10)
-        base_deg = TYRE_DEG_BASE.get(compound, 0.06) * deg_factor
-        accel_deg = TYRE_DEG_ACCEL.get(compound, 0.005) * deg_factor
-        if n_laps > grace:
-            n_deg = n_laps - grace
-            sum_k = n_deg * (n_deg + 1) // 2
-            sum_k2 = n_deg * (n_deg + 1) * (2 * n_deg + 1) / 6.0
-            total_time += base_deg * sum_k + accel_deg * sum_k2
+        # 2. Tyre degradation: linear rate from real per-circuit data
+        #    sum of deg_rate * k for k = 0..(n_laps-1) = deg_rate * n*(n-1)/2
+        deg_rate = self._get_deg_rate(gp, compound)
+        if n_laps > 1:
+            total_time += deg_rate * n_laps * (n_laps - 1) / 2.0
 
         return total_time
 
@@ -389,8 +357,8 @@ class StrategyOptimizer:
         Estimate net pit stop time loss (time lost vs staying on track).
 
         Uses real per-circuit median pit stop times from Pitstops.csv (2019-2024,
-        ~4000 entries). Falls back to ML model prediction, then overall median.
-        In F1 the net pit cost is typically 20-25s depending on circuit.
+        ~4000 entries). Falls back to overall median (23.5s) if circuit not found.
+        In F1 the net pit cost is typically 20-25s depending on pit lane length.
         """
         if not hasattr(self, '_pit_cost_cache'):
             self._pit_cost_cache: dict[str, float] = {}
@@ -412,14 +380,13 @@ class StrategyOptimizer:
                     cost = lookup_cost
                     break
 
-        # 3. Fall back to ML pitstop model
+        # 3. Fall back to overall median
         if cost is None:
-            try:
-                pit_df = pd.DataFrame([{"GP": gp}])
-                pit_cols = [c for c in self.pit_features if c in pit_df.columns]
-                cost = float(self.pit_model.predict(pit_df[pit_cols])[0])
-            except Exception:
-                cost = self._pit_cost_fallback
+            LOGGER.warning(
+                "No pit cost data for %s — using fallback %.1fs",
+                gp, self._pit_cost_fallback,
+            )
+            cost = self._pit_cost_fallback
 
         self._pit_cost_cache[gp] = cost
         return cost
@@ -564,12 +531,14 @@ class StrategyOptimizer:
 
         results = []
         for compounds, base_pit_laps in base_strategies:
-            # Try each window offset for the first pit stop
-            for offset in window_range:
+            # Build list of offset combos: one offset per pit stop
+            offset_combos = list(itertools.product(window_range, repeat=len(base_pit_laps)))
+
+            for offsets in offset_combos:
                 adjusted_pit_laps = []
                 valid = True
                 for i, pit_lap in enumerate(base_pit_laps):
-                    adjusted = pit_lap + (offset if i == 0 else 0)
+                    adjusted = pit_lap + offsets[i]
                     if adjusted < self.MIN_STINT_LAPS + 1 or adjusted >= total_laps - self.MIN_STINT_LAPS:
                         valid = False
                         break
@@ -578,7 +547,7 @@ class StrategyOptimizer:
                 if not valid:
                     continue
 
-                # Verify stint lengths are valid
+                # Verify pit laps are in ascending order and stint lengths valid
                 stint_valid = True
                 prev_lap = 0
                 for pl in adjusted_pit_laps:
@@ -882,12 +851,12 @@ def load_optimizer(
     race_sets: int | None = None,
 ) -> StrategyOptimizer:
     """Load trained models and create an optimizer instance."""
-    models = {}
-    for name in ["lap_time", "pitstop", "inlap", "outlap"]:
-        path = model_dir / f"{name}_model.joblib"
-        if not path.exists():
-            raise FileNotFoundError(f"Model not found: {path}")
-        models[name] = joblib.load(path)
+    # Only the lap time model is needed — pit cost, degradation, and
+    # compound offsets all come from real data lookups, not ML models.
+    lap_time_path = model_dir / "lap_time_model.joblib"
+    if not lap_time_path.exists():
+        raise FileNotFoundError(f"Model not found: {lap_time_path}")
+    lap_time_model = joblib.load(lap_time_path)
 
     circuit_info = None
     if circuit_info_path and circuit_info_path.exists():
@@ -897,14 +866,21 @@ def load_optimizer(
     data_processed = PATHS.data_processed
     pit_cost_lookup = _build_pit_cost_lookup(data_processed)
 
+    # Load per-circuit degradation rates from real data
+    deg_rates_path = data_processed / "DegradationRates.csv"
+    deg_rates = None
+    if deg_rates_path.exists():
+        try:
+            deg_rates = pd.read_csv(deg_rates_path)
+        except Exception as e:
+            LOGGER.warning("Failed to load DegradationRates.csv: %s", e)
+
     return StrategyOptimizer(
-        lap_time_model=models["lap_time"],
-        pitstop_model=models["pitstop"],
-        inlap_model=models["inlap"],
-        outlap_model=models["outlap"],
+        lap_time_model=lap_time_model,
         circuit_info=circuit_info,
         pit_cost_lookup=pit_cost_lookup,
         race_sets=race_sets,
+        deg_rates=deg_rates,
     )
 
 

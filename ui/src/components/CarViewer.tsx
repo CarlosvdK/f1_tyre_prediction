@@ -146,7 +146,7 @@ function buildTireVisualGroups(root: Object3D, tires: TireMeshEntry[]): TireVisu
 
       const center = bounds.getCenter(new Vector3());
       const size = bounds.getSize(new Vector3());
-      const axleAxis = size.x < size.z ? 'x' : 'z';
+      const axleAxis: 'x' | 'z' = size.x < size.z ? 'x' : 'z';
       const radius = axleAxis === 'x'
         ? Math.max(size.y, size.z) * 0.5
         : Math.max(size.x, size.y) * 0.5;
