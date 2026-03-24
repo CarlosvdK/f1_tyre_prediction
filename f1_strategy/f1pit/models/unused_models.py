@@ -22,13 +22,12 @@ is fundamentally unpredictable. They remain here for reference.
    phases of the pit stop independently.
 
    WHY WE DON'T USE IT:
-   The PitstopT model (which predicts total pit stop time loss per circuit)
-   already captures the aggregate effect of slow in-laps and out-laps in its
-   training data. Using inlap/outlap predictions on top of PitstopT would
-   double-count the time penalty. The per-circuit aggregate turned out to be
-   accurate enough for strategy selection — the difference between a granular
-   and aggregate approach is ~0.2-0.5s per stop, which rarely changes which
-   strategy is optimal.
+   The per-circuit median pit cost (from Pitstops.csv) already captures the
+   aggregate effect of slow in-laps and out-laps. Using inlap/outlap
+   predictions on top of that would double-count the time penalty. The
+   per-circuit average turned out to be accurate enough for strategy
+   selection — the difference between a granular and aggregate approach is
+   ~0.2-0.5s per stop, which rarely changes which strategy is optimal.
 
 -----------------------------------------------------------------------
 2. Outlap Model (GradientBoosting regression, R²=0.15, MAE=1.44s)
@@ -43,7 +42,7 @@ is fundamentally unpredictable. They remain here for reference.
    Same reasoning as the inlap model — granular pit stop modelling.
 
    WHY WE DON'T USE IT:
-   Same reason as above (double-counting with PitstopT), plus the model
+   Same reason as above (double-counting with the pit cost average), plus the model
    itself is weak (R²=0.15 means it only explains 15% of out-lap time
    variance). Out-lap times are highly variable depending on traffic,
    tyre warming strategy, and whether the driver is pushing or managing,
@@ -78,4 +77,26 @@ is fundamentally unpredictable. They remain here for reference.
    adjusting strategy AFTER one has already happened (the `safety_car=True`
    flag applies a 12s pit cost discount to reflect the reduced time loss
    of pitting under caution).
+
+-----------------------------------------------------------------------
+4. PitstopT Model (RandomForest regression, R²=0.37, MAE=2.08s)
+-----------------------------------------------------------------------
+   Predicts the net time lost during a pit stop (stationary time + pit
+   lane transit) at each circuit.
+
+   Features: GP (just one feature — circuit name)
+
+   WHY WE BUILT IT:
+   It was trained alongside the other strategy models as part of a batch
+   pipeline. The idea was to have an ML model predict pit cost so it could
+   generalise to new circuits or capture trends over time.
+
+   WHY WE DON'T USE IT:
+   With only one feature (GP), the model is effectively just a per-circuit
+   average — a lookup table with extra overhead. We replaced it with a
+   direct per-circuit median computed from Pitstops.csv (~4000 real pit
+   stops, 2019-2024, filtered to <60s to exclude red flags). This gives
+   the same accuracy, is simpler to understand, and doesn't require
+   loading a .joblib file. For circuits not in the data, we fall back to
+   the overall median of 23.5s.
 """
