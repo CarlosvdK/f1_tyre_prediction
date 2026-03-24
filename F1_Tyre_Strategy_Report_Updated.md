@@ -1,90 +1,109 @@
-F1 Tyre Strategy Prediction
+# F1 Tyre Strategy Prediction
+### Applying Supervised Machine Learning to Race Strategy Optimization
+**AI II Final Project Report — Group 8**
 
-Applying Supervised Machine Learning to Race Strategy Optimization
+> The complete reproducible model pipeline is available in [`final_model.ipynb`](final_model.ipynb).
 
-AI II Final Project Report: Group 8
+---
 
 ## 1. Problem and Objective
 
-When to pit is one of the most consequential decisions in an F1 race. Get the timing right, and you gain track position; get it wrong, and the race is effectively over. The difficulty is that tyre wear depends on compound, circuit, fuel load, driving style, and on-track events — all interacting in ways that are hard to reason about in real time.
+Pit stop timing is one of the most consequential decisions in an F1 race. Tyre wear depends on compound, circuit, fuel load, and driving style — all interacting in ways that are difficult to reason about in real time. We built a system that predicts the optimal pit strategy (when to stop and on which tyres) for any driver at any circuit.
 
-The initial approach decomposed the problem into five supervised learning targets: lap pace, pit stop duration, in-lap time, out-lap time, and safety car probability. All five were trained and evaluated (Table 1), but during integration only **one ML model survived: LapTimePerKM**, a Gradient Boosting regressor that predicts base lap pace for a given driver, team, and circuit. The other four were dropped — pit stop duration was replaced by a simple per-circuit average from real data, in-lap and out-lap effects were already captured in that average (using them separately would double-count), and safety car prediction performed at chance level since crashes are inherently random.
+The initial approach trained five supervised learning models: lap pace, pit stop duration, in-lap time, out-lap time, and safety car probability. During integration, only **one ML model survived: LapTimePerKM**, a Gradient Boosting regressor predicting base lap pace. The other four were dropped — pit stop duration was replaced by a per-circuit average from real data, in-lap/out-lap predictions double-counted that average, and safety car prediction performed at coin-flip level (crashes are random).
 
-The final strategy optimizer combines this single ML prediction with three data-driven components:
+The final optimizer combines this ML prediction with three data-driven components: (1) **tyre degradation curves** — non-linear, per-circuit wear profiles from 93,577 fuel-corrected laps, scaled by a calibrated factor of 2.5x; (2) **compound pace offsets** from Pirelli technical data (SOFT: -0.85 s/lap, HARD: +0.55 s/lap vs MEDIUM); and (3) **pit stop cost** — per-circuit median from ~4,000 real pit stops. The optimizer enumerates ~9,000 valid strategies (1-stop, 2-stop, 3-stop), sums predicted lap times and pit costs for each, and selects the lowest total race time.
 
-- **Tyre degradation rates** — per-circuit, per-compound wear rates (s/lap) computed from fuel-corrected analysis of 91,955 real laps across 34 circuits
-- **Compound pace offsets** — how much faster softs are vs hards (-0.85s/lap for SOFT, +0.55s/lap for HARD vs MEDIUM), from Pirelli technical data
-- **Pit stop cost** — per-circuit median time lost during a stop, from ~4,000 real pit stops
+## 2. Data
 
-The optimizer enumerates every valid pit configuration (≥2 tyre compounds, ≤3 stops, ≥5 laps per stint), sums predicted lap times and pit costs for each, and ranks them by total race time — producing a ranked list of 1-stop, 2-stop, and 3-stop options for any circuit and driver.
+Four publicly available sources were used:
 
-## 2. Dataset Identification
+- **FastF1 (Python API):** Official FIA timing data — lap times, compounds, pit records — for 2019–2024.
+- **Kaggle F1 Dataset:** Historical race results and constructor data for team/driver identifiers.
+- **Ergast API:** Circuit metadata and coordinates, cached locally.
+- **CircuitInfo.csv:** Pirelli tyre stress ratings per circuit (abrasion, traction, braking) for 32 circuits.
 
-Four data sources were used, all publicly available:
+**Cleaning:** Wet-compound laps were excluded. The 107% rule removed safety car laps and outliers. Compounds were standardised to SOFT/MEDIUM/HARD. Pit stops were filtered to a 10–60s window (88.9% pass rate). LapTimePerKM outliers outside the 1st–99th percentile were removed.
 
-- **FastF1 (Python API):** Official F1 telemetry (lap times, tyre compound, pit stop records) for 2019–2024.
-- **Kaggle F1 Dataset (1950–2024):** Historical race results and constructor data for team and driver identifiers.
-- **Ergast/Jolpica API:** Circuit metadata (coordinates, race schedules), cached locally to avoid rate limits.
-- **CircuitInfo.csv:** Hand-compiled Pirelli tyre stress ratings per circuit (abrasion, traction, braking, lateral load, asphalt age) for 32+ circuits.
+**Final dataset:** 93,577 laps, 4,020 pit stops, 6,051 stints, 112 races, 34 GPs across 2019–2024.
 
-Wet-compound laps (INTERMEDIATE/WET) were dropped to focus on dry-race degradation. The 107% rule removed formation laps and outliers. Compounds were standardized to SOFT, MEDIUM, and HARD. Pit stop records were validated against a 10–60 second service window (92.8% pass rate). Final dataset: 93,577 laps, 4,020 pit stops, 6,052 stints, 111 races, 34 circuits across 2019–2024.
+## 3. Features and Validation
 
-## 3. Feature Engineering and Validation Strategy
+Features were chosen based on what is known *before* the lap is driven. Post-race outcomes were excluded to prevent leakage.
 
-Features were chosen based on what would plausibly be known at the time of the decision. Post-race outcomes and whole-stint aggregates derived from future laps were excluded to prevent leakage.
+| Feature | Type | Role |
+|---------|------|------|
+| GP | Categorical | Circuit-specific pace |
+| Driver | Categorical | Driver skill |
+| Team | Categorical | Car performance |
+| Compound | Categorical | Tyre type (S/M/H) |
+| RacePercentage | Numeric | Fuel burn-off (cars get lighter → faster) |
+| TyreLife | Numeric | Laps on current tyres (degradation) |
+| Position | Numeric | Dirty air effect from cars ahead |
+| Stint | Numeric | Which stint (1st, 2nd, 3rd) |
 
-The LapTimePerKM model uses eight features: RacePercentage, TyreLife, Position, and Stint (numeric); GP, Driver, Team, and Compound (categorical). RacePercentage captures fuel burn-off — cars get lighter and faster as the race progresses — so no separate fuel correction is needed. TyreLife captures how many laps the current set of tyres has done. The model predicts lap time per kilometre rather than raw lap time, normalizing across circuits of different lengths. The preprocessing pipeline uses median imputation + StandardScaler for numeric features and mode imputation + OneHotEncoder for categorical features (scikit-learn Pipeline).
+**Target:** LapTimePerKM (lap time / circuit length) — normalises across circuits of different lengths.
 
-Validation used a temporal holdout: 2019–2023 for training, 2024 as a held-out test season. This reflects real deployment conditions — the model must generalize to a future season it was never trained on.
+**Preprocessing:** Median imputation + StandardScaler (numeric); mode imputation + OneHotEncoder (categorical).
 
-## 4. Model Implementation and Evaluation
+**Validation:** Temporal holdout — train on 2019–2023, test on 2024. This reflects real deployment: the model must generalise to a season it has never seen.
 
-For each of the five original targets, both Random Forest and Gradient Boosting (scikit-learn) were trained on the same pipeline, and the better algorithm was auto-selected by the primary metric: R² for regressions, ROC-AUC for classification. Results on the 2024 holdout are shown in Table 1.
+## 4. Model Selection and Evaluation
 
-**Table 1 — Model Performance on 2024 Holdout Test Set**
+Six regression models were compared on the 2024 holdout, selected by lowest MAE:
 
-| Model | Task | Algorithm | R² / ROC-AUC | MAE / F1 | Used in Optimizer |
-|---|---|---|---|---|---|
-| LapTimePerKM | Regression | Gradient Boosting | R² = 0.913 | MAE = 0.356 s/km | Yes |
-| PitstopT | Regression | Random Forest | R² = 0.373 | MAE = 2.08 s | No — replaced by per-circuit average |
-| Inlap | Regression | Gradient Boosting | R² = 0.505 | MAE = 1.48 s | No — double-counts pit cost |
-| Outlap | Regression | Gradient Boosting | R² = 0.151 | MAE = 1.44 s | No — double-counts pit cost |
-| SafetyCar | Classification | Gradient Boosting | ROC-AUC = 0.499 | F1 = 0.00 | No — performs at chance level |
+**Table 1 — Model Comparison (2024 Holdout)**
 
-**LapTimePerKM** (R² = 0.913, MAE = 0.356 s/km) is the only model used in the final optimizer. It predicts one value: the base lap pace for a given driver at a given circuit. Gradient Boosting was selected over Random Forest because it achieved a lower MAE on the 2024 holdout. R² = 0.913 means the model explains 91.3% of the variance in lap pace, which is strong given that lap times are influenced by many factors not in the feature set (dirty air, battery deployment, track evolution). The remaining four models were trained but dropped for the reasons noted in the table.
+| Model | MAE (s/km) | RMSE (s/km) | R² |
+|-------|-----------|------------|-----|
+| **Gradient Boosting** | **0.353** | **0.450** | **0.914** |
+| Ridge Regression | 0.373 | 0.483 | 0.901 |
+| Linear Regression | 0.373 | 0.484 | 0.901 |
+| Random Forest | 0.406 | 0.509 | 0.890 |
+| Decision Tree | 0.473 | 0.599 | 0.848 |
+| AdaBoost | 0.925 | 1.081 | 0.505 |
 
-**How the optimizer uses LapTimePerKM.** The model is queried once per (driver, circuit) combination to get a MEDIUM-compound baseline lap time. The optimizer then applies three adjustments per lap:
+**Gradient Boosting** was selected for lowest MAE. Linear and Ridge models cannot capture non-linear tyre degradation or compound-circuit interactions. Decision Tree overfits. AdaBoost converges poorly with high-dimensional one-hot features. Random Forest is close but GB's sequential error correction is more precise.
 
-1. **Compound pace offset:** SOFT is 0.85s/lap faster than MEDIUM; HARD is 0.55s/lap slower. These offsets come from Pirelli technical data, not from the training data, because compound choice in race data is confounded with fuel load — hard tyres are run late when cars are light, making them appear artificially fast.
+**Table 2 — Additional Models Trained and Dropped**
 
-2. **Tyre degradation:** Each additional lap on a set of tyres adds a circuit-specific, compound-specific penalty (e.g., 0.114 s/lap for SOFT at Bahrain, 0.026 s/lap for SOFT at Silverstone). These rates are computed offline from real stint data: the fuel benefit (~0.06 s/lap from weight reduction) is added back to the raw lap time increase to isolate true tyre wear. This produces 99 (circuit, compound) rates across 34 circuits, stored in DegradationRates.csv.
+| Model | Task | R² / AUC | Why dropped |
+|-------|------|----------|-------------|
+| PitstopT | Pit stop duration | R² = 0.37 | Equivalent to a per-circuit lookup table — replaced by median from real data |
+| Inlap | In-lap time | R² = 0.51 | Double-counts time already in pit cost average |
+| Outlap | Out-lap time | R² = 0.15 | Too weak — out-lap times depend on traffic and tyre warming |
+| Safety Car | SC probability | AUC = 0.50 | Coin flip — crashes are inherently unpredictable |
 
-3. **Pit stop cost:** The median time lost per pit stop at each circuit, computed from ~4,000 real pit stops (filtered to 10–60s). For circuits without data, the system falls back to the overall median of 23.5s.
+### How the Optimizer Uses the Model
 
-The optimizer sums these per-lap times across all laps and all stints, adds pit costs, and compares every legal strategy. For a typical 1-stop race, this means testing ~280 strategies (6 compound pairs × ~47 possible pit laps); for 2-stop races, thousands of combinations are evaluated.
+The ML model is queried once per (driver, circuit) to get a MEDIUM-compound baseline pace. For each candidate strategy, the optimizer computes per-lap times by adding compound pace offsets (from Pirelli technical data), non-linear tyre degradation curves (fuel-corrected from real lap data, scaled by a calibrated factor validated against 87 real races), and per-circuit pit stop costs (median from ~4,000 real pit stops). It then enumerates ~9,000 valid strategies — all legal compound combinations across 1, 2, and 3-stop configurations — and selects the one with the lowest total race time.
 
 ## 5. Critical Reflection
 
-**Compound pace offsets are the biggest assumption.** The -0.85s / +0.55s offsets from Pirelli data cannot be independently verified and may not hold across regulation changes. The 1.4s/lap swing between SOFT and HARD has outsized leverage: over a 70-lap race, a 10% error shifts predicted race time by ~10s, enough to change which strategy ranks first. Deriving these offsets from race data was attempted but failed due to the fuel-load confound described above.
+**Compound pace offsets are the biggest assumption.** The 1.4 s/lap swing between SOFT and HARD cannot be independently verified from race data and may shift with regulation changes. Over a 70-lap race, a 10% error in these offsets shifts predicted race time by ~10s — enough to change which strategy ranks first.
 
-**Simpler methods beat ML in three out of five targets.** PitstopT's single-feature Random Forest was equivalent to a per-circuit average. The degradation pipeline's fuel-corrected stint analysis was more physically grounded than letting the ML model learn wear implicitly. SafetyCar prediction was fundamentally impossible. This highlights that supervised learning is not always the right tool — domain-informed averages can outperform ML when the signal is weak or the feature set is thin.
+**Simpler methods beat ML in 3 of 5 targets.** Pit cost was better served by a lookup table. Degradation came from domain-specific fuel correction rather than learned implicitly. Safety car prediction was impossible. This underscores that ML is not always the right tool — domain-informed averages outperform when signal is weak or features are thin.
 
-**Distributional shift.** The 2022 regulation change (ground-effect aerodynamics) fundamentally changed tyre loading. Training data from 2019–2021 carries partially wrong priors for 2022+ degradation. The temporal holdout is realistic about this, but it also means the model needs retraining each season as technical regulations evolve.
+**Distributional shift.** The 2022 ground-effect regulation change fundamentally altered tyre loading. Pre-2022 training data carries partially wrong priors, and the model requires retraining each season.
 
-**Evaluation gap.** R² measures how well the model explains variance in individual lap times, but what matters for strategy is whether the *ordering* of strategies is correct. A model with R² = 0.913 could still rank two close strategies incorrectly. A more operationally meaningful metric would be comparing the optimizer's top-ranked strategy against the strategy that actually won each 2024 race, which was not evaluated here.
+**Evaluation gap.** R² measures individual lap-time accuracy, but what matters is whether strategy *rankings* are correct. A dedicated metric comparing the optimizer's top strategy to actual race-winning strategies was not computed.
 
-**Data imbalance across teams.** Top teams (Red Bull, Mercedes, Ferrari) generate far more laps of clean data than midfield or backmarker teams. Predictions are likely less reliable for smaller teams.
+**Team data imbalance.** Top teams generate more clean laps; predictions for smaller teams are likely less reliable.
 
-**Practical deployment gap.** The system is an offline batch predictor that assumes a fixed race length and does not react to live conditions (weather, safety cars, tyre temperature). Bridging this gap would require live telemetry ingestion and confidence intervals rather than point estimates.
+---
 
 ## Appendix — Reproducibility
 
-Retrain models: `cd f1_strategy && make strategy-train` | Serve API: `make serve` | Frontend: `cd ui && npm install && npm run dev`
+```
+pip install -r requirements.txt          # Install dependencies
+jupyter notebook final_model.ipynb       # Run complete pipeline
 
-Per-circuit degradation rates: `cd f1_strategy && python scripts/build_deg_table.py` (writes `data/processed/DegradationRates.csv`)
+cd f1_strategy
+python f1pit/models/strategy_models.py   # Retrain models
+python scripts/calibrate_deg_scale.py    # Re-run DEG_SCALE calibration
+python scripts/build_deg_curves.py       # Rebuild degradation curves
 
-Unused model rationale: `f1_strategy/f1pit/models/unused_models.py`
+cd ui && npm install && npm run dev      # Launch interactive dashboard
+```
 
-Artifacts (trained models + evaluation metrics): `f1_strategy/artifacts/strategy_20260307_151844/`
-
-All cleaned CSVs in `data/`; FastF1 requires `fastf1` Python package; Kaggle data requires Kaggle API credentials.
+All data is included in `data/processed/`. Trained model artifacts: `f1_strategy/artifacts/strategy_latest/`. Unused model rationale: `f1_strategy/f1pit/models/unused_models.py`. No external API calls needed for reproduction.
