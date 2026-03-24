@@ -18,7 +18,7 @@ const METHOD_TEXT = [
   'How we calculate the optimal pit strategy:',
   '',
   '1. ML model predicts base lap pace per circuit/driver/team.',
-  '   Trained on ~50,000 real F1 laps (2019-2024).',
+  '   Trained on ~93,000 real F1 laps (2019-2024).',
   '',
   '2. Physics-based tyre degradation (non-linear, accelerating).',
   '   Circuit-specific degradation factor from TyreStress/Abrasion data.',
