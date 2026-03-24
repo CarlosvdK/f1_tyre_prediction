@@ -194,10 +194,11 @@ export default function App() {
     if (!track || !driver || !lap) return;
     let alive = true;
     const baselineLap = Math.max(1, lap - 5);
+    const pits = strategyData?.best_strategy?.pit_laps ?? [];
     setMapLoading(true);
     Promise.all([
-      getTelemetry(track, driver, lap),
-      getTelemetry(track, driver, baselineLap),
+      getTelemetry(track, driver, lap, pits),
+      getTelemetry(track, driver, baselineLap, pits),
     ])
       .then(([current, baseline]) => {
         if (!alive) return;
@@ -214,7 +215,7 @@ export default function App() {
         if (alive) setMapLoading(false);
       });
     return () => { alive = false; };
-  }, [track, driver, lap]);
+  }, [track, driver, lap, strategyData]);
 
   useEffect(() => {
     if (!isPlaying || laps.length < 2) return;
@@ -342,7 +343,7 @@ export default function App() {
           <section className="scene-glass-card scene-map-card">
             <header className="scene-card-head">
               <div>
-                <InfoTip text="Shows predicted braking and acceleration zones around the circuit for the current lap. As tyres degrade, braking zones grow longer (thicker red lines) because the driver must brake earlier with less grip. Acceleration zones shrink (thinner green lines) as traction reduces. Compare against the faint fresh-tyre braking outline to see the degradation effect. Hover over any zone for details.">
+                <InfoTip text="Shows braking and acceleration zones around the circuit for the current lap. As tyres degrade, braking zones grow longer (thicker red lines) and acceleration zones shrink (thinner green lines). After a pit stop with fresh tyres, braking resets shorter and acceleration gets stronger. Hover over any zone for details.">
                   <h2 className="scene-card-title">Braking &amp; Acceleration Map</h2>
                 </InfoTip>
                 <p className="scene-card-sub">Lap {lap} · Stint {currentStint} · Stint lap {stintLapNum}</p>
@@ -356,10 +357,6 @@ export default function App() {
                   <span className="feature-legend-dot" style={{ background: '#36e888' }} />
                   Throttle
                 </span>
-                <span className="feature-legend-item">
-                  <span className="feature-legend-dot" style={{ background: 'rgba(255,255,255,0.2)' }} />
-                  Fresh ref
-                </span>
               </div>
             </header>
             <div className="scene-card-body">
@@ -369,7 +366,7 @@ export default function App() {
                 baselineTelemetry={baselineTelemetry}
                 lap={lap}
                 totalLaps={maxLap}
-                prediction={prediction}
+                pitLaps={best?.pit_laps ?? []}
               />
             </div>
           </section>

@@ -29,22 +29,22 @@
   --div: rgba(255, 255, 255, 0.14);
 
   /* Typography scale */
-  --fs-super: clamp(2.4rem, 3.8vw, 3.6rem);
+  --fs-super: clamp(3.2rem, 5vw, 4.8rem);
   /* hero number */
-  --fs-large: clamp(1.6rem, 2.5vw, 2.4rem);
+  --fs-large: clamp(2.6rem, 4vw, 3.8rem);
   /* KPI value */
-  --fs-body: 0.88rem;
+  --fs-body: 1.2rem;
   /* normal text */
-  --fs-label: 0.56rem;
+  --fs-label: 1.0rem;
   /* ALL CAPS labels */
-  --fs-micro: 0.48rem;
+  --fs-micro: 0.72rem;
   /* tiny meta */
 
   /* Spacing */
   --pad: 28px;
   --pad-sm: 16px;
   --nav-h: 52px;
-  --strip-h: 72px;
+  --strip-h: 120px;
   /* bottom strip height */
 
   /* Fonts */
@@ -395,7 +395,7 @@ body {
 
 .ctrl-lap-value {
   font-family: var(--ff-display);
-  font-size: 1.0rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--white);
   white-space: nowrap;
@@ -408,7 +408,7 @@ body {
   outline: none;
   cursor: pointer;
   font-family: var(--ff-display);
-  font-size: 0.85rem;
+  font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -551,7 +551,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .scene-card-title {
   font-family: var(--ff-display);
-  font-size: 1.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -560,7 +560,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .scene-card-sub {
   font-family: var(--ff-display);
-  font-size: 0.95rem;
+  font-size: 1.4rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
@@ -590,11 +590,11 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .scene-chart-card .deg-chart-title {
-  font-size: 1.5rem;
+  font-size: 2.2rem;
 }
 
 .scene-chart-card .deg-chart-sub {
-  font-size: 0.92rem;
+  font-size: 1.3rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -669,7 +669,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .telem-unit {
-  font-size: 0.6rem;
+  font-size: 1.2rem;
   font-weight: 400;
   color: var(--white-35);
   margin-left: 4px;
@@ -692,19 +692,19 @@ input[type='range']::-webkit-slider-thumb:hover {
   background: transparent;
   border: none;
   font-family: var(--ff-display);
-  font-size: clamp(0.88rem, 1.4vw, 1.2rem);
+  font-size: clamp(1.0rem, 1.4vw, 1.3rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.02em;
   color: var(--white);
   cursor: pointer;
-  padding: 0 16px 0 0;
+  padding: 0 20px 0 0;
   outline: none;
   width: 100%;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M0 0l6 7 6-7z' fill='rgba(255,255,255,0.35)'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 0 center;
-  background-size: 10px 6px;
+  background-size: 12px 7px;
   transition: color var(--t-fast);
 }
 
@@ -973,7 +973,7 @@ input[type='range']::-webkit-slider-thumb:hover {
   align-items: center;
   gap: 8px;
   font-family: var(--ff-display);
-  font-size: 0.88rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1155,7 +1155,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-title {
   font-family: var(--ff-display);
-  font-size: 1.7rem;
+  font-size: 2.4rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1165,7 +1165,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-sub {
   font-family: var(--ff-display);
-  font-size: 1.0rem;
+  font-size: 1.4rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--white-35);
@@ -1217,9 +1217,9 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .strat-compare-rank {
-  flex: 0 0 48px;
+  flex: 0 0 56px;
   font-family: var(--ff-display);
-  font-size: 1.05rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1248,7 +1248,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .strat-compare-label {
   font-family: var(--ff-display);
-  font-size: 0.95rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.75);
   letter-spacing: 0.05em;
@@ -1264,9 +1264,9 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .strat-compare-delta {
-  flex: 0 0 60px;
+  flex: 0 0 70px;
   font-family: var(--ff-display);
-  font-size: 0.95rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--white-35);
@@ -1293,7 +1293,7 @@ input[type='range']::-webkit-slider-thumb:hover {
   align-items: center;
   gap: 10px;
   font-family: var(--ff-display);
-  font-size: 1.0rem;
+  font-size: 1.4rem;
   letter-spacing: 0.04em;
   color: var(--white-55);
 }
@@ -1322,7 +1322,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .strat-breakdown-total {
   font-family: var(--ff-display);
-  font-size: 0.92rem;
+  font-size: 1.3rem;
   letter-spacing: 0.06em;
   color: var(--white-35);
   margin-top: 4px;

@@ -5,7 +5,6 @@ import {
   type StrategyResult,
   type StrategyOption,
   COMPOUND_COLORS,
-  COMPOUND_COLORS_DIM,
 } from '../data/api';
 
 const Plot = createPlotlyComponent(Plotly);
@@ -158,7 +157,7 @@ export default function DegradationChart({
       y: yVals,
       type: 'scatter',
       mode: 'lines',
-      line: { color: col, width: 2.5 },
+      line: { color: col, width: 4 },
       name: formatCompound(compound),
       hovertemplate: laps.map((l) =>
         `<b>${formatCompound(compound)}</b> · Lap ${l.lap}<br>` +
@@ -175,7 +174,7 @@ export default function DegradationChart({
       y: [yMin - yPad, yMax + yPad],
       type: 'scatter',
       mode: 'lines',
-      line: { color: 'rgba(255,255,255,0.35)', width: 1.5, dash: 'dash' },
+      line: { color: 'rgba(255,255,255,0.4)', width: 2.5, dash: 'dash' },
       name: `Pit L${pitLap}`,
       hoverinfo: 'skip',
       showlegend: false,
@@ -265,29 +264,29 @@ export default function DegradationChart({
               data={lineTraces}
               layout={{
                 autosize: true,
-                margin: { l: 48, r: 8, t: 4, b: 24 },
+                margin: { l: 64, r: 12, t: 8, b: 40 },
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 15 },
+                font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 22 },
                 xaxis: {
-                  title: { text: 'Lap', font: { size: 14, color: 'rgba(255,255,255,0.4)' } },
+                  title: { text: 'Lap', font: { size: 22, color: 'rgba(255,255,255,0.4)' } },
                   gridcolor: 'rgba(255,255,255,0.06)',
                   zerolinecolor: 'rgba(255,255,255,0.06)',
-                  tickfont: { size: 13 },
+                  tickfont: { size: 20 },
                   range: [0, totalLaps + 1],
                   fixedrange: true,
                 },
                 yaxis: {
-                  title: { text: 'Lap time (s)', font: { size: 14, color: 'rgba(255,255,255,0.4)' } },
+                  title: { text: 'Lap time (s)', font: { size: 22, color: 'rgba(255,255,255,0.4)' } },
                   gridcolor: 'rgba(255,255,255,0.06)',
                   zerolinecolor: 'rgba(255,255,255,0.06)',
-                  tickfont: { size: 13 },
+                  tickfont: { size: 20 },
                   fixedrange: true,
                   range: [yMin - yPad, yMax + yPad],
                 },
                 legend: {
                   orientation: 'h', y: 1.18, x: 0.5, xanchor: 'center',
-                  font: { size: 14, color: 'rgba(255,255,255,0.55)' },
+                  font: { size: 20, color: 'rgba(255,255,255,0.55)' },
                   bgcolor: 'rgba(0,0,0,0)',
                 },
                 showlegend: true,
@@ -296,13 +295,13 @@ export default function DegradationChart({
                 hoverlabel: {
                   bgcolor: 'rgba(14,14,18,0.95)',
                   bordercolor: 'rgba(255,255,255,0.15)',
-                  font: { size: 16, family: 'Barlow Condensed', color: '#f5f5f7' },
+                  font: { size: 22, family: 'Barlow Condensed', color: '#f5f5f7' },
                 },
                 annotations: best.pit_laps.map((pitLap) => ({
                   x: pitLap, y: 1, yref: 'paper' as const,
                   text: `PIT L${pitLap}`,
                   showarrow: false,
-                  font: { size: 14, color: 'rgba(255,255,255,0.65)', family: 'Barlow Condensed' },
+                  font: { size: 22, color: 'rgba(255,255,255,0.65)', family: 'Barlow Condensed' },
                   yanchor: 'bottom' as const,
                 })),
               }}

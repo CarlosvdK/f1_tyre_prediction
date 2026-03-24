@@ -258,16 +258,15 @@ function makeSyntheticTelemetry(track: string, driver: string, lap: number, pitL
     const dx2 = next2[0] - prev2[0];
     const dy2 = next2[1] - prev2[1];
     const cross = Math.abs(dx * dy2 - dy * dx2);
-    const curvature = Math.min(1, cross * 40);
-    const isBraking = curvature > 0.3;
+    const segLen = Math.max(Math.hypot(dx, dy), 1e-6);
+    const curvature = Math.min(1, (cross / (segLen * segLen)) * 2);
+    const isBraking = curvature > 0.4;
 
     const baseSpeed = isBraking ? 100 + (1 - curvature) * 120 : 250 + (1 - curvature) * 80;
     const speed = clamp(baseSpeed * (1 - lapFactor * 0.08) + wave * 8 + driverBias * 14, 70, 340);
-    const rawBrake = clamp((isBraking ? 0.6 + curvature * 0.3 : 0.0) + lapFactor * 0.14 + Math.max(0, -wave) * 0.06, 0, 1);
-    const rawThrottle = clamp((isBraking ? 0.0 : 0.92) - lapFactor * 0.11 + Math.max(0, wave) * 0.07, 0, 1);
-    // Ensure brake and throttle are mutually exclusive — whichever is stronger wins
-    const brake = rawBrake > rawThrottle ? rawBrake : 0;
-    const throttle = rawBrake > rawThrottle ? 0 : rawThrottle;
+    // Only add brake where curvature indicates a corner — don't add brake on straights
+    const brake = isBraking ? clamp(0.6 + curvature * 0.3 + lapFactor * 0.14, 0, 1) : 0;
+    const throttle = isBraking ? 0 : clamp(0.92 - lapFactor * 0.11, 0, 1);
 
     return {
       x: Number((px * 34).toFixed(3)),
@@ -296,10 +295,11 @@ function modulateTelemetry(
   return base.map((point, idx) => {
     const localWave = Math.sin((idx / Math.max(base.length, 1)) * Math.PI * 5 + (seed % 17));
     const speed = clamp((point.speed * paceDrop) + localWave * 4, 65, 360);
-    const rawB = clamp(point.brake + brakeLift + Math.max(0, -localWave) * 0.03, 0, 1);
-    const rawT = clamp(point.throttle - throttleDrop + Math.max(0, localWave) * 0.03, 0, 1);
-    const brake = rawB > rawT ? rawB : 0;
-    const throttle = rawB > rawT ? 0 : rawT;
+    // Only add brake where the base data already has braking (before corners).
+    // Don't add brake noise to non-braking points — that creates fake brake zones.
+    const isBraking = point.brake > 0.3;
+    const brake = isBraking ? clamp(point.brake + brakeLift, 0, 1) : 0;
+    const throttle = isBraking ? 0 : clamp(point.throttle - throttleDrop, 0, 1);
     return {
       x: point.x,
       y: point.y,
@@ -449,13 +449,14 @@ export async function getTelemetry(
   track: string,
   driver: string,
   lap: number,
+  pitLaps: number[] = [],
 ): Promise<TelemetryPoint[]> {
-  const openF1 = await getOpenF1Telemetry(track, driver, lap);
+  const openF1 = await getOpenF1Telemetry(track, driver, lap, pitLaps);
   if (openF1 && openF1.length > 0) {
     return openF1;
   }
 
-  return makeSyntheticTelemetry(resolveCircuitKey(track), driver, lap);
+  return makeSyntheticTelemetry(resolveCircuitKey(track), driver, lap, pitLaps);
 }
 
 /* ── Strategy types (match backend StrategyOptimizer response) ──── */
