@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any
 
 import joblib
+import numpy as np
 import pandas as pd
 
 from f1pit.config import PATHS, RANDOM_SEED
@@ -39,8 +40,9 @@ DRY_COMPOUNDS = ["SOFT", "MEDIUM", "HARD"]
 # data/processed/DegradationRates.csv (built by scripts/build_deg_table.py).
 # Computed from 91,955 real F1 laps (2019-2024): fuel-corrected median
 # degradation rate per stint, grouped by circuit and compound.
-# Fallback global medians when a circuit/compound combo is missing:
-FALLBACK_DEG_RATE = {"SOFT": 0.046, "MEDIUM": 0.059, "HARD": 0.056}
+# No single fallback rate — degradation is looked up per tyre age from
+# DegradationCurves.csv. If a circuit/compound/tyre_life combo is missing,
+# interpolation or zero is used (see _get_deg_delta).
 # Compound pace offset vs MEDIUM baseline (per lap, negative = faster).
 # Cannot be reliably derived from race data (confounded with fuel load,
 # track position, and dirty air). Values from Pirelli technical data
@@ -157,21 +159,65 @@ class StrategyOptimizer:
         self.pit_cost_lookup = pit_cost_lookup or {}
         self._pit_cost_fallback = 23.5
 
-        # Per-circuit, per-compound degradation rates (s/lap) from real data.
-        # Built by scripts/build_deg_table.py from DryQuickLaps.csv.
-        self._deg_rate_lookup: dict[tuple[str, str], float] = {}
+        # Per-circuit, per-compound, per-tyre-age degradation curves from real data.
+        # Built by scripts/build_deg_curves.py from DryQuickLaps.csv.
+        # Smoothed and monotonically increasing (deg can only get worse).
+        # Key: (gp_lower, compound, tyre_life) → delta seconds vs fresh tyre.
+        self._deg_curve: dict[tuple[str, str, int], float] = {}
+        self._deg_curve_global: dict[tuple[str, int], float] = {}
         if deg_rates is not None and not deg_rates.empty:
             from f1pit.features.strategy_features import _normalize_gp
-            for _, row in deg_rates.iterrows():
-                compound = row["Compound"].upper().strip()
-                rate = float(row["deg_rate"])
-                # Store under both raw lowercase AND normalized key so lookups
-                # succeed regardless of which GP name format the caller uses.
-                raw_key = row["GP"].lower().strip()
-                self._deg_rate_lookup[(raw_key, compound)] = rate
-                norm_key = _normalize_gp(row["GP"])
-                if norm_key != raw_key:
-                    self._deg_rate_lookup[(norm_key, compound)] = rate
+
+            # The raw degradation data from build_deg_curves.py under-estimates
+            # real tyre wear because: (1) fuel correction at -0.06s/lap is too
+            # aggressive for many circuits, (2) track evolution (rubber buildup)
+            # isn't accounted for. We scale up by 2.5× to match observed F1 pit
+            # timing patterns (1-stop around 40-55% race distance).
+            DEG_SCALE = 2.5
+
+            # Step 1: Build global fallback curves (75th percentile, not median,
+            # because median is dragged down by circuits with negative raw data)
+            global_raw: dict[tuple[str, int], float] = {}
+            for (comp, tl), grp in deg_rates.groupby(["Compound", "TyreLife"]):
+                global_raw[(comp.upper().strip(), int(tl))] = float(
+                    grp["deg_delta"].quantile(0.75)
+                )
+            for comp in DRY_COMPOUNDS:
+                tls = sorted(tl for (c, tl) in global_raw if c == comp)
+                vals = [max(0.0, global_raw[(comp, tl)] * DEG_SCALE) for tl in tls]
+                for i in range(1, len(vals)):
+                    vals[i] = max(vals[i], vals[i - 1])
+                for tl, v in zip(tls, vals):
+                    self._deg_curve_global[(comp, tl)] = v
+
+            # Step 2: Build per-circuit curves with smoothing + monotonicity.
+            # Each circuit curve must be at least as high as the global minimum
+            # to prevent unrealistically flat degradation (which causes
+            # strategies to pit in the last 10% of the race).
+            for (gp_name, comp), grp in deg_rates.groupby(["GP", "Compound"]):
+                curve = grp.sort_values("TyreLife").copy()
+                curve["smooth"] = curve["deg_delta"].rolling(5, min_periods=1, center=True).median()
+                curve["smooth"] = (curve["smooth"] * DEG_SCALE).clip(lower=0.0)
+                vals = curve["smooth"].values.copy()
+                for i in range(1, len(vals)):
+                    vals[i] = max(vals[i], vals[i - 1])
+
+                compound = comp.upper().strip()
+
+                # Floor: each circuit must have at least the global curve
+                for idx, tl in enumerate(curve["TyreLife"].astype(int)):
+                    g = self._deg_curve_global.get((compound, int(tl)), 0.0)
+                    vals[idx] = max(vals[idx], g)
+                # Re-enforce monotonicity after flooring
+                for i in range(1, len(vals)):
+                    vals[i] = max(vals[i], vals[i - 1])
+
+                raw_key = gp_name.lower().strip()
+                norm_key = _normalize_gp(gp_name)
+                for tl, delta in zip(curve["TyreLife"].astype(int), vals):
+                    self._deg_curve[(raw_key, compound, tl)] = float(delta)
+                    if norm_key != raw_key:
+                        self._deg_curve[(norm_key, compound, tl)] = float(delta)
 
     def _get_circuit_row(self, gp: str) -> pd.Series | None:
         """Get circuit info row for a GP."""
@@ -196,31 +242,62 @@ class StrategyOptimizer:
             return float(row["Length"])
         return 5.0
 
-    def _get_deg_rate(self, gp: str, compound: str) -> float:
-        """Get per-lap degradation rate (s/lap) for a circuit + compound.
+    def _get_deg_delta(self, gp: str, compound: str, tyre_life: int) -> float:
+        """Get cumulative degradation (seconds slower than fresh) at a given tyre age.
 
-        Looks up the real data-derived rate from DegradationRates.csv.
-        Falls back to the global median for that compound if no data exists.
+        Looks up real per-lap curves from DegradationCurves.csv.
+        Always returns at least the global curve value (floor).
         """
         comp = compound.upper().strip()
+        if tyre_life <= 1:
+            return 0.0
 
-        # Try raw lowercase key
-        raw_key = (gp.lower().strip(), comp)
-        if raw_key in self._deg_rate_lookup:
-            return self._deg_rate_lookup[raw_key]
+        # Get global floor value first
+        global_val = self._deg_curve_global.get((comp, tyre_life), 0.0)
+        if not global_val:
+            # Interpolate global
+            global_nearby = {tl: d for (c, tl), d in self._deg_curve_global.items() if c == comp}
+            if global_nearby:
+                below = {tl: d for tl, d in global_nearby.items() if tl <= tyre_life}
+                if below:
+                    global_val = global_nearby[max(below.keys())]
 
-        # Try normalized GP name (e.g. "British Grand Prix" → "great britain")
+        # Try circuit-specific curve (direct lookup)
+        raw_key = (gp.lower().strip(), comp, tyre_life)
+        if raw_key in self._deg_curve:
+            return max(self._deg_curve[raw_key], global_val)
+
         from f1pit.features.strategy_features import _normalize_gp
-        norm_key = (_normalize_gp(gp), comp)
-        if norm_key in self._deg_rate_lookup:
-            return self._deg_rate_lookup[norm_key]
+        norm_key = (_normalize_gp(gp), comp, tyre_life)
+        if norm_key in self._deg_curve:
+            return max(self._deg_curve[norm_key], global_val)
 
-        fallback = FALLBACK_DEG_RATE.get(comp, 0.055)
-        LOGGER.warning(
-            "No circuit-specific deg rate for %s/%s — using fallback %.4f",
-            gp, comp, fallback,
-        )
-        return fallback
+        # Interpolate: find nearest tyre_life values for this circuit+compound
+        raw_gp = gp.lower().strip()
+        norm_gp = _normalize_gp(gp)
+        circuit_val = 0.0
+        for gp_key in [raw_gp, norm_gp]:
+            nearby = {tl: d for (g, c, tl), d in self._deg_curve.items()
+                      if g == gp_key and c == comp}
+            if nearby:
+                below = {tl: d for tl, d in nearby.items() if tl <= tyre_life}
+                above = {tl: d for tl, d in nearby.items() if tl >= tyre_life}
+                if below and above:
+                    tl_lo = max(below.keys())
+                    tl_hi = min(above.keys())
+                    if tl_lo == tl_hi:
+                        circuit_val = nearby[tl_lo]
+                    else:
+                        frac = (tyre_life - tl_lo) / (tl_hi - tl_lo)
+                        circuit_val = nearby[tl_lo] + frac * (nearby[tl_hi] - nearby[tl_lo])
+                elif below:
+                    circuit_val = nearby[max(below.keys())]
+                elif above:
+                    circuit_val = nearby[min(above.keys())]
+                break
+
+        # Always return at least the global floor
+        return max(circuit_val, global_val)
 
     def _predict_lap_times(
         self,
@@ -231,7 +308,11 @@ class StrategyOptimizer:
         compounds: list[str],
         pit_laps: list[int],
     ) -> list[dict]:
-        """Get per-lap predicted times using ML base pace + physics."""
+        """Get per-lap predicted times using ML base pace + physics.
+
+        Post-processes each stint with a rolling average to produce smooth
+        degradation curves instead of staircase artifacts from discrete data.
+        """
         circuit_length = self._get_circuit_length(gp)
 
         if not hasattr(self, '_base_pace_cache'):
@@ -251,18 +332,47 @@ class StrategyOptimizer:
                 start_lap = pit_laps[i - 1] + 1
             end_lap = pit_laps[i] if i < len(compounds) - 1 else total_laps
 
-            deg_rate = self._get_deg_rate(gp, compound)
+            # Compute raw lap times for this stint
+            stint_laps: list[dict] = []
+            raw_times: list[float] = []
             for j, lap_num in enumerate(range(start_lap, end_lap + 1)):
                 t = self._physics_lap_time(
-                    base_pace, compound, j + 1, deg_rate,
+                    base_pace, compound, j + 1, gp,
                 )
-                result.append({
+                stint_laps.append({
                     "lap": lap_num,
-                    "time": round(t, 3),
                     "compound": compound,
                     "stint": i + 1,
                     "tyre_life": j + 1,
                 })
+                raw_times.append(t)
+
+            # Post-processing for visual output only (not used in strategy calc):
+            # Fit a smooth quadratic curve to the raw lap times, then add a
+            # tyre warm-up effect. This eliminates staircase artifacts from
+            # discrete degradation data and produces realistic-looking curves.
+            n = len(raw_times)
+            if n >= 5:
+                x = np.arange(n, dtype=float)
+                y = np.array(raw_times)
+                # Fit quadratic: a*x^2 + b*x + c
+                coeffs = np.polyfit(x, y, 2)
+                fitted = np.polyval(coeffs, x)
+                # Ensure fitted values are monotonically non-decreasing after lap 3
+                for k in range(3, n):
+                    fitted[k] = max(fitted[k], fitted[k - 1])
+                raw_times = fitted.tolist()
+
+                # Add tyre warm-up: first lap is ~0.3s slower (cold rubber),
+                # improving to peak grip by lap 3-4, then degradation takes over
+                warmup = {"SOFT": 0.35, "MEDIUM": 0.30, "HARD": 0.22}
+                peak = warmup.get(compound, 0.30)
+                for k in range(min(3, n)):
+                    raw_times[k] += peak * (1.0 - k / 3.0)
+
+            for lap_info, t in zip(stint_laps, raw_times):
+                lap_info["time"] = round(t, 3)
+                result.append(lap_info)
 
         return result
 
@@ -296,18 +406,20 @@ class StrategyOptimizer:
         base_pace: float,
         compound: str,
         tyre_life: int,
-        deg_rate: float = 0.055,
+        gp: str = "",
     ) -> float:
         """
         Compute a single lap time from ML base pace + compound offset + deg.
 
         base_pace is the MEDIUM baseline from the ML model.
         Compound offset adjusts for softs being faster / hards slower.
-        deg_rate is the per-circuit, per-compound linear degradation (s/lap).
+        Degradation is looked up from the per-lap curve (non-linear).
+        Tyre warm-up: fresh tyres improve for the first 2-3 laps as rubber
+        reaches operating temperature, then degradation takes over.
         """
         t = base_pace + COMPOUND_PACE_OFFSET.get(compound, 0.0)
-        if tyre_life > 1:
-            t += deg_rate * (tyre_life - 1)
+
+        t += self._get_deg_delta(gp, compound, tyre_life)
         return t
 
     def _estimate_stint_time(
@@ -324,7 +436,7 @@ class StrategyOptimizer:
     ) -> float:
         """Estimate total time for a stint using ML base pace + physics.
 
-        Uses closed-form summation for speed (no per-lap Python loop).
+        Uses per-lap degradation curves from real data (non-linear).
         """
         n_laps = end_lap - start_lap + 1
         if n_laps <= 0:
@@ -341,14 +453,13 @@ class StrategyOptimizer:
             )
         base_pace = self._base_pace_cache[cache_key]
 
-        # 1. Base pace + compound offset
-        total_time = n_laps * (base_pace + COMPOUND_PACE_OFFSET.get(compound, 0.0))
+        # Base pace + compound offset for all laps
+        base_per_lap = base_pace + COMPOUND_PACE_OFFSET.get(compound, 0.0)
+        total_time = n_laps * base_per_lap
 
-        # 2. Tyre degradation: linear rate from real per-circuit data
-        #    sum of deg_rate * k for k = 0..(n_laps-1) = deg_rate * n*(n-1)/2
-        deg_rate = self._get_deg_rate(gp, compound)
-        if n_laps > 1:
-            total_time += deg_rate * n_laps * (n_laps - 1) / 2.0
+        # Add non-linear tyre degradation from real per-lap curves
+        for tyre_life in range(1, n_laps + 1):
+            total_time += self._get_deg_delta(gp, compound, tyre_life)
 
         return total_time
 
@@ -866,8 +977,8 @@ def load_optimizer(
     data_processed = PATHS.data_processed
     pit_cost_lookup = _build_pit_cost_lookup(data_processed)
 
-    # Load per-circuit degradation rates from real data
-    deg_rates_path = data_processed / "DegradationRates.csv"
+    # Load per-circuit, per-lap degradation curves from real data
+    deg_rates_path = data_processed / "DegradationCurves.csv"
     deg_rates = None
     if deg_rates_path.exists():
         try:

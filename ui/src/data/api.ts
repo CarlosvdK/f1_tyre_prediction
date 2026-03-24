@@ -216,12 +216,31 @@ function mergeTracks(primary: Track[], secondary: Track[]): Track[] {
   return [...byId.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
-function makeSyntheticTelemetry(track: string, driver: string, lap: number): TelemetryPoint[] {
+/** Compute tyre wear factor (0 = fresh, ~1 = end of stint) based on
+ *  current lap and pit stop schedule. Resets to 0 after each pit stop. */
+function tyreWearFactor(lap: number, totalLaps: number, pitLaps: number[]): number {
+  // Find which stint the current lap is in
+  const stops = [0, ...pitLaps, totalLaps];
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (lap <= stops[i + 1]) {
+      const stintStart = stops[i];
+      const stintEnd = stops[i + 1];
+      const stintLen = Math.max(stintEnd - stintStart, 1);
+      return Math.max(0, (lap - stintStart - 1) / stintLen);
+    }
+  }
+  return 0.5;
+}
+
+function makeSyntheticTelemetry(track: string, driver: string, lap: number, pitLaps: number[] = []): TelemetryPoint[] {
   const coords = getCircuitOutline(track);
   if (coords.length === 0) return [];
 
   const seed = hashString(`${track}|${driver}`);
-  const lapFactor = Math.max(0, (lap - 1) / Math.max(defaultLapCount(track), 1));
+  const totalLaps = defaultLapCount(track);
+  // Use tyre wear within the current stint, not overall race progress.
+  // This means after a pit stop the car brakes later and accelerates harder.
+  const lapFactor = tyreWearFactor(lap, totalLaps, pitLaps);
   const driverBias = ((seed % 31) - 15) / 250;
   const wavePhase = (seed % 360) * (Math.PI / 180);
   const totalPoints = coords.length;
@@ -244,8 +263,11 @@ function makeSyntheticTelemetry(track: string, driver: string, lap: number): Tel
 
     const baseSpeed = isBraking ? 100 + (1 - curvature) * 120 : 250 + (1 - curvature) * 80;
     const speed = clamp(baseSpeed * (1 - lapFactor * 0.08) + wave * 8 + driverBias * 14, 70, 340);
-    const brake = clamp((isBraking ? 0.6 + curvature * 0.3 : 0.05) + lapFactor * 0.14 + Math.max(0, -wave) * 0.06, 0, 1);
-    const throttle = clamp((isBraking ? 0.3 : 0.92) - lapFactor * 0.11 + Math.max(0, wave) * 0.07, 0.05, 1);
+    const rawBrake = clamp((isBraking ? 0.6 + curvature * 0.3 : 0.0) + lapFactor * 0.14 + Math.max(0, -wave) * 0.06, 0, 1);
+    const rawThrottle = clamp((isBraking ? 0.0 : 0.92) - lapFactor * 0.11 + Math.max(0, wave) * 0.07, 0, 1);
+    // Ensure brake and throttle are mutually exclusive — whichever is stronger wins
+    const brake = rawBrake > rawThrottle ? rawBrake : 0;
+    const throttle = rawBrake > rawThrottle ? 0 : rawThrottle;
 
     return {
       x: Number((px * 34).toFixed(3)),
@@ -262,10 +284,11 @@ function modulateTelemetry(
   track: string,
   driver: string,
   lap: number,
+  pitLaps: number[] = [],
 ): TelemetryPoint[] {
   if (base.length === 0) return base;
   const seed = hashString(`${track}|${driver}`);
-  const lapFactor = Math.max(0, (lap - 1) / Math.max(defaultLapCount(track), 1));
+  const lapFactor = tyreWearFactor(lap, defaultLapCount(track), pitLaps);
   const paceDrop = 1 - (lapFactor * (0.06 + (seed % 4) * 0.006));
   const brakeLift = lapFactor * 0.12;
   const throttleDrop = lapFactor * 0.08;
@@ -273,8 +296,10 @@ function modulateTelemetry(
   return base.map((point, idx) => {
     const localWave = Math.sin((idx / Math.max(base.length, 1)) * Math.PI * 5 + (seed % 17));
     const speed = clamp((point.speed * paceDrop) + localWave * 4, 65, 360);
-    const brake = clamp(point.brake + brakeLift + Math.max(0, -localWave) * 0.03, 0, 1);
-    const throttle = clamp(point.throttle - throttleDrop + Math.max(0, localWave) * 0.03, 0.04, 1);
+    const rawB = clamp(point.brake + brakeLift + Math.max(0, -localWave) * 0.03, 0, 1);
+    const rawT = clamp(point.throttle - throttleDrop + Math.max(0, localWave) * 0.03, 0, 1);
+    const brake = rawB > rawT ? rawB : 0;
+    const throttle = rawB > rawT ? 0 : rawT;
     return {
       x: point.x,
       y: point.y,
@@ -289,6 +314,7 @@ async function getOpenF1Telemetry(
   track: string,
   driver: string,
   lap: number,
+  pitLaps: number[] = [],
 ): Promise<TelemetryPoint[] | null> {
   const key = resolveCircuitKey(track);
   if (openF1Unavailable.has(key)) return null;
@@ -315,7 +341,7 @@ async function getOpenF1Telemetry(
     }
   }
 
-  return modulateTelemetry(base, track, driver, lap);
+  return modulateTelemetry(base, track, driver, lap, pitLaps);
 }
 
 async function fetchJson<T>(path: string): Promise<T> {

@@ -1,0 +1,3067 @@
+GP,Compound,TyreLife,deg_delta,n_samples
+70th Anniversary Grand Prix,HARD,2,0.0,27
+70th Anniversary Grand Prix,HARD,3,0.028,31
+70th Anniversary Grand Prix,HARD,4,0.365,32
+70th Anniversary Grand Prix,HARD,5,0.2145,32
+70th Anniversary Grand Prix,HARD,6,0.309,34
+70th Anniversary Grand Prix,HARD,7,0.56,34
+70th Anniversary Grand Prix,HARD,8,0.653,34
+70th Anniversary Grand Prix,HARD,9,0.417,33
+70th Anniversary Grand Prix,HARD,10,0.5175,32
+70th Anniversary Grand Prix,HARD,11,0.585,32
+70th Anniversary Grand Prix,HARD,12,0.469,31
+70th Anniversary Grand Prix,HARD,13,0.678,29
+70th Anniversary Grand Prix,HARD,14,0.348,27
+70th Anniversary Grand Prix,HARD,15,0.563,25
+70th Anniversary Grand Prix,HARD,16,0.553,23
+70th Anniversary Grand Prix,HARD,17,0.308,21
+70th Anniversary Grand Prix,HARD,18,0.225,21
+70th Anniversary Grand Prix,HARD,19,0.306,18
+70th Anniversary Grand Prix,HARD,20,0.3695,16
+70th Anniversary Grand Prix,HARD,21,0.089,15
+70th Anniversary Grand Prix,HARD,22,0.8205,12
+70th Anniversary Grand Prix,HARD,23,0.404,9
+70th Anniversary Grand Prix,HARD,24,0.703,7
+70th Anniversary Grand Prix,HARD,25,0.726,7
+70th Anniversary Grand Prix,HARD,26,0.496,5
+70th Anniversary Grand Prix,HARD,27,0.394,4
+70th Anniversary Grand Prix,HARD,28,0.177,4
+70th Anniversary Grand Prix,HARD,29,0.174,3
+70th Anniversary Grand Prix,MEDIUM,2,0.0,3
+70th Anniversary Grand Prix,MEDIUM,3,-0.22,4
+70th Anniversary Grand Prix,MEDIUM,4,0.0,7
+70th Anniversary Grand Prix,MEDIUM,5,0.0,16
+70th Anniversary Grand Prix,MEDIUM,6,-0.313,16
+70th Anniversary Grand Prix,MEDIUM,7,-0.216,17
+70th Anniversary Grand Prix,MEDIUM,8,0.122,17
+70th Anniversary Grand Prix,MEDIUM,9,0.102,18
+70th Anniversary Grand Prix,MEDIUM,10,0.067,17
+70th Anniversary Grand Prix,MEDIUM,11,0.117,17
+70th Anniversary Grand Prix,MEDIUM,12,0.158,17
+70th Anniversary Grand Prix,MEDIUM,13,-0.083,17
+70th Anniversary Grand Prix,MEDIUM,14,0.048,17
+70th Anniversary Grand Prix,MEDIUM,15,0.1495,14
+70th Anniversary Grand Prix,MEDIUM,16,0.066,13
+70th Anniversary Grand Prix,MEDIUM,17,0.226,11
+70th Anniversary Grand Prix,MEDIUM,18,-0.4405,8
+70th Anniversary Grand Prix,MEDIUM,19,-0.4475,6
+70th Anniversary Grand Prix,MEDIUM,20,-0.057,5
+Abu Dhabi Grand Prix,HARD,2,0.0,103
+Abu Dhabi Grand Prix,HARD,3,0.071,119
+Abu Dhabi Grand Prix,HARD,4,0.094,132
+Abu Dhabi Grand Prix,HARD,5,0.2,135
+Abu Dhabi Grand Prix,HARD,6,0.2665,132
+Abu Dhabi Grand Prix,HARD,7,0.2635,134
+Abu Dhabi Grand Prix,HARD,8,0.4225,134
+Abu Dhabi Grand Prix,HARD,9,0.379,135
+Abu Dhabi Grand Prix,HARD,10,0.461,133
+Abu Dhabi Grand Prix,HARD,11,0.425,132
+Abu Dhabi Grand Prix,HARD,12,0.5125,128
+Abu Dhabi Grand Prix,HARD,13,0.56,130
+Abu Dhabi Grand Prix,HARD,14,0.563,129
+Abu Dhabi Grand Prix,HARD,15,0.588,131
+Abu Dhabi Grand Prix,HARD,16,0.6815,128
+Abu Dhabi Grand Prix,HARD,17,0.7495,124
+Abu Dhabi Grand Prix,HARD,18,0.654,116
+Abu Dhabi Grand Prix,HARD,19,0.712,113
+Abu Dhabi Grand Prix,HARD,20,0.833,109
+Abu Dhabi Grand Prix,HARD,21,0.839,107
+Abu Dhabi Grand Prix,HARD,22,0.956,106
+Abu Dhabi Grand Prix,HARD,23,0.951,96
+Abu Dhabi Grand Prix,HARD,24,0.8925,86
+Abu Dhabi Grand Prix,HARD,25,1.0175,82
+Abu Dhabi Grand Prix,HARD,26,0.981,75
+Abu Dhabi Grand Prix,HARD,27,0.925,67
+Abu Dhabi Grand Prix,HARD,28,0.89,63
+Abu Dhabi Grand Prix,HARD,29,1.001,60
+Abu Dhabi Grand Prix,HARD,30,0.9625,56
+Abu Dhabi Grand Prix,HARD,31,0.9855,50
+Abu Dhabi Grand Prix,HARD,32,1.199,50
+Abu Dhabi Grand Prix,HARD,33,1.251,44
+Abu Dhabi Grand Prix,HARD,34,0.984,40
+Abu Dhabi Grand Prix,HARD,35,1.4135,38
+Abu Dhabi Grand Prix,HARD,36,1.224,33
+Abu Dhabi Grand Prix,HARD,37,1.2085,30
+Abu Dhabi Grand Prix,HARD,38,1.422,27
+Abu Dhabi Grand Prix,HARD,39,1.208,25
+Abu Dhabi Grand Prix,HARD,40,1.8,21
+Abu Dhabi Grand Prix,HARD,41,1.477,21
+Abu Dhabi Grand Prix,HARD,42,1.452,20
+Abu Dhabi Grand Prix,HARD,43,1.171,20
+Abu Dhabi Grand Prix,HARD,44,0.831,17
+Abu Dhabi Grand Prix,HARD,45,2.2865,14
+Abu Dhabi Grand Prix,MEDIUM,2,0.0,57
+Abu Dhabi Grand Prix,MEDIUM,3,-0.485,69
+Abu Dhabi Grand Prix,MEDIUM,4,0.0,87
+Abu Dhabi Grand Prix,MEDIUM,5,-0.056,96
+Abu Dhabi Grand Prix,MEDIUM,6,-0.024,98
+Abu Dhabi Grand Prix,MEDIUM,7,-0.114,99
+Abu Dhabi Grand Prix,MEDIUM,8,0.057,101
+Abu Dhabi Grand Prix,MEDIUM,9,0.198,98
+Abu Dhabi Grand Prix,MEDIUM,10,0.3215,96
+Abu Dhabi Grand Prix,MEDIUM,11,0.348,95
+Abu Dhabi Grand Prix,MEDIUM,12,0.533,89
+Abu Dhabi Grand Prix,MEDIUM,13,0.6095,80
+Abu Dhabi Grand Prix,MEDIUM,14,0.628,73
+Abu Dhabi Grand Prix,MEDIUM,15,0.644,61
+Abu Dhabi Grand Prix,MEDIUM,16,0.671,58
+Abu Dhabi Grand Prix,MEDIUM,17,0.7485,48
+Abu Dhabi Grand Prix,MEDIUM,18,0.57,45
+Abu Dhabi Grand Prix,MEDIUM,19,0.748,42
+Abu Dhabi Grand Prix,MEDIUM,20,0.782,34
+Abu Dhabi Grand Prix,MEDIUM,21,0.629,33
+Abu Dhabi Grand Prix,MEDIUM,22,0.907,26
+Abu Dhabi Grand Prix,MEDIUM,23,0.8425,22
+Abu Dhabi Grand Prix,MEDIUM,24,0.961,22
+Abu Dhabi Grand Prix,MEDIUM,25,0.935,18
+Abu Dhabi Grand Prix,MEDIUM,26,0.568,16
+Abu Dhabi Grand Prix,MEDIUM,27,0.801,13
+Abu Dhabi Grand Prix,MEDIUM,28,1.236,11
+Abu Dhabi Grand Prix,MEDIUM,29,-0.0735,6
+Abu Dhabi Grand Prix,MEDIUM,30,-0.3625,4
+Abu Dhabi Grand Prix,MEDIUM,31,-0.3935,4
+Abu Dhabi Grand Prix,MEDIUM,32,0.027,3
+Abu Dhabi Grand Prix,MEDIUM,33,0.009,3
+Abu Dhabi Grand Prix,MEDIUM,34,-0.069,3
+Abu Dhabi Grand Prix,SOFT,2,0.0,5
+Abu Dhabi Grand Prix,SOFT,3,0.568,5
+Abu Dhabi Grand Prix,SOFT,4,0.6205,6
+Abu Dhabi Grand Prix,SOFT,5,0.0,22
+Abu Dhabi Grand Prix,SOFT,6,-0.151,23
+Abu Dhabi Grand Prix,SOFT,7,-0.002,23
+Abu Dhabi Grand Prix,SOFT,8,0.084,23
+Abu Dhabi Grand Prix,SOFT,9,0.092,23
+Abu Dhabi Grand Prix,SOFT,10,0.003,23
+Abu Dhabi Grand Prix,SOFT,11,0.3005,22
+Abu Dhabi Grand Prix,SOFT,12,0.189,22
+Abu Dhabi Grand Prix,SOFT,13,0.3745,18
+Abu Dhabi Grand Prix,SOFT,14,0.395,15
+Abu Dhabi Grand Prix,SOFT,15,0.258,13
+Abu Dhabi Grand Prix,SOFT,16,0.42,11
+Abu Dhabi Grand Prix,SOFT,17,0.6575,10
+Abu Dhabi Grand Prix,SOFT,18,0.483,7
+Abu Dhabi Grand Prix,SOFT,19,0.6805,8
+Abu Dhabi Grand Prix,SOFT,20,1.36,7
+Abu Dhabi Grand Prix,SOFT,21,2.041,3
+Australian Grand Prix,HARD,2,0.0,36
+Australian Grand Prix,HARD,3,0.0,56
+Australian Grand Prix,HARD,4,-0.105,59
+Australian Grand Prix,HARD,5,-0.04,59
+Australian Grand Prix,HARD,6,-0.225,61
+Australian Grand Prix,HARD,7,-0.253,62
+Australian Grand Prix,HARD,8,-0.0675,64
+Australian Grand Prix,HARD,9,-0.138,67
+Australian Grand Prix,HARD,10,-0.187,60
+Australian Grand Prix,HARD,11,-0.222,59
+Australian Grand Prix,HARD,12,-0.214,67
+Australian Grand Prix,HARD,13,-0.202,72
+Australian Grand Prix,HARD,14,-0.082,75
+Australian Grand Prix,HARD,15,-0.0335,74
+Australian Grand Prix,HARD,16,0.0605,70
+Australian Grand Prix,HARD,17,0.217,62
+Australian Grand Prix,HARD,18,0.078,59
+Australian Grand Prix,HARD,19,0.272,63
+Australian Grand Prix,HARD,20,0.243,64
+Australian Grand Prix,HARD,21,0.005,57
+Australian Grand Prix,HARD,22,-0.165,55
+Australian Grand Prix,HARD,23,0.152,53
+Australian Grand Prix,HARD,24,-0.063,49
+Australian Grand Prix,HARD,25,-0.321,45
+Australian Grand Prix,HARD,26,-0.215,44
+Australian Grand Prix,HARD,27,-0.3475,42
+Australian Grand Prix,HARD,28,-0.198,43
+Australian Grand Prix,HARD,29,-0.234,43
+Australian Grand Prix,HARD,30,-0.294,40
+Australian Grand Prix,HARD,31,-0.551,37
+Australian Grand Prix,HARD,32,-0.585,37
+Australian Grand Prix,HARD,33,-0.687,36
+Australian Grand Prix,HARD,34,-0.4435,36
+Australian Grand Prix,HARD,35,-0.567,35
+Australian Grand Prix,HARD,36,-0.448,31
+Australian Grand Prix,HARD,37,-0.196,28
+Australian Grand Prix,HARD,38,-0.568,26
+Australian Grand Prix,HARD,39,-0.938,21
+Australian Grand Prix,HARD,40,-0.867,20
+Australian Grand Prix,HARD,41,-0.838,21
+Australian Grand Prix,HARD,42,-0.63,20
+Australian Grand Prix,HARD,43,-0.683,19
+Australian Grand Prix,HARD,44,-0.5935,18
+Australian Grand Prix,HARD,45,-1.194,15
+Australian Grand Prix,MEDIUM,2,0.0,25
+Australian Grand Prix,MEDIUM,3,0.0,27
+Australian Grand Prix,MEDIUM,4,-0.0185,26
+Australian Grand Prix,MEDIUM,5,0.014,28
+Australian Grand Prix,MEDIUM,6,-0.117,29
+Australian Grand Prix,MEDIUM,7,-0.0235,34
+Australian Grand Prix,MEDIUM,8,0.0135,36
+Australian Grand Prix,MEDIUM,9,0.087,33
+Australian Grand Prix,MEDIUM,10,0.0475,30
+Australian Grand Prix,MEDIUM,11,0.222,30
+Australian Grand Prix,MEDIUM,12,0.231,31
+Australian Grand Prix,MEDIUM,13,0.481,30
+Australian Grand Prix,MEDIUM,14,0.414,29
+Australian Grand Prix,MEDIUM,15,0.318,29
+Australian Grand Prix,MEDIUM,16,0.463,25
+Australian Grand Prix,MEDIUM,17,0.445,25
+Australian Grand Prix,MEDIUM,18,0.3825,22
+Australian Grand Prix,MEDIUM,19,0.378,18
+Australian Grand Prix,MEDIUM,20,0.7965,20
+Australian Grand Prix,MEDIUM,21,0.424,17
+Australian Grand Prix,MEDIUM,22,0.755,15
+Australian Grand Prix,MEDIUM,23,0.64,14
+Australian Grand Prix,MEDIUM,24,0.6875,14
+Australian Grand Prix,MEDIUM,25,0.775,13
+Australian Grand Prix,MEDIUM,26,0.914,11
+Australian Grand Prix,MEDIUM,27,1.043,10
+Australian Grand Prix,MEDIUM,28,0.905,9
+Australian Grand Prix,MEDIUM,29,0.964,9
+Australian Grand Prix,MEDIUM,30,1.256,9
+Australian Grand Prix,MEDIUM,31,0.927,9
+Australian Grand Prix,MEDIUM,32,1.122,9
+Australian Grand Prix,MEDIUM,33,1.318,9
+Australian Grand Prix,MEDIUM,34,1.1205,8
+Australian Grand Prix,MEDIUM,35,1.888,7
+Australian Grand Prix,MEDIUM,36,1.413,7
+Australian Grand Prix,MEDIUM,37,1.619,5
+Australian Grand Prix,MEDIUM,38,1.694,5
+Australian Grand Prix,MEDIUM,39,1.385,5
+Australian Grand Prix,MEDIUM,40,1.295,5
+Australian Grand Prix,MEDIUM,41,1.985,5
+Australian Grand Prix,MEDIUM,42,2.021,5
+Australian Grand Prix,MEDIUM,43,2.26,5
+Australian Grand Prix,MEDIUM,44,2.426,3
+Australian Grand Prix,SOFT,2,0.0,7
+Australian Grand Prix,SOFT,3,0.0,9
+Australian Grand Prix,SOFT,4,0.124,9
+Australian Grand Prix,SOFT,5,0.0,16
+Australian Grand Prix,SOFT,6,-0.2665,18
+Australian Grand Prix,SOFT,7,-0.223,17
+Australian Grand Prix,SOFT,8,-0.178,18
+Australian Grand Prix,SOFT,9,-0.053,17
+Australian Grand Prix,SOFT,10,-0.228,17
+Australian Grand Prix,SOFT,11,-0.012,17
+Australian Grand Prix,SOFT,12,0.3345,16
+Australian Grand Prix,SOFT,13,0.064,16
+Australian Grand Prix,SOFT,14,-0.042,14
+Australian Grand Prix,SOFT,15,0.287,13
+Australian Grand Prix,SOFT,16,-0.3855,10
+Australian Grand Prix,SOFT,17,-0.2725,8
+Australian Grand Prix,SOFT,18,-0.325,5
+Australian Grand Prix,SOFT,19,-0.456,5
+Australian Grand Prix,SOFT,20,-0.195,5
+Australian Grand Prix,SOFT,21,-0.3635,4
+Australian Grand Prix,SOFT,22,-0.569,4
+Australian Grand Prix,SOFT,23,-0.483,4
+Australian Grand Prix,SOFT,24,-0.513,4
+Australian Grand Prix,SOFT,25,-0.093,4
+Australian Grand Prix,SOFT,27,1.018,3
+Austrian Grand Prix,HARD,2,0.0,107
+Austrian Grand Prix,HARD,3,0.0,115
+Austrian Grand Prix,HARD,4,0.102,118
+Austrian Grand Prix,HARD,5,0.23,119
+Austrian Grand Prix,HARD,6,0.259,121
+Austrian Grand Prix,HARD,7,0.303,122
+Austrian Grand Prix,HARD,8,0.428,123
+Austrian Grand Prix,HARD,9,0.473,118
+Austrian Grand Prix,HARD,10,0.535,123
+Austrian Grand Prix,HARD,11,0.672,119
+Austrian Grand Prix,HARD,12,0.703,115
+Austrian Grand Prix,HARD,13,0.7925,116
+Austrian Grand Prix,HARD,14,0.8665,118
+Austrian Grand Prix,HARD,15,1.089,111
+Austrian Grand Prix,HARD,16,1.166,113
+Austrian Grand Prix,HARD,17,1.143,110
+Austrian Grand Prix,HARD,18,1.1205,116
+Austrian Grand Prix,HARD,19,1.207,113
+Austrian Grand Prix,HARD,20,1.317,107
+Austrian Grand Prix,HARD,21,1.255,103
+Austrian Grand Prix,HARD,22,1.301,93
+Austrian Grand Prix,HARD,23,1.5365,84
+Austrian Grand Prix,HARD,24,1.519,83
+Austrian Grand Prix,HARD,25,1.5545,74
+Austrian Grand Prix,HARD,26,1.583,73
+Austrian Grand Prix,HARD,27,1.702,61
+Austrian Grand Prix,HARD,28,1.4625,52
+Austrian Grand Prix,HARD,29,1.515,48
+Austrian Grand Prix,HARD,30,1.4,41
+Austrian Grand Prix,HARD,31,1.5135,40
+Austrian Grand Prix,HARD,32,1.367,35
+Austrian Grand Prix,HARD,33,1.335,35
+Austrian Grand Prix,HARD,34,1.496,33
+Austrian Grand Prix,HARD,35,1.364,32
+Austrian Grand Prix,HARD,36,1.5935,30
+Austrian Grand Prix,HARD,37,1.826,29
+Austrian Grand Prix,HARD,38,1.553,27
+Austrian Grand Prix,HARD,39,1.653,24
+Austrian Grand Prix,HARD,40,2.036,23
+Austrian Grand Prix,HARD,41,2.322,21
+Austrian Grand Prix,HARD,42,1.715,16
+Austrian Grand Prix,HARD,43,1.764,11
+Austrian Grand Prix,HARD,44,2.2805,10
+Austrian Grand Prix,HARD,45,2.405,9
+Austrian Grand Prix,MEDIUM,2,0.0,50
+Austrian Grand Prix,MEDIUM,3,0.0,75
+Austrian Grand Prix,MEDIUM,4,-0.0295,86
+Austrian Grand Prix,MEDIUM,5,0.07,94
+Austrian Grand Prix,MEDIUM,6,0.1445,98
+Austrian Grand Prix,MEDIUM,7,0.265,101
+Austrian Grand Prix,MEDIUM,8,0.244,107
+Austrian Grand Prix,MEDIUM,9,0.236,108
+Austrian Grand Prix,MEDIUM,10,0.303,106
+Austrian Grand Prix,MEDIUM,11,0.413,99
+Austrian Grand Prix,MEDIUM,12,0.4575,102
+Austrian Grand Prix,MEDIUM,13,0.481,92
+Austrian Grand Prix,MEDIUM,14,0.7105,82
+Austrian Grand Prix,MEDIUM,15,0.7375,78
+Austrian Grand Prix,MEDIUM,16,0.74,75
+Austrian Grand Prix,MEDIUM,17,0.956,77
+Austrian Grand Prix,MEDIUM,18,0.963,71
+Austrian Grand Prix,MEDIUM,19,0.638,65
+Austrian Grand Prix,MEDIUM,20,0.894,58
+Austrian Grand Prix,MEDIUM,21,0.824,55
+Austrian Grand Prix,MEDIUM,22,0.829,50
+Austrian Grand Prix,MEDIUM,23,1.1185,46
+Austrian Grand Prix,MEDIUM,24,0.987,45
+Austrian Grand Prix,MEDIUM,25,0.8225,40
+Austrian Grand Prix,MEDIUM,26,0.8805,36
+Austrian Grand Prix,MEDIUM,27,0.901,31
+Austrian Grand Prix,MEDIUM,28,0.448,26
+Austrian Grand Prix,MEDIUM,29,0.704,24
+Austrian Grand Prix,MEDIUM,30,0.5095,20
+Austrian Grand Prix,MEDIUM,31,0.7605,18
+Austrian Grand Prix,MEDIUM,32,0.741,17
+Austrian Grand Prix,MEDIUM,33,1.18,13
+Austrian Grand Prix,MEDIUM,34,0.6085,8
+Austrian Grand Prix,MEDIUM,35,0.263,5
+Austrian Grand Prix,MEDIUM,36,0.758,5
+Austrian Grand Prix,MEDIUM,37,0.561,4
+Austrian Grand Prix,MEDIUM,38,0.566,4
+Austrian Grand Prix,MEDIUM,39,0.447,4
+Austrian Grand Prix,MEDIUM,40,1.2965,4
+Austrian Grand Prix,MEDIUM,41,1.583,3
+Austrian Grand Prix,MEDIUM,42,1.454,3
+Austrian Grand Prix,SOFT,3,0.0,3
+Austrian Grand Prix,SOFT,4,0.0,5
+Austrian Grand Prix,SOFT,5,0.0,17
+Austrian Grand Prix,SOFT,6,-0.504,18
+Austrian Grand Prix,SOFT,7,-0.471,22
+Austrian Grand Prix,SOFT,8,-0.862,22
+Austrian Grand Prix,SOFT,9,-1.0405,22
+Austrian Grand Prix,SOFT,10,-0.691,22
+Austrian Grand Prix,SOFT,11,-0.809,23
+Austrian Grand Prix,SOFT,12,-0.665,23
+Austrian Grand Prix,SOFT,13,-0.527,22
+Austrian Grand Prix,SOFT,14,-0.6,21
+Austrian Grand Prix,SOFT,15,-0.0495,20
+Austrian Grand Prix,SOFT,16,-0.281,18
+Austrian Grand Prix,SOFT,17,-0.286,17
+Austrian Grand Prix,SOFT,18,-0.068,15
+Austrian Grand Prix,SOFT,19,-0.37,15
+Austrian Grand Prix,SOFT,20,-0.273,15
+Austrian Grand Prix,SOFT,21,-0.18,15
+Austrian Grand Prix,SOFT,22,-0.2345,14
+Austrian Grand Prix,SOFT,23,0.1655,14
+Austrian Grand Prix,SOFT,24,0.124,7
+Austrian Grand Prix,SOFT,25,0.3845,4
+Austrian Grand Prix,SOFT,26,0.304,3
+Azerbaijan Grand Prix,HARD,2,0.0,55
+Azerbaijan Grand Prix,HARD,3,0.0,72
+Azerbaijan Grand Prix,HARD,4,-0.211,77
+Azerbaijan Grand Prix,HARD,5,-0.3165,76
+Azerbaijan Grand Prix,HARD,6,-0.2725,80
+Azerbaijan Grand Prix,HARD,7,-0.3665,80
+Azerbaijan Grand Prix,HARD,8,-0.217,81
+Azerbaijan Grand Prix,HARD,9,-0.312,78
+Azerbaijan Grand Prix,HARD,10,-0.313,77
+Azerbaijan Grand Prix,HARD,11,-0.279,80
+Azerbaijan Grand Prix,HARD,12,-0.2,81
+Azerbaijan Grand Prix,HARD,13,-0.097,78
+Azerbaijan Grand Prix,HARD,14,-0.2085,76
+Azerbaijan Grand Prix,HARD,15,-0.062,75
+Azerbaijan Grand Prix,HARD,16,-0.099,75
+Azerbaijan Grand Prix,HARD,17,0.053,75
+Azerbaijan Grand Prix,HARD,18,-0.027,75
+Azerbaijan Grand Prix,HARD,19,0.069,71
+Azerbaijan Grand Prix,HARD,20,-0.019,64
+Azerbaijan Grand Prix,HARD,21,-0.0465,62
+Azerbaijan Grand Prix,HARD,22,-0.0415,56
+Azerbaijan Grand Prix,HARD,23,-0.094,55
+Azerbaijan Grand Prix,HARD,24,-0.081,51
+Azerbaijan Grand Prix,HARD,25,0.021,49
+Azerbaijan Grand Prix,HARD,26,0.0255,54
+Azerbaijan Grand Prix,HARD,27,0.0645,56
+Azerbaijan Grand Prix,HARD,28,-0.092,57
+Azerbaijan Grand Prix,HARD,29,-0.097,54
+Azerbaijan Grand Prix,HARD,30,-0.1735,54
+Azerbaijan Grand Prix,HARD,31,-0.0965,52
+Azerbaijan Grand Prix,HARD,32,-0.053,52
+Azerbaijan Grand Prix,HARD,33,-0.1495,48
+Azerbaijan Grand Prix,HARD,34,-0.1225,42
+Azerbaijan Grand Prix,HARD,35,0.088,40
+Azerbaijan Grand Prix,HARD,36,-0.3945,34
+Azerbaijan Grand Prix,HARD,37,-0.559,30
+Azerbaijan Grand Prix,HARD,38,-0.381,23
+Azerbaijan Grand Prix,HARD,39,-0.337,22
+Azerbaijan Grand Prix,HARD,40,-0.778,20
+Azerbaijan Grand Prix,HARD,41,-0.688,16
+Azerbaijan Grand Prix,HARD,42,-0.623,14
+Azerbaijan Grand Prix,HARD,43,-0.612,11
+Azerbaijan Grand Prix,HARD,44,-0.6365,6
+Azerbaijan Grand Prix,HARD,45,-0.488,5
+Azerbaijan Grand Prix,MEDIUM,2,0.0,56
+Azerbaijan Grand Prix,MEDIUM,3,-0.248,62
+Azerbaijan Grand Prix,MEDIUM,4,-0.375,65
+Azerbaijan Grand Prix,MEDIUM,5,-0.4075,68
+Azerbaijan Grand Prix,MEDIUM,6,-0.399,67
+Azerbaijan Grand Prix,MEDIUM,7,-0.4145,70
+Azerbaijan Grand Prix,MEDIUM,8,-0.35,67
+Azerbaijan Grand Prix,MEDIUM,9,-0.44,51
+Azerbaijan Grand Prix,MEDIUM,10,-0.215,47
+Azerbaijan Grand Prix,MEDIUM,11,-0.2035,44
+Azerbaijan Grand Prix,MEDIUM,12,-0.156,40
+Azerbaijan Grand Prix,MEDIUM,13,-0.162,36
+Azerbaijan Grand Prix,MEDIUM,14,0.146,34
+Azerbaijan Grand Prix,MEDIUM,15,0.342,30
+Azerbaijan Grand Prix,MEDIUM,16,0.13,28
+Azerbaijan Grand Prix,MEDIUM,17,0.123,23
+Azerbaijan Grand Prix,MEDIUM,18,0.1435,20
+Azerbaijan Grand Prix,MEDIUM,19,-0.032,17
+Azerbaijan Grand Prix,MEDIUM,20,0.14,18
+Azerbaijan Grand Prix,MEDIUM,21,0.042,17
+Azerbaijan Grand Prix,MEDIUM,22,0.123,17
+Azerbaijan Grand Prix,MEDIUM,23,-0.147,17
+Azerbaijan Grand Prix,MEDIUM,24,0.037,16
+Azerbaijan Grand Prix,MEDIUM,25,0.0025,14
+Azerbaijan Grand Prix,MEDIUM,26,-0.155,12
+Azerbaijan Grand Prix,MEDIUM,27,-0.346,11
+Azerbaijan Grand Prix,MEDIUM,28,-0.001,11
+Azerbaijan Grand Prix,MEDIUM,29,-0.163,11
+Azerbaijan Grand Prix,MEDIUM,30,0.124,11
+Azerbaijan Grand Prix,MEDIUM,31,-0.247,13
+Azerbaijan Grand Prix,MEDIUM,32,-0.1085,12
+Azerbaijan Grand Prix,MEDIUM,33,-0.237,11
+Azerbaijan Grand Prix,MEDIUM,34,0.1055,10
+Azerbaijan Grand Prix,MEDIUM,35,-0.1255,10
+Azerbaijan Grand Prix,MEDIUM,36,0.027,11
+Azerbaijan Grand Prix,MEDIUM,37,-0.108,11
+Azerbaijan Grand Prix,MEDIUM,38,0.0555,10
+Azerbaijan Grand Prix,MEDIUM,39,-0.022,7
+Azerbaijan Grand Prix,MEDIUM,40,1.117,5
+Azerbaijan Grand Prix,MEDIUM,41,0.1115,4
+Azerbaijan Grand Prix,SOFT,2,0.0,6
+Azerbaijan Grand Prix,SOFT,3,-0.1775,10
+Azerbaijan Grand Prix,SOFT,4,0.0,11
+Azerbaijan Grand Prix,SOFT,5,0.0,18
+Azerbaijan Grand Prix,SOFT,6,-0.424,21
+Azerbaijan Grand Prix,SOFT,7,-0.552,24
+Azerbaijan Grand Prix,SOFT,8,0.0,25
+Azerbaijan Grand Prix,SOFT,9,-0.9315,24
+Azerbaijan Grand Prix,SOFT,10,-0.883,21
+Azerbaijan Grand Prix,SOFT,11,-0.591,21
+Azerbaijan Grand Prix,SOFT,12,-1.128,17
+Azerbaijan Grand Prix,SOFT,13,-0.6325,14
+Azerbaijan Grand Prix,SOFT,14,-0.709,14
+Azerbaijan Grand Prix,SOFT,15,0.545,9
+Azerbaijan Grand Prix,SOFT,16,0.097,3
+Bahrain Grand Prix,HARD,2,0.0,112
+Bahrain Grand Prix,HARD,3,0.128,115
+Bahrain Grand Prix,HARD,4,0.2965,116
+Bahrain Grand Prix,HARD,5,0.402,118
+Bahrain Grand Prix,HARD,6,0.465,117
+Bahrain Grand Prix,HARD,7,0.606,115
+Bahrain Grand Prix,HARD,8,0.666,117
+Bahrain Grand Prix,HARD,9,0.704,118
+Bahrain Grand Prix,HARD,10,0.7925,116
+Bahrain Grand Prix,HARD,11,0.971,111
+Bahrain Grand Prix,HARD,12,1.1065,112
+Bahrain Grand Prix,HARD,13,1.176,107
+Bahrain Grand Prix,HARD,14,1.263,100
+Bahrain Grand Prix,HARD,15,1.2745,96
+Bahrain Grand Prix,HARD,16,1.342,87
+Bahrain Grand Prix,HARD,17,1.465,79
+Bahrain Grand Prix,HARD,18,1.474,68
+Bahrain Grand Prix,HARD,19,1.545,63
+Bahrain Grand Prix,HARD,20,1.556,49
+Bahrain Grand Prix,HARD,21,1.637,42
+Bahrain Grand Prix,HARD,22,1.84,37
+Bahrain Grand Prix,HARD,23,1.962,33
+Bahrain Grand Prix,HARD,24,2.3335,24
+Bahrain Grand Prix,HARD,25,2.378,18
+Bahrain Grand Prix,HARD,26,2.469,17
+Bahrain Grand Prix,HARD,27,2.31,10
+Bahrain Grand Prix,HARD,28,2.588,7
+Bahrain Grand Prix,HARD,29,2.9065,4
+Bahrain Grand Prix,HARD,30,3.636,3
+Bahrain Grand Prix,MEDIUM,2,0.0,62
+Bahrain Grand Prix,MEDIUM,3,0.3565,66
+Bahrain Grand Prix,MEDIUM,4,0.454,69
+Bahrain Grand Prix,MEDIUM,5,0.786,69
+Bahrain Grand Prix,MEDIUM,6,0.7465,76
+Bahrain Grand Prix,MEDIUM,7,0.933,76
+Bahrain Grand Prix,MEDIUM,8,0.9765,74
+Bahrain Grand Prix,MEDIUM,9,1.025,79
+Bahrain Grand Prix,MEDIUM,10,1.132,83
+Bahrain Grand Prix,MEDIUM,11,1.128,79
+Bahrain Grand Prix,MEDIUM,12,1.045,79
+Bahrain Grand Prix,MEDIUM,13,1.2835,74
+Bahrain Grand Prix,MEDIUM,14,1.153,72
+Bahrain Grand Prix,MEDIUM,15,1.228,64
+Bahrain Grand Prix,MEDIUM,16,1.39,61
+Bahrain Grand Prix,MEDIUM,17,1.547,61
+Bahrain Grand Prix,MEDIUM,18,1.482,49
+Bahrain Grand Prix,MEDIUM,19,2.1425,42
+Bahrain Grand Prix,MEDIUM,20,1.982,36
+Bahrain Grand Prix,MEDIUM,21,2.016,28
+Bahrain Grand Prix,MEDIUM,22,1.861,22
+Bahrain Grand Prix,MEDIUM,23,2.363,17
+Bahrain Grand Prix,MEDIUM,24,2.0385,12
+Bahrain Grand Prix,MEDIUM,25,1.455,8
+Bahrain Grand Prix,MEDIUM,26,1.007,6
+Bahrain Grand Prix,MEDIUM,27,1.569,8
+Bahrain Grand Prix,MEDIUM,28,2.344,5
+Bahrain Grand Prix,MEDIUM,29,1.514,4
+Bahrain Grand Prix,MEDIUM,30,1.777,3
+Bahrain Grand Prix,SOFT,2,0.0,47
+Bahrain Grand Prix,SOFT,3,0.0175,48
+Bahrain Grand Prix,SOFT,4,0.1775,60
+Bahrain Grand Prix,SOFT,5,0.0,96
+Bahrain Grand Prix,SOFT,6,0.154,99
+Bahrain Grand Prix,SOFT,7,0.24,98
+Bahrain Grand Prix,SOFT,8,0.2545,102
+Bahrain Grand Prix,SOFT,9,0.419,106
+Bahrain Grand Prix,SOFT,10,0.564,107
+Bahrain Grand Prix,SOFT,11,0.632,110
+Bahrain Grand Prix,SOFT,12,0.8635,98
+Bahrain Grand Prix,SOFT,13,0.8325,92
+Bahrain Grand Prix,SOFT,14,0.9275,80
+Bahrain Grand Prix,SOFT,15,1.217,61
+Bahrain Grand Prix,SOFT,16,1.223,46
+Bahrain Grand Prix,SOFT,17,1.672,34
+Bahrain Grand Prix,SOFT,18,1.9645,24
+Bahrain Grand Prix,SOFT,19,2.352,20
+Bahrain Grand Prix,SOFT,20,2.491,13
+Bahrain Grand Prix,SOFT,21,2.2225,10
+Bahrain Grand Prix,SOFT,22,2.702,7
+Bahrain Grand Prix,SOFT,23,2.434,5
+Bahrain Grand Prix,SOFT,24,2.737,5
+Belgian Grand Prix,HARD,2,0.0,39
+Belgian Grand Prix,HARD,3,0.251,39
+Belgian Grand Prix,HARD,4,0.3515,46
+Belgian Grand Prix,HARD,5,0.399,51
+Belgian Grand Prix,HARD,6,0.346,51
+Belgian Grand Prix,HARD,7,0.498,51
+Belgian Grand Prix,HARD,8,0.392,51
+Belgian Grand Prix,HARD,9,0.6645,50
+Belgian Grand Prix,HARD,10,0.842,49
+Belgian Grand Prix,HARD,11,0.834,49
+Belgian Grand Prix,HARD,12,0.7585,48
+Belgian Grand Prix,HARD,13,0.714,46
+Belgian Grand Prix,HARD,14,0.856,43
+Belgian Grand Prix,HARD,15,0.7945,42
+Belgian Grand Prix,HARD,16,0.448,36
+Belgian Grand Prix,HARD,17,0.76,34
+Belgian Grand Prix,HARD,18,0.4865,30
+Belgian Grand Prix,HARD,19,0.317,24
+Belgian Grand Prix,HARD,20,-0.537,17
+Belgian Grand Prix,HARD,21,0.125,15
+Belgian Grand Prix,HARD,22,-1.137,14
+Belgian Grand Prix,HARD,23,-0.906,14
+Belgian Grand Prix,HARD,24,-1.025,13
+Belgian Grand Prix,HARD,25,-0.5535,12
+Belgian Grand Prix,HARD,26,-0.136,11
+Belgian Grand Prix,HARD,27,-0.5095,10
+Belgian Grand Prix,HARD,28,-0.712,9
+Belgian Grand Prix,HARD,29,-0.456,9
+Belgian Grand Prix,HARD,30,-0.452,9
+Belgian Grand Prix,HARD,31,-0.378,9
+Belgian Grand Prix,HARD,32,-0.312,9
+Belgian Grand Prix,HARD,33,0.031,9
+Belgian Grand Prix,MEDIUM,2,0.0,83
+Belgian Grand Prix,MEDIUM,3,0.2085,90
+Belgian Grand Prix,MEDIUM,4,0.345,88
+Belgian Grand Prix,MEDIUM,5,0.3145,98
+Belgian Grand Prix,MEDIUM,6,0.446,101
+Belgian Grand Prix,MEDIUM,7,0.553,100
+Belgian Grand Prix,MEDIUM,8,0.695,97
+Belgian Grand Prix,MEDIUM,9,0.805,95
+Belgian Grand Prix,MEDIUM,10,1.128,78
+Belgian Grand Prix,MEDIUM,11,1.127,75
+Belgian Grand Prix,MEDIUM,12,1.28,65
+Belgian Grand Prix,MEDIUM,13,1.3215,58
+Belgian Grand Prix,MEDIUM,14,1.339,48
+Belgian Grand Prix,MEDIUM,15,1.492,38
+Belgian Grand Prix,MEDIUM,16,1.573,31
+Belgian Grand Prix,MEDIUM,17,1.791,28
+Belgian Grand Prix,MEDIUM,18,1.8975,30
+Belgian Grand Prix,MEDIUM,19,1.935,25
+Belgian Grand Prix,MEDIUM,20,0.786,20
+Belgian Grand Prix,MEDIUM,21,0.978,19
+Belgian Grand Prix,MEDIUM,22,0.6875,16
+Belgian Grand Prix,MEDIUM,23,0.869,13
+Belgian Grand Prix,MEDIUM,24,0.507,11
+Belgian Grand Prix,MEDIUM,25,0.3965,8
+Belgian Grand Prix,MEDIUM,26,0.557,9
+Belgian Grand Prix,MEDIUM,27,0.845,8
+Belgian Grand Prix,MEDIUM,28,1.3155,8
+Belgian Grand Prix,MEDIUM,29,1.3225,6
+Belgian Grand Prix,MEDIUM,30,1.002,4
+Belgian Grand Prix,MEDIUM,31,0.741,3
+Belgian Grand Prix,SOFT,2,0.0,33
+Belgian Grand Prix,SOFT,3,0.305,35
+Belgian Grand Prix,SOFT,4,0.7015,36
+Belgian Grand Prix,SOFT,5,0.386,45
+Belgian Grand Prix,SOFT,6,0.5835,48
+Belgian Grand Prix,SOFT,7,0.5705,54
+Belgian Grand Prix,SOFT,8,0.611,57
+Belgian Grand Prix,SOFT,9,0.319,59
+Belgian Grand Prix,SOFT,10,0.2,57
+Belgian Grand Prix,SOFT,11,0.101,57
+Belgian Grand Prix,SOFT,12,0.182,54
+Belgian Grand Prix,SOFT,13,0.444,48
+Belgian Grand Prix,SOFT,14,1.262,38
+Belgian Grand Prix,SOFT,15,1.089,32
+Belgian Grand Prix,SOFT,16,0.712,27
+Belgian Grand Prix,SOFT,17,0.657,25
+Belgian Grand Prix,SOFT,18,0.188,22
+Belgian Grand Prix,SOFT,19,0.35,21
+Belgian Grand Prix,SOFT,20,0.34,19
+Belgian Grand Prix,SOFT,21,0.42,15
+Belgian Grand Prix,SOFT,22,0.418,15
+Belgian Grand Prix,SOFT,23,-0.13,13
+Belgian Grand Prix,SOFT,24,0.013,11
+Belgian Grand Prix,SOFT,25,-0.957,10
+Belgian Grand Prix,SOFT,26,-0.973,10
+Belgian Grand Prix,SOFT,27,-0.093,9
+Belgian Grand Prix,SOFT,28,-0.7265,6
+Belgian Grand Prix,SOFT,29,-0.2725,6
+Belgian Grand Prix,SOFT,30,-0.468,5
+Belgian Grand Prix,SOFT,31,-0.607,5
+Belgian Grand Prix,SOFT,32,-0.157,5
+Belgian Grand Prix,SOFT,33,-0.142,5
+Belgian Grand Prix,SOFT,34,0.117,5
+Belgian Grand Prix,SOFT,35,0.857,4
+Belgian Grand Prix,SOFT,36,0.7395,4
+Brazilian Grand Prix,HARD,2,0.0,4
+Brazilian Grand Prix,HARD,3,0.232,4
+Brazilian Grand Prix,HARD,4,0.1655,4
+Brazilian Grand Prix,HARD,5,0.081,4
+Brazilian Grand Prix,HARD,6,0.434,3
+Brazilian Grand Prix,HARD,7,0.852,4
+Brazilian Grand Prix,HARD,8,0.622,4
+Brazilian Grand Prix,HARD,9,0.597,4
+Brazilian Grand Prix,HARD,10,0.6415,4
+Brazilian Grand Prix,HARD,11,0.7455,4
+Brazilian Grand Prix,HARD,12,1.1025,4
+Brazilian Grand Prix,HARD,13,1.0735,4
+Brazilian Grand Prix,HARD,14,1.389,3
+Brazilian Grand Prix,HARD,15,0.951,3
+Brazilian Grand Prix,HARD,16,1.037,3
+Brazilian Grand Prix,MEDIUM,2,0.0,14
+Brazilian Grand Prix,MEDIUM,3,-0.007,14
+Brazilian Grand Prix,MEDIUM,4,0.184,15
+Brazilian Grand Prix,MEDIUM,5,0.199,17
+Brazilian Grand Prix,MEDIUM,6,0.548,16
+Brazilian Grand Prix,MEDIUM,7,0.616,17
+Brazilian Grand Prix,MEDIUM,8,0.5365,16
+Brazilian Grand Prix,MEDIUM,9,0.624,18
+Brazilian Grand Prix,MEDIUM,10,0.424,17
+Brazilian Grand Prix,MEDIUM,11,0.347,15
+Brazilian Grand Prix,MEDIUM,12,0.45,15
+Brazilian Grand Prix,MEDIUM,13,0.749,13
+Brazilian Grand Prix,MEDIUM,14,0.5405,14
+Brazilian Grand Prix,MEDIUM,15,0.6905,14
+Brazilian Grand Prix,MEDIUM,16,0.763,14
+Brazilian Grand Prix,MEDIUM,17,1.035,16
+Brazilian Grand Prix,MEDIUM,18,0.966,16
+Brazilian Grand Prix,MEDIUM,19,1.138,13
+Brazilian Grand Prix,MEDIUM,20,1.332,15
+Brazilian Grand Prix,MEDIUM,21,1.188,15
+Brazilian Grand Prix,MEDIUM,22,1.3005,14
+Brazilian Grand Prix,MEDIUM,23,1.612,11
+Brazilian Grand Prix,MEDIUM,24,1.339,9
+Brazilian Grand Prix,MEDIUM,25,1.592,9
+Brazilian Grand Prix,MEDIUM,26,1.582,4
+Brazilian Grand Prix,MEDIUM,27,1.32,3
+Brazilian Grand Prix,SOFT,2,0.0,5
+Brazilian Grand Prix,SOFT,3,0.0,9
+Brazilian Grand Prix,SOFT,4,0.0,13
+Brazilian Grand Prix,SOFT,5,0.0,26
+Brazilian Grand Prix,SOFT,6,-0.004,27
+Brazilian Grand Prix,SOFT,7,0.288,21
+Brazilian Grand Prix,SOFT,8,0.241,21
+Brazilian Grand Prix,SOFT,9,0.1905,24
+Brazilian Grand Prix,SOFT,10,0.5155,22
+Brazilian Grand Prix,SOFT,11,0.373,23
+Brazilian Grand Prix,SOFT,12,0.509,21
+Brazilian Grand Prix,SOFT,13,0.654,23
+Brazilian Grand Prix,SOFT,14,0.672,23
+Brazilian Grand Prix,SOFT,15,0.7035,24
+Brazilian Grand Prix,SOFT,16,0.813,22
+Brazilian Grand Prix,SOFT,17,0.835,22
+Brazilian Grand Prix,SOFT,18,0.999,23
+Brazilian Grand Prix,SOFT,19,0.946,23
+Brazilian Grand Prix,SOFT,20,1.015,21
+Brazilian Grand Prix,SOFT,21,1.243,20
+Brazilian Grand Prix,SOFT,22,1.2025,18
+Brazilian Grand Prix,SOFT,23,1.276,13
+Brazilian Grand Prix,SOFT,24,1.285,13
+Brazilian Grand Prix,SOFT,25,1.417,11
+Brazilian Grand Prix,SOFT,26,1.697,9
+Brazilian Grand Prix,SOFT,27,1.6895,8
+Brazilian Grand Prix,SOFT,28,1.882,6
+British Grand Prix,HARD,2,0.0,33
+British Grand Prix,HARD,3,0.0,36
+British Grand Prix,HARD,4,0.062,42
+British Grand Prix,HARD,5,0.059,45
+British Grand Prix,HARD,6,0.101,47
+British Grand Prix,HARD,7,0.063,49
+British Grand Prix,HARD,8,0.0095,50
+British Grand Prix,HARD,9,0.0,58
+British Grand Prix,HARD,10,0.0,59
+British Grand Prix,HARD,11,-0.015,58
+British Grand Prix,HARD,12,0.001,58
+British Grand Prix,HARD,13,0.0085,58
+British Grand Prix,HARD,14,-0.024,59
+British Grand Prix,HARD,15,0.058,60
+British Grand Prix,HARD,16,0.087,59
+British Grand Prix,HARD,17,-0.0715,56
+British Grand Prix,HARD,18,-0.1205,54
+British Grand Prix,HARD,19,-0.075,53
+British Grand Prix,HARD,20,-0.1185,50
+British Grand Prix,HARD,21,-0.263,50
+British Grand Prix,HARD,22,-0.1755,50
+British Grand Prix,HARD,23,-0.174,49
+British Grand Prix,HARD,24,-0.055,44
+British Grand Prix,HARD,25,-0.1845,42
+British Grand Prix,HARD,26,-0.137,41
+British Grand Prix,HARD,27,-0.209,39
+British Grand Prix,HARD,28,-0.283,36
+British Grand Prix,HARD,29,-0.604,33
+British Grand Prix,HARD,30,-0.469,35
+British Grand Prix,HARD,31,-0.459,31
+British Grand Prix,HARD,32,-0.64,27
+British Grand Prix,HARD,33,-0.377,21
+British Grand Prix,HARD,34,-0.608,18
+British Grand Prix,HARD,35,-0.648,17
+British Grand Prix,HARD,36,-0.588,16
+British Grand Prix,HARD,37,-0.354,14
+British Grand Prix,HARD,38,-0.063,13
+British Grand Prix,HARD,39,-0.123,12
+British Grand Prix,HARD,40,-0.0605,10
+British Grand Prix,MEDIUM,2,0.0,26
+British Grand Prix,MEDIUM,3,0.0,41
+British Grand Prix,MEDIUM,4,-0.09,44
+British Grand Prix,MEDIUM,5,-0.148,49
+British Grand Prix,MEDIUM,6,0.0,56
+British Grand Prix,MEDIUM,7,0.0,56
+British Grand Prix,MEDIUM,8,-0.004,59
+British Grand Prix,MEDIUM,9,-0.027,64
+British Grand Prix,MEDIUM,10,-0.091,63
+British Grand Prix,MEDIUM,11,-0.1035,62
+British Grand Prix,MEDIUM,12,-0.002,65
+British Grand Prix,MEDIUM,13,-0.138,65
+British Grand Prix,MEDIUM,14,0.007,65
+British Grand Prix,MEDIUM,15,-0.126,65
+British Grand Prix,MEDIUM,16,0.0965,56
+British Grand Prix,MEDIUM,17,-0.115,52
+British Grand Prix,MEDIUM,18,-0.0805,48
+British Grand Prix,MEDIUM,19,-0.141,44
+British Grand Prix,MEDIUM,20,-0.27,40
+British Grand Prix,MEDIUM,21,-0.3635,36
+British Grand Prix,MEDIUM,22,-0.0975,34
+British Grand Prix,MEDIUM,23,-0.127,32
+British Grand Prix,MEDIUM,24,-0.087,29
+British Grand Prix,MEDIUM,25,-0.1325,26
+British Grand Prix,MEDIUM,26,0.002,23
+British Grand Prix,MEDIUM,27,-0.1215,22
+British Grand Prix,MEDIUM,28,-0.1385,20
+British Grand Prix,MEDIUM,29,-0.115,17
+British Grand Prix,MEDIUM,30,0.031,16
+British Grand Prix,MEDIUM,31,0.065,14
+British Grand Prix,MEDIUM,32,0.577,9
+British Grand Prix,MEDIUM,33,0.294,5
+British Grand Prix,MEDIUM,34,0.7595,4
+British Grand Prix,SOFT,2,0.0,8
+British Grand Prix,SOFT,3,0.0,13
+British Grand Prix,SOFT,4,0.0,19
+British Grand Prix,SOFT,5,-0.0395,26
+British Grand Prix,SOFT,6,-0.306,28
+British Grand Prix,SOFT,7,-0.1295,32
+British Grand Prix,SOFT,8,-0.325,33
+British Grand Prix,SOFT,9,-0.036,35
+British Grand Prix,SOFT,10,-0.3015,34
+British Grand Prix,SOFT,11,0.0,39
+British Grand Prix,SOFT,12,0.045,38
+British Grand Prix,SOFT,13,0.013,37
+British Grand Prix,SOFT,14,0.113,29
+British Grand Prix,SOFT,15,-0.01,23
+British Grand Prix,SOFT,16,0.011,21
+British Grand Prix,SOFT,17,0.153,19
+British Grand Prix,SOFT,18,0.119,17
+British Grand Prix,SOFT,19,0.204,17
+British Grand Prix,SOFT,20,-0.0035,16
+British Grand Prix,SOFT,21,0.154,11
+British Grand Prix,SOFT,22,0.287,10
+British Grand Prix,SOFT,23,0.0625,6
+British Grand Prix,SOFT,24,-0.041,5
+Canadian Grand Prix,HARD,2,0.0,40
+Canadian Grand Prix,HARD,3,0.0,47
+Canadian Grand Prix,HARD,4,-0.087,46
+Canadian Grand Prix,HARD,5,0.105,49
+Canadian Grand Prix,HARD,6,0.0,61
+Canadian Grand Prix,HARD,7,0.0,64
+Canadian Grand Prix,HARD,8,-0.042,63
+Canadian Grand Prix,HARD,9,-0.007,61
+Canadian Grand Prix,HARD,10,0.17,59
+Canadian Grand Prix,HARD,11,0.148,63
+Canadian Grand Prix,HARD,12,0.184,63
+Canadian Grand Prix,HARD,13,0.163,61
+Canadian Grand Prix,HARD,14,0.18,63
+Canadian Grand Prix,HARD,15,0.2115,64
+Canadian Grand Prix,HARD,16,0.319,65
+Canadian Grand Prix,HARD,17,0.462,69
+Canadian Grand Prix,HARD,18,0.343,70
+Canadian Grand Prix,HARD,19,0.5055,66
+Canadian Grand Prix,HARD,20,0.67,62
+Canadian Grand Prix,HARD,21,0.649,63
+Canadian Grand Prix,HARD,22,0.765,65
+Canadian Grand Prix,HARD,23,0.737,60
+Canadian Grand Prix,HARD,24,0.8005,56
+Canadian Grand Prix,HARD,25,0.7685,56
+Canadian Grand Prix,HARD,26,0.9335,54
+Canadian Grand Prix,HARD,27,0.948,53
+Canadian Grand Prix,HARD,28,1.112,51
+Canadian Grand Prix,HARD,29,1.0445,48
+Canadian Grand Prix,HARD,30,1.095,43
+Canadian Grand Prix,HARD,31,0.977,40
+Canadian Grand Prix,HARD,32,1.285,39
+Canadian Grand Prix,HARD,33,1.039,37
+Canadian Grand Prix,HARD,34,1.185,35
+Canadian Grand Prix,HARD,35,1.213,31
+Canadian Grand Prix,HARD,36,1.218,28
+Canadian Grand Prix,HARD,37,1.22,27
+Canadian Grand Prix,HARD,38,0.893,21
+Canadian Grand Prix,HARD,39,1.072,19
+Canadian Grand Prix,HARD,40,1.117,20
+Canadian Grand Prix,HARD,41,1.294,19
+Canadian Grand Prix,HARD,42,1.323,18
+Canadian Grand Prix,HARD,43,1.261,17
+Canadian Grand Prix,HARD,44,1.459,15
+Canadian Grand Prix,HARD,45,1.26,14
+Canadian Grand Prix,MEDIUM,2,0.0,28
+Canadian Grand Prix,MEDIUM,3,-0.132,37
+Canadian Grand Prix,MEDIUM,4,-0.343,37
+Canadian Grand Prix,MEDIUM,5,-0.494,37
+Canadian Grand Prix,MEDIUM,6,-0.377,39
+Canadian Grand Prix,MEDIUM,7,-0.4,39
+Canadian Grand Prix,MEDIUM,8,-0.602,27
+Canadian Grand Prix,MEDIUM,9,-0.1335,30
+Canadian Grand Prix,MEDIUM,10,-0.022,29
+Canadian Grand Prix,MEDIUM,11,-0.2335,34
+Canadian Grand Prix,MEDIUM,12,-0.2855,26
+Canadian Grand Prix,MEDIUM,13,-0.226,25
+Canadian Grand Prix,MEDIUM,14,-0.208,27
+Canadian Grand Prix,MEDIUM,15,0.0035,28
+Canadian Grand Prix,MEDIUM,16,0.044,27
+Canadian Grand Prix,MEDIUM,17,0.0415,28
+Canadian Grand Prix,MEDIUM,18,-0.143,27
+Canadian Grand Prix,MEDIUM,19,0.087,21
+Canadian Grand Prix,MEDIUM,20,0.033,20
+Canadian Grand Prix,MEDIUM,21,0.311,22
+Canadian Grand Prix,MEDIUM,22,0.357,19
+Canadian Grand Prix,MEDIUM,23,0.661,19
+Canadian Grand Prix,MEDIUM,24,0.642,18
+Canadian Grand Prix,MEDIUM,25,0.696,17
+Canadian Grand Prix,MEDIUM,26,0.9815,16
+Canadian Grand Prix,MEDIUM,27,1.134,15
+Canadian Grand Prix,MEDIUM,28,0.784,13
+Canadian Grand Prix,MEDIUM,29,0.832,12
+Canadian Grand Prix,MEDIUM,30,0.946,10
+Canadian Grand Prix,MEDIUM,31,0.4095,6
+Canadian Grand Prix,MEDIUM,32,0.7055,6
+Canadian Grand Prix,MEDIUM,33,0.515,5
+Canadian Grand Prix,MEDIUM,34,0.793,5
+Canadian Grand Prix,MEDIUM,35,0.812,4
+Canadian Grand Prix,MEDIUM,36,1.0425,4
+Canadian Grand Prix,MEDIUM,37,0.933,3
+Canadian Grand Prix,SOFT,6,0.0,4
+Canadian Grand Prix,SOFT,7,0.117,4
+Canadian Grand Prix,SOFT,8,0.415,3
+Canadian Grand Prix,SOFT,9,0.122,3
+Chinese Grand Prix,HARD,2,0.0,27
+Chinese Grand Prix,HARD,3,0.375,27
+Chinese Grand Prix,HARD,4,0.7225,26
+Chinese Grand Prix,HARD,5,0.72,26
+Chinese Grand Prix,HARD,6,0.872,25
+Chinese Grand Prix,HARD,7,0.934,27
+Chinese Grand Prix,HARD,8,1.076,27
+Chinese Grand Prix,HARD,9,0.512,33
+Chinese Grand Prix,HARD,10,0.754,34
+Chinese Grand Prix,HARD,11,0.843,35
+Chinese Grand Prix,HARD,12,0.766,34
+Chinese Grand Prix,HARD,13,0.733,31
+Chinese Grand Prix,HARD,14,0.612,31
+Chinese Grand Prix,HARD,15,0.899,29
+Chinese Grand Prix,HARD,16,0.769,28
+Chinese Grand Prix,HARD,17,0.893,23
+Chinese Grand Prix,HARD,18,1.19,24
+Chinese Grand Prix,HARD,19,1.2215,24
+Chinese Grand Prix,HARD,20,1.28,23
+Chinese Grand Prix,HARD,21,1.1575,20
+Chinese Grand Prix,HARD,22,1.198,21
+Chinese Grand Prix,HARD,23,1.353,21
+Chinese Grand Prix,HARD,24,1.5715,20
+Chinese Grand Prix,HARD,25,1.6295,20
+Chinese Grand Prix,HARD,26,1.54,19
+Chinese Grand Prix,HARD,27,1.454,17
+Chinese Grand Prix,HARD,28,1.7985,16
+Chinese Grand Prix,HARD,29,1.714,17
+Chinese Grand Prix,HARD,30,1.6445,16
+Chinese Grand Prix,HARD,31,1.817,15
+Chinese Grand Prix,HARD,32,2.132,16
+Chinese Grand Prix,HARD,33,1.966,13
+Chinese Grand Prix,HARD,34,2.573,8
+Chinese Grand Prix,HARD,35,2.406,5
+Chinese Grand Prix,HARD,36,2.837,3
+Chinese Grand Prix,MEDIUM,1,0.0,4
+Chinese Grand Prix,MEDIUM,2,0.0,31
+Chinese Grand Prix,MEDIUM,3,0.0,36
+Chinese Grand Prix,MEDIUM,4,0.253,37
+Chinese Grand Prix,MEDIUM,5,0.504,38
+Chinese Grand Prix,MEDIUM,6,0.4295,44
+Chinese Grand Prix,MEDIUM,7,0.674,43
+Chinese Grand Prix,MEDIUM,8,0.8955,40
+Chinese Grand Prix,MEDIUM,9,0.7435,38
+Chinese Grand Prix,MEDIUM,10,0.711,37
+Chinese Grand Prix,MEDIUM,11,0.8225,34
+Chinese Grand Prix,MEDIUM,12,0.673,31
+Chinese Grand Prix,MEDIUM,13,0.9125,28
+Chinese Grand Prix,MEDIUM,14,0.946,25
+Chinese Grand Prix,MEDIUM,15,1.238,23
+Chinese Grand Prix,MEDIUM,16,1.38,23
+Chinese Grand Prix,MEDIUM,17,1.208,22
+Chinese Grand Prix,MEDIUM,18,1.676,21
+Chinese Grand Prix,MEDIUM,19,1.578,19
+Chinese Grand Prix,MEDIUM,20,1.739,16
+Chinese Grand Prix,MEDIUM,21,1.761,12
+Chinese Grand Prix,MEDIUM,22,1.829,9
+Chinese Grand Prix,MEDIUM,23,1.753,7
+Chinese Grand Prix,MEDIUM,24,2.339,5
+Chinese Grand Prix,SOFT,2,0.0,9
+Chinese Grand Prix,SOFT,3,-0.062,10
+Chinese Grand Prix,SOFT,4,0.145,10
+Chinese Grand Prix,SOFT,5,0.444,9
+Chinese Grand Prix,SOFT,6,0.233,13
+Chinese Grand Prix,SOFT,7,0.296,11
+Chinese Grand Prix,SOFT,8,0.5165,12
+Chinese Grand Prix,SOFT,9,0.275,11
+Chinese Grand Prix,SOFT,10,0.076,11
+Chinese Grand Prix,SOFT,11,0.1355,10
+Chinese Grand Prix,SOFT,12,0.239,8
+Chinese Grand Prix,SOFT,13,0.5035,8
+Chinese Grand Prix,SOFT,14,0.51,7
+Chinese Grand Prix,SOFT,15,0.667,7
+Chinese Grand Prix,SOFT,16,0.6565,6
+Chinese Grand Prix,SOFT,17,0.681,4
+Chinese Grand Prix,SOFT,18,0.7525,4
+Chinese Grand Prix,SOFT,19,0.8225,4
+Dutch Grand Prix,HARD,2,0.0,36
+Dutch Grand Prix,HARD,3,-0.013,42
+Dutch Grand Prix,HARD,4,0.025,41
+Dutch Grand Prix,HARD,5,0.061,39
+Dutch Grand Prix,HARD,6,0.1415,42
+Dutch Grand Prix,HARD,7,0.297,39
+Dutch Grand Prix,HARD,8,0.214,40
+Dutch Grand Prix,HARD,9,0.399,40
+Dutch Grand Prix,HARD,10,0.458,41
+Dutch Grand Prix,HARD,11,0.5025,38
+Dutch Grand Prix,HARD,12,0.655,35
+Dutch Grand Prix,HARD,13,0.7555,36
+Dutch Grand Prix,HARD,14,0.793,34
+Dutch Grand Prix,HARD,15,0.974,34
+Dutch Grand Prix,HARD,16,0.9165,34
+Dutch Grand Prix,HARD,17,0.986,31
+Dutch Grand Prix,HARD,18,1.056,32
+Dutch Grand Prix,HARD,19,1.143,31
+Dutch Grand Prix,HARD,20,1.171,30
+Dutch Grand Prix,HARD,21,1.129,29
+Dutch Grand Prix,HARD,22,1.2255,30
+Dutch Grand Prix,HARD,23,1.1425,28
+Dutch Grand Prix,HARD,24,1.3415,30
+Dutch Grand Prix,HARD,25,1.2895,30
+Dutch Grand Prix,HARD,26,1.3735,30
+Dutch Grand Prix,HARD,27,1.4915,28
+Dutch Grand Prix,HARD,28,1.555,29
+Dutch Grand Prix,HARD,29,1.6565,24
+Dutch Grand Prix,HARD,30,1.687,24
+Dutch Grand Prix,HARD,31,1.763,24
+Dutch Grand Prix,HARD,32,1.8725,24
+Dutch Grand Prix,HARD,33,1.697,22
+Dutch Grand Prix,HARD,34,1.7095,22
+Dutch Grand Prix,HARD,35,1.7315,22
+Dutch Grand Prix,HARD,36,1.913,19
+Dutch Grand Prix,HARD,37,2.1915,18
+Dutch Grand Prix,HARD,38,2.111,17
+Dutch Grand Prix,HARD,39,2.2135,16
+Dutch Grand Prix,HARD,40,2.057,13
+Dutch Grand Prix,HARD,41,2.351,11
+Dutch Grand Prix,HARD,42,2.3295,8
+Dutch Grand Prix,HARD,43,2.6805,6
+Dutch Grand Prix,HARD,44,2.695,5
+Dutch Grand Prix,HARD,45,2.6665,4
+Dutch Grand Prix,MEDIUM,2,0.0,38
+Dutch Grand Prix,MEDIUM,3,0.0,48
+Dutch Grand Prix,MEDIUM,4,0.111,50
+Dutch Grand Prix,MEDIUM,5,0.1505,50
+Dutch Grand Prix,MEDIUM,6,0.193,50
+Dutch Grand Prix,MEDIUM,7,0.2645,48
+Dutch Grand Prix,MEDIUM,8,0.523,48
+Dutch Grand Prix,MEDIUM,9,0.444,44
+Dutch Grand Prix,MEDIUM,10,0.621,45
+Dutch Grand Prix,MEDIUM,11,0.629,43
+Dutch Grand Prix,MEDIUM,12,0.765,44
+Dutch Grand Prix,MEDIUM,13,0.768,47
+Dutch Grand Prix,MEDIUM,14,0.753,43
+Dutch Grand Prix,MEDIUM,15,0.8,45
+Dutch Grand Prix,MEDIUM,16,0.905,46
+Dutch Grand Prix,MEDIUM,17,0.908,41
+Dutch Grand Prix,MEDIUM,18,1.082,37
+Dutch Grand Prix,MEDIUM,19,0.997,36
+Dutch Grand Prix,MEDIUM,20,1.13,33
+Dutch Grand Prix,MEDIUM,21,1.2305,32
+Dutch Grand Prix,MEDIUM,22,1.2365,30
+Dutch Grand Prix,MEDIUM,23,1.323,28
+Dutch Grand Prix,MEDIUM,24,1.302,28
+Dutch Grand Prix,MEDIUM,25,1.49,26
+Dutch Grand Prix,MEDIUM,26,1.481,24
+Dutch Grand Prix,MEDIUM,27,1.3915,22
+Dutch Grand Prix,MEDIUM,28,1.632,19
+Dutch Grand Prix,MEDIUM,29,1.4945,14
+Dutch Grand Prix,MEDIUM,30,1.534,10
+Dutch Grand Prix,MEDIUM,31,2.0355,8
+Dutch Grand Prix,MEDIUM,32,1.774,5
+Dutch Grand Prix,MEDIUM,33,1.651,4
+Dutch Grand Prix,MEDIUM,34,2.079,4
+Dutch Grand Prix,MEDIUM,35,2.251,5
+Dutch Grand Prix,MEDIUM,36,2.25,3
+Dutch Grand Prix,SOFT,2,0.0,12
+Dutch Grand Prix,SOFT,3,0.0,17
+Dutch Grand Prix,SOFT,4,-0.053,22
+Dutch Grand Prix,SOFT,5,0.0,27
+Dutch Grand Prix,SOFT,6,0.0,34
+Dutch Grand Prix,SOFT,7,-0.0125,38
+Dutch Grand Prix,SOFT,8,-0.017,41
+Dutch Grand Prix,SOFT,9,-0.101,39
+Dutch Grand Prix,SOFT,10,-0.037,37
+Dutch Grand Prix,SOFT,11,0.2175,36
+Dutch Grand Prix,SOFT,12,0.283,33
+Dutch Grand Prix,SOFT,13,0.297,32
+Dutch Grand Prix,SOFT,14,0.286,34
+Dutch Grand Prix,SOFT,15,0.327,31
+Dutch Grand Prix,SOFT,16,0.6315,30
+Dutch Grand Prix,SOFT,17,0.308,29
+Dutch Grand Prix,SOFT,18,0.589,22
+Dutch Grand Prix,SOFT,19,0.524,19
+Dutch Grand Prix,SOFT,20,0.606,13
+Dutch Grand Prix,SOFT,21,0.8285,12
+Dutch Grand Prix,SOFT,22,1.041,11
+Dutch Grand Prix,SOFT,23,1.145,10
+Dutch Grand Prix,SOFT,24,0.635,7
+Dutch Grand Prix,SOFT,25,0.973,5
+Dutch Grand Prix,SOFT,26,0.9865,4
+Dutch Grand Prix,SOFT,27,1.347,4
+Eifel Grand Prix,HARD,2,0.0,4
+Eifel Grand Prix,HARD,3,-0.1945,4
+Eifel Grand Prix,HARD,4,0.226,3
+Eifel Grand Prix,HARD,5,-0.096,3
+Eifel Grand Prix,HARD,6,1.174,4
+Eifel Grand Prix,HARD,7,0.8525,4
+Eifel Grand Prix,HARD,8,0.979,4
+Eifel Grand Prix,HARD,9,0.4615,4
+Eifel Grand Prix,HARD,10,0.6615,4
+Eifel Grand Prix,HARD,11,0.3525,4
+Eifel Grand Prix,HARD,12,0.479,4
+Eifel Grand Prix,HARD,13,0.5465,4
+Eifel Grand Prix,HARD,14,0.8,3
+Eifel Grand Prix,HARD,15,0.919,3
+Eifel Grand Prix,HARD,23,2.485,3
+Eifel Grand Prix,HARD,24,1.583,3
+Eifel Grand Prix,HARD,25,1.859,3
+Eifel Grand Prix,HARD,26,1.433,3
+Eifel Grand Prix,MEDIUM,2,0.0,12
+Eifel Grand Prix,MEDIUM,3,0.0,15
+Eifel Grand Prix,MEDIUM,4,-0.189,15
+Eifel Grand Prix,MEDIUM,5,-0.066,16
+Eifel Grand Prix,MEDIUM,6,0.0445,14
+Eifel Grand Prix,MEDIUM,7,-0.062,16
+Eifel Grand Prix,MEDIUM,8,-0.101,15
+Eifel Grand Prix,MEDIUM,9,0.1015,14
+Eifel Grand Prix,MEDIUM,10,0.043,15
+Eifel Grand Prix,MEDIUM,11,-0.0905,14
+Eifel Grand Prix,MEDIUM,12,0.0045,16
+Eifel Grand Prix,MEDIUM,13,0.2475,14
+Eifel Grand Prix,MEDIUM,14,0.167,11
+Eifel Grand Prix,MEDIUM,15,0.3425,14
+Eifel Grand Prix,MEDIUM,16,0.6895,8
+Eifel Grand Prix,MEDIUM,17,0.8575,8
+Eifel Grand Prix,MEDIUM,18,1.166,13
+Eifel Grand Prix,MEDIUM,19,0.972,11
+Eifel Grand Prix,MEDIUM,20,1.047,11
+Eifel Grand Prix,MEDIUM,21,1.008,9
+Eifel Grand Prix,MEDIUM,22,0.905,11
+Eifel Grand Prix,MEDIUM,23,1.2125,10
+Eifel Grand Prix,MEDIUM,24,1.275,11
+Eifel Grand Prix,MEDIUM,25,1.289,9
+Eifel Grand Prix,MEDIUM,26,0.9,9
+Eifel Grand Prix,MEDIUM,27,0.8815,8
+Eifel Grand Prix,MEDIUM,28,1.213,3
+Eifel Grand Prix,SOFT,4,0.0,3
+Eifel Grand Prix,SOFT,5,0.0,3
+Eifel Grand Prix,SOFT,6,-0.0925,8
+Eifel Grand Prix,SOFT,7,-0.002,9
+Eifel Grand Prix,SOFT,8,-0.102,13
+Eifel Grand Prix,SOFT,9,-0.501,12
+Eifel Grand Prix,SOFT,10,-0.798,17
+Eifel Grand Prix,SOFT,11,-0.5015,18
+Eifel Grand Prix,SOFT,12,-0.7425,18
+Eifel Grand Prix,SOFT,13,-1.0895,16
+Eifel Grand Prix,SOFT,14,-0.739,18
+Eifel Grand Prix,SOFT,15,-0.5085,18
+Eifel Grand Prix,SOFT,16,-0.691,17
+Eifel Grand Prix,SOFT,17,0.0855,14
+Eifel Grand Prix,SOFT,18,-0.17,13
+Eifel Grand Prix,SOFT,19,-0.2185,4
+Eifel Grand Prix,SOFT,21,0.586,5
+Eifel Grand Prix,SOFT,22,0.348,5
+Eifel Grand Prix,SOFT,23,0.094,5
+Eifel Grand Prix,SOFT,24,-0.162,5
+Eifel Grand Prix,SOFT,25,0.1255,4
+Eifel Grand Prix,SOFT,26,0.2395,4
+Eifel Grand Prix,SOFT,27,0.146,4
+Eifel Grand Prix,SOFT,28,0.5485,4
+Eifel Grand Prix,SOFT,29,0.345,3
+Eifel Grand Prix,SOFT,30,0.879,3
+Emilia Romagna Grand Prix,HARD,2,0.0,26
+Emilia Romagna Grand Prix,HARD,3,0.0,30
+Emilia Romagna Grand Prix,HARD,4,0.086,32
+Emilia Romagna Grand Prix,HARD,5,0.1,32
+Emilia Romagna Grand Prix,HARD,6,0.281,31
+Emilia Romagna Grand Prix,HARD,7,0.173,33
+Emilia Romagna Grand Prix,HARD,8,0.274,33
+Emilia Romagna Grand Prix,HARD,9,0.612,33
+Emilia Romagna Grand Prix,HARD,10,0.571,34
+Emilia Romagna Grand Prix,HARD,11,0.418,32
+Emilia Romagna Grand Prix,HARD,12,0.56,31
+Emilia Romagna Grand Prix,HARD,13,0.693,31
+Emilia Romagna Grand Prix,HARD,14,0.624,32
+Emilia Romagna Grand Prix,HARD,15,0.681,31
+Emilia Romagna Grand Prix,HARD,16,0.8915,28
+Emilia Romagna Grand Prix,HARD,17,1.007,28
+Emilia Romagna Grand Prix,HARD,18,0.9655,30
+Emilia Romagna Grand Prix,HARD,19,1.18,29
+Emilia Romagna Grand Prix,HARD,20,1.432,29
+Emilia Romagna Grand Prix,HARD,21,1.257,29
+Emilia Romagna Grand Prix,HARD,22,1.052,27
+Emilia Romagna Grand Prix,HARD,23,1.276,28
+Emilia Romagna Grand Prix,HARD,24,1.503,25
+Emilia Romagna Grand Prix,HARD,25,1.649,28
+Emilia Romagna Grand Prix,HARD,26,1.633,25
+Emilia Romagna Grand Prix,HARD,27,1.754,27
+Emilia Romagna Grand Prix,HARD,28,1.634,25
+Emilia Romagna Grand Prix,HARD,29,1.568,25
+Emilia Romagna Grand Prix,HARD,30,2.136,24
+Emilia Romagna Grand Prix,HARD,31,2.22,21
+Emilia Romagna Grand Prix,HARD,32,1.667,21
+Emilia Romagna Grand Prix,HARD,33,1.889,19
+Emilia Romagna Grand Prix,HARD,34,1.8685,18
+Emilia Romagna Grand Prix,HARD,35,1.8305,18
+Emilia Romagna Grand Prix,HARD,36,2.0235,18
+Emilia Romagna Grand Prix,HARD,37,2.279,11
+Emilia Romagna Grand Prix,HARD,38,2.842,9
+Emilia Romagna Grand Prix,HARD,39,3.351,6
+Emilia Romagna Grand Prix,HARD,40,2.912,7
+Emilia Romagna Grand Prix,HARD,41,3.173,5
+Emilia Romagna Grand Prix,HARD,42,2.873,4
+Emilia Romagna Grand Prix,HARD,43,3.2255,4
+Emilia Romagna Grand Prix,HARD,44,4.7845,4
+Emilia Romagna Grand Prix,HARD,45,3.599,5
+Emilia Romagna Grand Prix,MEDIUM,2,0.0,21
+Emilia Romagna Grand Prix,MEDIUM,3,-0.351,25
+Emilia Romagna Grand Prix,MEDIUM,4,-0.006,27
+Emilia Romagna Grand Prix,MEDIUM,5,0.0,30
+Emilia Romagna Grand Prix,MEDIUM,6,0.0975,30
+Emilia Romagna Grand Prix,MEDIUM,7,0.014,30
+Emilia Romagna Grand Prix,MEDIUM,8,0.137,27
+Emilia Romagna Grand Prix,MEDIUM,9,0.27,29
+Emilia Romagna Grand Prix,MEDIUM,10,0.3885,30
+Emilia Romagna Grand Prix,MEDIUM,11,0.362,29
+Emilia Romagna Grand Prix,MEDIUM,12,0.417,30
+Emilia Romagna Grand Prix,MEDIUM,13,0.3635,28
+Emilia Romagna Grand Prix,MEDIUM,14,0.478,28
+Emilia Romagna Grand Prix,MEDIUM,15,0.553,27
+Emilia Romagna Grand Prix,MEDIUM,16,0.311,27
+Emilia Romagna Grand Prix,MEDIUM,17,0.4905,26
+Emilia Romagna Grand Prix,MEDIUM,18,0.579,27
+Emilia Romagna Grand Prix,MEDIUM,19,0.579,27
+Emilia Romagna Grand Prix,MEDIUM,20,0.597,26
+Emilia Romagna Grand Prix,MEDIUM,21,0.4505,24
+Emilia Romagna Grand Prix,MEDIUM,22,0.5845,22
+Emilia Romagna Grand Prix,MEDIUM,23,0.708,21
+Emilia Romagna Grand Prix,MEDIUM,24,0.8175,20
+Emilia Romagna Grand Prix,MEDIUM,25,0.912,18
+Emilia Romagna Grand Prix,MEDIUM,26,0.937,17
+Emilia Romagna Grand Prix,MEDIUM,27,0.267,13
+Emilia Romagna Grand Prix,MEDIUM,28,0.39,13
+Emilia Romagna Grand Prix,MEDIUM,29,0.672,13
+Emilia Romagna Grand Prix,MEDIUM,30,0.9985,8
+Emilia Romagna Grand Prix,MEDIUM,31,0.341,11
+Emilia Romagna Grand Prix,MEDIUM,32,0.462,10
+Emilia Romagna Grand Prix,MEDIUM,33,0.3625,8
+Emilia Romagna Grand Prix,MEDIUM,34,0.363,5
+Emilia Romagna Grand Prix,MEDIUM,35,0.7185,6
+Emilia Romagna Grand Prix,MEDIUM,36,0.562,6
+Emilia Romagna Grand Prix,MEDIUM,37,0.444,5
+Emilia Romagna Grand Prix,MEDIUM,38,0.381,3
+Emilia Romagna Grand Prix,SOFT,9,0.0,7
+Emilia Romagna Grand Prix,SOFT,10,-0.077,9
+Emilia Romagna Grand Prix,SOFT,11,-0.3655,12
+Emilia Romagna Grand Prix,SOFT,12,-0.84,10
+Emilia Romagna Grand Prix,SOFT,13,-0.917,9
+Emilia Romagna Grand Prix,SOFT,14,-0.3915,8
+Emilia Romagna Grand Prix,SOFT,15,-0.6265,6
+Emilia Romagna Grand Prix,SOFT,16,0.295,4
+French Grand Prix,HARD,2,0.0,39
+French Grand Prix,HARD,3,0.0,57
+French Grand Prix,HARD,4,-0.044,60
+French Grand Prix,HARD,5,0.0,63
+French Grand Prix,HARD,6,-0.133,63
+French Grand Prix,HARD,7,-0.124,62
+French Grand Prix,HARD,8,-0.0285,60
+French Grand Prix,HARD,9,-0.12,59
+French Grand Prix,HARD,10,-0.2255,58
+French Grand Prix,HARD,11,-0.08,58
+French Grand Prix,HARD,12,-0.088,59
+French Grand Prix,HARD,13,0.0835,58
+French Grand Prix,HARD,14,-0.004,55
+French Grand Prix,HARD,15,0.1625,56
+French Grand Prix,HARD,16,0.396,57
+French Grand Prix,HARD,17,0.2495,56
+French Grand Prix,HARD,18,0.231,52
+French Grand Prix,HARD,19,0.4825,50
+French Grand Prix,HARD,20,0.552,49
+French Grand Prix,HARD,21,0.41,51
+French Grand Prix,HARD,22,0.377,51
+French Grand Prix,HARD,23,0.248,50
+French Grand Prix,HARD,24,0.3845,48
+French Grand Prix,HARD,25,0.229,49
+French Grand Prix,HARD,26,0.489,47
+French Grand Prix,HARD,27,0.609,44
+French Grand Prix,HARD,28,0.476,42
+French Grand Prix,HARD,29,0.359,42
+French Grand Prix,HARD,30,0.3495,38
+French Grand Prix,HARD,31,0.966,26
+French Grand Prix,HARD,32,1.508,23
+French Grand Prix,HARD,33,0.818,29
+French Grand Prix,HARD,34,1.0055,28
+French Grand Prix,HARD,35,1.313,25
+French Grand Prix,HARD,36,1.713,13
+French Grand Prix,HARD,37,1.814,5
+French Grand Prix,MEDIUM,2,0.0,23
+French Grand Prix,MEDIUM,3,0.0,33
+French Grand Prix,MEDIUM,4,-0.13,35
+French Grand Prix,MEDIUM,5,-0.027,49
+French Grand Prix,MEDIUM,6,-0.142,52
+French Grand Prix,MEDIUM,7,-0.0055,58
+French Grand Prix,MEDIUM,8,-0.3275,58
+French Grand Prix,MEDIUM,9,-0.322,57
+French Grand Prix,MEDIUM,10,-0.088,56
+French Grand Prix,MEDIUM,11,-0.231,56
+French Grand Prix,MEDIUM,12,-0.131,53
+French Grand Prix,MEDIUM,13,-0.121,55
+French Grand Prix,MEDIUM,14,-0.006,50
+French Grand Prix,MEDIUM,15,0.2485,48
+French Grand Prix,MEDIUM,16,0.136,49
+French Grand Prix,MEDIUM,17,0.271,46
+French Grand Prix,MEDIUM,18,0.29,34
+French Grand Prix,MEDIUM,19,0.0,30
+French Grand Prix,MEDIUM,20,0.038,25
+French Grand Prix,MEDIUM,21,-0.314,19
+French Grand Prix,MEDIUM,22,-0.1675,18
+French Grand Prix,MEDIUM,23,-0.11,15
+French Grand Prix,MEDIUM,24,-0.162,11
+French Grand Prix,MEDIUM,25,0.092,7
+French Grand Prix,MEDIUM,26,-0.252,7
+French Grand Prix,MEDIUM,27,-0.1745,6
+Hungarian Grand Prix,HARD,2,0.0,45
+Hungarian Grand Prix,HARD,3,0.0,52
+Hungarian Grand Prix,HARD,4,0.203,50
+Hungarian Grand Prix,HARD,5,0.098,59
+Hungarian Grand Prix,HARD,6,0.1515,64
+Hungarian Grand Prix,HARD,7,0.246,73
+Hungarian Grand Prix,HARD,8,0.445,71
+Hungarian Grand Prix,HARD,9,0.399,70
+Hungarian Grand Prix,HARD,10,0.4985,70
+Hungarian Grand Prix,HARD,11,0.671,65
+Hungarian Grand Prix,HARD,12,0.6565,68
+Hungarian Grand Prix,HARD,13,0.694,72
+Hungarian Grand Prix,HARD,14,0.723,68
+Hungarian Grand Prix,HARD,15,0.901,71
+Hungarian Grand Prix,HARD,16,0.976,66
+Hungarian Grand Prix,HARD,17,1.0275,64
+Hungarian Grand Prix,HARD,18,0.981,64
+Hungarian Grand Prix,HARD,19,1.0715,68
+Hungarian Grand Prix,HARD,20,1.1125,62
+Hungarian Grand Prix,HARD,21,1.2875,58
+Hungarian Grand Prix,HARD,22,1.3415,58
+Hungarian Grand Prix,HARD,23,1.391,57
+Hungarian Grand Prix,HARD,24,1.444,48
+Hungarian Grand Prix,HARD,25,1.497,45
+Hungarian Grand Prix,HARD,26,1.485,49
+Hungarian Grand Prix,HARD,27,1.724,41
+Hungarian Grand Prix,HARD,28,1.56,31
+Hungarian Grand Prix,HARD,29,1.707,33
+Hungarian Grand Prix,HARD,30,1.75,31
+Hungarian Grand Prix,HARD,31,1.684,31
+Hungarian Grand Prix,HARD,32,1.949,30
+Hungarian Grand Prix,HARD,33,1.806,23
+Hungarian Grand Prix,HARD,34,1.819,22
+Hungarian Grand Prix,HARD,35,1.875,17
+Hungarian Grand Prix,HARD,36,1.773,19
+Hungarian Grand Prix,HARD,37,1.6615,16
+Hungarian Grand Prix,HARD,38,1.789,16
+Hungarian Grand Prix,HARD,39,2.025,15
+Hungarian Grand Prix,HARD,40,2.386,14
+Hungarian Grand Prix,HARD,41,1.584,7
+Hungarian Grand Prix,HARD,42,2.01,3
+Hungarian Grand Prix,MEDIUM,2,0.0,37
+Hungarian Grand Prix,MEDIUM,3,0.0,43
+Hungarian Grand Prix,MEDIUM,4,0.0,54
+Hungarian Grand Prix,MEDIUM,5,0.0,66
+Hungarian Grand Prix,MEDIUM,6,0.1285,68
+Hungarian Grand Prix,MEDIUM,7,0.2165,72
+Hungarian Grand Prix,MEDIUM,8,0.157,73
+Hungarian Grand Prix,MEDIUM,9,0.332,73
+Hungarian Grand Prix,MEDIUM,10,0.444,73
+Hungarian Grand Prix,MEDIUM,11,0.5795,72
+Hungarian Grand Prix,MEDIUM,12,0.549,71
+Hungarian Grand Prix,MEDIUM,13,0.624,69
+Hungarian Grand Prix,MEDIUM,14,0.65,71
+Hungarian Grand Prix,MEDIUM,15,0.756,70
+Hungarian Grand Prix,MEDIUM,16,0.867,69
+Hungarian Grand Prix,MEDIUM,17,0.989,63
+Hungarian Grand Prix,MEDIUM,18,1.16,60
+Hungarian Grand Prix,MEDIUM,19,1.1935,56
+Hungarian Grand Prix,MEDIUM,20,1.498,50
+Hungarian Grand Prix,MEDIUM,21,1.312,43
+Hungarian Grand Prix,MEDIUM,22,1.376,41
+Hungarian Grand Prix,MEDIUM,23,1.411,36
+Hungarian Grand Prix,MEDIUM,24,1.733,29
+Hungarian Grand Prix,MEDIUM,25,1.658,27
+Hungarian Grand Prix,MEDIUM,26,1.775,21
+Hungarian Grand Prix,MEDIUM,27,1.546,19
+Hungarian Grand Prix,MEDIUM,28,1.588,20
+Hungarian Grand Prix,MEDIUM,29,1.976,17
+Hungarian Grand Prix,MEDIUM,30,1.8425,12
+Hungarian Grand Prix,MEDIUM,31,1.798,9
+Hungarian Grand Prix,MEDIUM,32,1.6835,4
+Hungarian Grand Prix,SOFT,2,0.0,12
+Hungarian Grand Prix,SOFT,3,-0.1315,12
+Hungarian Grand Prix,SOFT,4,-0.0285,18
+Hungarian Grand Prix,SOFT,5,-0.15,19
+Hungarian Grand Prix,SOFT,6,-0.324,22
+Hungarian Grand Prix,SOFT,7,-0.087,23
+Hungarian Grand Prix,SOFT,8,-0.143,24
+Hungarian Grand Prix,SOFT,9,0.009,26
+Hungarian Grand Prix,SOFT,10,0.094,24
+Hungarian Grand Prix,SOFT,11,0.0505,24
+Hungarian Grand Prix,SOFT,12,0.413,23
+Hungarian Grand Prix,SOFT,13,0.614,25
+Hungarian Grand Prix,SOFT,14,0.522,23
+Hungarian Grand Prix,SOFT,15,0.719,21
+Hungarian Grand Prix,SOFT,16,0.953,18
+Hungarian Grand Prix,SOFT,17,1.003,11
+Hungarian Grand Prix,SOFT,18,1.454,9
+Hungarian Grand Prix,SOFT,19,1.193,7
+Hungarian Grand Prix,SOFT,20,0.787,6
+Hungarian Grand Prix,SOFT,21,1.294,7
+Hungarian Grand Prix,SOFT,22,1.575,6
+Hungarian Grand Prix,SOFT,23,2.416,6
+Hungarian Grand Prix,SOFT,24,1.8185,4
+Hungarian Grand Prix,SOFT,25,0.571,3
+Hungarian Grand Prix,SOFT,26,0.559,3
+Hungarian Grand Prix,SOFT,29,1.129,3
+Hungarian Grand Prix,SOFT,30,1.636,3
+Italian Grand Prix,HARD,2,0.0,44
+Italian Grand Prix,HARD,3,0.0,51
+Italian Grand Prix,HARD,4,0.0,54
+Italian Grand Prix,HARD,5,0.0,66
+Italian Grand Prix,HARD,6,-0.004,72
+Italian Grand Prix,HARD,7,0.0,76
+Italian Grand Prix,HARD,8,-0.059,82
+Italian Grand Prix,HARD,9,-0.001,80
+Italian Grand Prix,HARD,10,-0.017,83
+Italian Grand Prix,HARD,11,0.079,81
+Italian Grand Prix,HARD,12,0.14,80
+Italian Grand Prix,HARD,13,0.135,81
+Italian Grand Prix,HARD,14,0.19,81
+Italian Grand Prix,HARD,15,0.388,81
+Italian Grand Prix,HARD,16,0.483,79
+Italian Grand Prix,HARD,17,0.4475,76
+Italian Grand Prix,HARD,18,0.6145,70
+Italian Grand Prix,HARD,19,0.488,71
+Italian Grand Prix,HARD,20,0.673,67
+Italian Grand Prix,HARD,21,0.573,64
+Italian Grand Prix,HARD,22,0.632,57
+Italian Grand Prix,HARD,23,0.624,55
+Italian Grand Prix,HARD,24,0.768,51
+Italian Grand Prix,HARD,25,0.884,49
+Italian Grand Prix,HARD,26,1.001,47
+Italian Grand Prix,HARD,27,1.026,45
+Italian Grand Prix,HARD,28,1.0675,36
+Italian Grand Prix,HARD,29,1.019,34
+Italian Grand Prix,HARD,30,1.355,28
+Italian Grand Prix,HARD,31,1.386,23
+Italian Grand Prix,HARD,32,1.3285,18
+Italian Grand Prix,HARD,33,1.412,15
+Italian Grand Prix,HARD,34,1.735,13
+Italian Grand Prix,HARD,35,1.8265,10
+Italian Grand Prix,HARD,36,1.569,8
+Italian Grand Prix,HARD,37,1.58,7
+Italian Grand Prix,HARD,38,1.158,5
+Italian Grand Prix,HARD,39,1.5205,4
+Italian Grand Prix,MEDIUM,1,0.0,6
+Italian Grand Prix,MEDIUM,2,0.0,63
+Italian Grand Prix,MEDIUM,3,0.0,78
+Italian Grand Prix,MEDIUM,4,-0.306,82
+Italian Grand Prix,MEDIUM,5,-0.35,93
+Italian Grand Prix,MEDIUM,6,-0.36,90
+Italian Grand Prix,MEDIUM,7,-0.526,100
+Italian Grand Prix,MEDIUM,8,-0.4815,98
+Italian Grand Prix,MEDIUM,9,-0.439,103
+Italian Grand Prix,MEDIUM,10,-0.4365,102
+Italian Grand Prix,MEDIUM,11,-0.219,101
+Italian Grand Prix,MEDIUM,12,-0.092,87
+Italian Grand Prix,MEDIUM,13,-0.123,97
+Italian Grand Prix,MEDIUM,14,0.044,96
+Italian Grand Prix,MEDIUM,15,-0.037,90
+Italian Grand Prix,MEDIUM,16,-0.049,85
+Italian Grand Prix,MEDIUM,17,0.044,83
+Italian Grand Prix,MEDIUM,18,0.14,75
+Italian Grand Prix,MEDIUM,19,0.0935,68
+Italian Grand Prix,MEDIUM,20,0.113,63
+Italian Grand Prix,MEDIUM,21,0.287,57
+Italian Grand Prix,MEDIUM,22,0.043,54
+Italian Grand Prix,MEDIUM,23,0.131,47
+Italian Grand Prix,MEDIUM,24,0.1195,40
+Italian Grand Prix,MEDIUM,25,0.0765,38
+Italian Grand Prix,MEDIUM,26,-0.0235,32
+Italian Grand Prix,MEDIUM,27,-0.034,30
+Italian Grand Prix,MEDIUM,28,-0.29,17
+Italian Grand Prix,MEDIUM,29,0.151,15
+Italian Grand Prix,MEDIUM,30,-0.142,13
+Italian Grand Prix,MEDIUM,31,0.012,10
+Italian Grand Prix,MEDIUM,32,-0.247,4
+Italian Grand Prix,MEDIUM,33,0.681,3
+Italian Grand Prix,SOFT,2,0.0,17
+Italian Grand Prix,SOFT,3,-0.123,19
+Italian Grand Prix,SOFT,4,-0.238,25
+Italian Grand Prix,SOFT,5,0.0,41
+Italian Grand Prix,SOFT,6,-0.285,38
+Italian Grand Prix,SOFT,7,-0.456,42
+Italian Grand Prix,SOFT,8,-0.309,42
+Italian Grand Prix,SOFT,9,-0.011,40
+Italian Grand Prix,SOFT,10,-0.216,43
+Italian Grand Prix,SOFT,11,-0.016,41
+Italian Grand Prix,SOFT,12,-0.025,36
+Italian Grand Prix,SOFT,13,-0.2525,40
+Italian Grand Prix,SOFT,14,-0.104,37
+Italian Grand Prix,SOFT,15,-0.013,35
+Italian Grand Prix,SOFT,16,0.045,35
+Italian Grand Prix,SOFT,17,-0.041,33
+Italian Grand Prix,SOFT,18,0.006,31
+Italian Grand Prix,SOFT,19,0.061,31
+Italian Grand Prix,SOFT,20,0.038,28
+Italian Grand Prix,SOFT,21,0.252,28
+Italian Grand Prix,SOFT,22,0.451,26
+Italian Grand Prix,SOFT,23,0.487,15
+Italian Grand Prix,SOFT,24,0.3965,14
+Italian Grand Prix,SOFT,25,0.381,11
+Italian Grand Prix,SOFT,26,0.5195,8
+Italian Grand Prix,SOFT,27,0.365,9
+Italian Grand Prix,SOFT,28,0.532,6
+Italian Grand Prix,SOFT,29,0.551,5
+Italian Grand Prix,SOFT,30,0.413,3
+Japanese Grand Prix,HARD,2,0.0,47
+Japanese Grand Prix,HARD,3,0.237,51
+Japanese Grand Prix,HARD,4,0.499,54
+Japanese Grand Prix,HARD,5,0.472,53
+Japanese Grand Prix,HARD,6,0.585,52
+Japanese Grand Prix,HARD,7,0.684,54
+Japanese Grand Prix,HARD,8,0.879,51
+Japanese Grand Prix,HARD,9,0.9575,50
+Japanese Grand Prix,HARD,10,1.123,52
+Japanese Grand Prix,HARD,11,1.2715,52
+Japanese Grand Prix,HARD,12,1.097,48
+Japanese Grand Prix,HARD,13,1.35,49
+Japanese Grand Prix,HARD,14,1.4125,48
+Japanese Grand Prix,HARD,15,1.4075,44
+Japanese Grand Prix,HARD,16,1.398,40
+Japanese Grand Prix,HARD,17,1.608,37
+Japanese Grand Prix,HARD,18,1.525,33
+Japanese Grand Prix,HARD,19,1.2885,30
+Japanese Grand Prix,HARD,20,1.695,25
+Japanese Grand Prix,HARD,21,1.949,21
+Japanese Grand Prix,HARD,22,1.626,17
+Japanese Grand Prix,HARD,23,1.929,16
+Japanese Grand Prix,HARD,24,1.729,13
+Japanese Grand Prix,HARD,25,1.9145,16
+Japanese Grand Prix,HARD,26,1.7855,14
+Japanese Grand Prix,HARD,27,2.365,13
+Japanese Grand Prix,HARD,28,2.615,8
+Japanese Grand Prix,HARD,29,2.486,7
+Japanese Grand Prix,HARD,30,2.743,4
+Japanese Grand Prix,MEDIUM,2,0.0,27
+Japanese Grand Prix,MEDIUM,3,0.076,34
+Japanese Grand Prix,MEDIUM,4,0.289,39
+Japanese Grand Prix,MEDIUM,5,0.061,46
+Japanese Grand Prix,MEDIUM,6,0.4615,44
+Japanese Grand Prix,MEDIUM,7,0.637,45
+Japanese Grand Prix,MEDIUM,8,0.5345,48
+Japanese Grand Prix,MEDIUM,9,0.67,49
+Japanese Grand Prix,MEDIUM,10,0.812,45
+Japanese Grand Prix,MEDIUM,11,0.981,44
+Japanese Grand Prix,MEDIUM,12,1.0035,44
+Japanese Grand Prix,MEDIUM,13,1.102,38
+Japanese Grand Prix,MEDIUM,14,1.0215,34
+Japanese Grand Prix,MEDIUM,15,0.9235,36
+Japanese Grand Prix,MEDIUM,16,1.029,30
+Japanese Grand Prix,MEDIUM,17,1.042,27
+Japanese Grand Prix,MEDIUM,18,0.992,22
+Japanese Grand Prix,MEDIUM,19,1.074,20
+Japanese Grand Prix,MEDIUM,20,1.024,15
+Japanese Grand Prix,MEDIUM,21,1.0045,12
+Japanese Grand Prix,MEDIUM,22,0.916,9
+Japanese Grand Prix,MEDIUM,23,1.0285,8
+Japanese Grand Prix,MEDIUM,24,1.029,7
+Japanese Grand Prix,MEDIUM,25,1.366,6
+Japanese Grand Prix,MEDIUM,26,1.747,4
+Japanese Grand Prix,MEDIUM,27,1.589,5
+Japanese Grand Prix,MEDIUM,28,2.283,3
+Japanese Grand Prix,MEDIUM,29,2.926,3
+Japanese Grand Prix,MEDIUM,31,3.169,3
+Japanese Grand Prix,SOFT,2,0.0,10
+Japanese Grand Prix,SOFT,3,0.1215,12
+Japanese Grand Prix,SOFT,4,0.0,15
+Japanese Grand Prix,SOFT,5,0.0,25
+Japanese Grand Prix,SOFT,6,0.046,25
+Japanese Grand Prix,SOFT,7,0.115,26
+Japanese Grand Prix,SOFT,8,0.076,26
+Japanese Grand Prix,SOFT,9,0.203,28
+Japanese Grand Prix,SOFT,10,-0.026,26
+Japanese Grand Prix,SOFT,11,0.072,24
+Japanese Grand Prix,SOFT,12,0.264,23
+Japanese Grand Prix,SOFT,13,0.5265,22
+Japanese Grand Prix,SOFT,14,0.344,19
+Japanese Grand Prix,SOFT,15,0.518,18
+Japanese Grand Prix,SOFT,16,0.459,19
+Japanese Grand Prix,SOFT,17,0.6385,16
+Japanese Grand Prix,SOFT,18,0.939,15
+Japanese Grand Prix,SOFT,19,1.042,10
+Japanese Grand Prix,SOFT,20,1.1445,8
+Japanese Grand Prix,SOFT,21,1.4815,4
+Japanese Grand Prix,SOFT,22,0.912,5
+Japanese Grand Prix,SOFT,23,1.0595,4
+Las Vegas Grand Prix,HARD,2,0.0,30
+Las Vegas Grand Prix,HARD,3,0.0,52
+Las Vegas Grand Prix,HARD,4,-0.305,52
+Las Vegas Grand Prix,HARD,5,-0.2995,50
+Las Vegas Grand Prix,HARD,6,-0.342,48
+Las Vegas Grand Prix,HARD,7,-0.2205,50
+Las Vegas Grand Prix,HARD,8,-0.197,53
+Las Vegas Grand Prix,HARD,9,-0.2825,54
+Las Vegas Grand Prix,HARD,10,-0.374,54
+Las Vegas Grand Prix,HARD,11,-0.438,51
+Las Vegas Grand Prix,HARD,12,-0.549,50
+Las Vegas Grand Prix,HARD,13,-0.153,50
+Las Vegas Grand Prix,HARD,14,-0.29,51
+Las Vegas Grand Prix,HARD,15,-0.506,47
+Las Vegas Grand Prix,HARD,16,-0.485,46
+Las Vegas Grand Prix,HARD,17,-0.2275,40
+Las Vegas Grand Prix,HARD,18,-0.2415,40
+Las Vegas Grand Prix,HARD,19,-0.288,37
+Las Vegas Grand Prix,HARD,20,-0.0155,32
+Las Vegas Grand Prix,HARD,21,-0.2945,28
+Las Vegas Grand Prix,HARD,22,-0.051,29
+Las Vegas Grand Prix,HARD,23,0.364,23
+Las Vegas Grand Prix,HARD,24,-0.201,21
+Las Vegas Grand Prix,HARD,25,0.246,15
+Las Vegas Grand Prix,HARD,26,0.294,11
+Las Vegas Grand Prix,HARD,27,0.517,11
+Las Vegas Grand Prix,HARD,28,0.3035,8
+Las Vegas Grand Prix,HARD,29,0.4385,8
+Las Vegas Grand Prix,HARD,30,0.304,7
+Las Vegas Grand Prix,HARD,31,0.6255,6
+Las Vegas Grand Prix,HARD,32,0.3,6
+Las Vegas Grand Prix,HARD,33,0.187,5
+Las Vegas Grand Prix,MEDIUM,2,0.0,16
+Las Vegas Grand Prix,MEDIUM,3,-0.474,22
+Las Vegas Grand Prix,MEDIUM,4,-0.65,23
+Las Vegas Grand Prix,MEDIUM,5,-0.569,23
+Las Vegas Grand Prix,MEDIUM,6,-0.518,23
+Las Vegas Grand Prix,MEDIUM,7,-0.077,27
+Las Vegas Grand Prix,MEDIUM,8,0.0,31
+Las Vegas Grand Prix,MEDIUM,9,-0.246,24
+Las Vegas Grand Prix,MEDIUM,10,-0.019,22
+Las Vegas Grand Prix,MEDIUM,11,-0.5505,18
+Las Vegas Grand Prix,MEDIUM,12,-1.1895,16
+Las Vegas Grand Prix,MEDIUM,13,-0.837,14
+Las Vegas Grand Prix,MEDIUM,14,-0.413,12
+Las Vegas Grand Prix,MEDIUM,15,-0.828,9
+Las Vegas Grand Prix,MEDIUM,16,-0.005,7
+Las Vegas Grand Prix,MEDIUM,17,-0.393,5
+Las Vegas Grand Prix,MEDIUM,18,-0.384,4
+Las Vegas Grand Prix,MEDIUM,19,-1.013,4
+Las Vegas Grand Prix,MEDIUM,20,-0.808,3
+Mexican Grand Prix,HARD,2,0.0,18
+Mexican Grand Prix,HARD,3,0.156,20
+Mexican Grand Prix,HARD,4,0.257,19
+Mexican Grand Prix,HARD,5,0.303,20
+Mexican Grand Prix,HARD,6,0.266,20
+Mexican Grand Prix,HARD,7,0.4285,20
+Mexican Grand Prix,HARD,8,0.5415,20
+Mexican Grand Prix,HARD,9,0.647,20
+Mexican Grand Prix,HARD,10,0.64,20
+Mexican Grand Prix,HARD,11,0.7145,20
+Mexican Grand Prix,HARD,12,0.932,19
+Mexican Grand Prix,HARD,13,0.666,19
+Mexican Grand Prix,HARD,14,0.986,20
+Mexican Grand Prix,HARD,15,1.0705,16
+Mexican Grand Prix,HARD,16,1.053,20
+Mexican Grand Prix,HARD,17,1.015,19
+Mexican Grand Prix,HARD,18,1.2135,20
+Mexican Grand Prix,HARD,19,0.971,18
+Mexican Grand Prix,HARD,20,1.051,17
+Mexican Grand Prix,HARD,21,0.9955,18
+Mexican Grand Prix,HARD,22,1.231,19
+Mexican Grand Prix,HARD,23,1.1535,18
+Mexican Grand Prix,HARD,24,1.0885,18
+Mexican Grand Prix,HARD,25,1.407,18
+Mexican Grand Prix,HARD,26,1.353,18
+Mexican Grand Prix,HARD,27,1.304,19
+Mexican Grand Prix,HARD,28,1.3,17
+Mexican Grand Prix,HARD,29,1.095,16
+Mexican Grand Prix,HARD,30,1.367,17
+Mexican Grand Prix,HARD,31,1.402,17
+Mexican Grand Prix,HARD,32,1.746,17
+Mexican Grand Prix,HARD,33,0.9665,16
+Mexican Grand Prix,HARD,34,1.0,13
+Mexican Grand Prix,HARD,35,1.543,13
+Mexican Grand Prix,HARD,36,1.12,11
+Mexican Grand Prix,HARD,37,1.215,10
+Mexican Grand Prix,HARD,38,1.541,9
+Mexican Grand Prix,HARD,39,1.076,7
+Mexican Grand Prix,HARD,40,1.6635,8
+Mexican Grand Prix,HARD,41,2.2085,8
+Mexican Grand Prix,HARD,42,1.665,7
+Mexican Grand Prix,HARD,43,1.649,7
+Mexican Grand Prix,HARD,44,1.619,7
+Mexican Grand Prix,HARD,45,1.964,6
+Mexican Grand Prix,MEDIUM,2,0.0,7
+Mexican Grand Prix,MEDIUM,3,0.0,13
+Mexican Grand Prix,MEDIUM,4,0.0,15
+Mexican Grand Prix,MEDIUM,5,0.507,13
+Mexican Grand Prix,MEDIUM,6,0.1095,16
+Mexican Grand Prix,MEDIUM,7,0.0275,20
+Mexican Grand Prix,MEDIUM,8,0.398,21
+Mexican Grand Prix,MEDIUM,9,0.407,20
+Mexican Grand Prix,MEDIUM,10,0.422,20
+Mexican Grand Prix,MEDIUM,11,0.352,19
+Mexican Grand Prix,MEDIUM,12,0.387,20
+Mexican Grand Prix,MEDIUM,13,0.258,19
+Mexican Grand Prix,MEDIUM,14,0.39,19
+Mexican Grand Prix,MEDIUM,15,0.434,17
+Mexican Grand Prix,MEDIUM,16,0.411,16
+Mexican Grand Prix,MEDIUM,17,0.596,15
+Mexican Grand Prix,MEDIUM,18,0.438,14
+Mexican Grand Prix,MEDIUM,19,0.523,14
+Mexican Grand Prix,MEDIUM,20,0.7295,14
+Mexican Grand Prix,MEDIUM,21,0.6385,12
+Mexican Grand Prix,MEDIUM,22,0.869,9
+Mexican Grand Prix,MEDIUM,23,0.674,8
+Mexican Grand Prix,MEDIUM,24,0.727,10
+Mexican Grand Prix,MEDIUM,25,0.873,10
+Mexican Grand Prix,MEDIUM,26,1.213,8
+Mexican Grand Prix,MEDIUM,27,0.123,7
+Mexican Grand Prix,MEDIUM,28,-0.365,5
+Mexican Grand Prix,MEDIUM,29,-0.333,5
+Mexican Grand Prix,MEDIUM,30,-0.241,5
+Mexican Grand Prix,MEDIUM,31,-0.155,5
+Mexican Grand Prix,MEDIUM,32,-0.01,5
+Mexican Grand Prix,MEDIUM,33,-0.291,4
+Mexican Grand Prix,MEDIUM,34,0.077,5
+Mexican Grand Prix,MEDIUM,35,0.112,5
+Mexican Grand Prix,MEDIUM,36,1.4735,4
+Mexican Grand Prix,SOFT,7,0.0,3
+Mexican Grand Prix,SOFT,8,-0.147,3
+Mexican Grand Prix,SOFT,9,-0.016,3
+Mexican Grand Prix,SOFT,10,0.321,3
+Mexican Grand Prix,SOFT,11,0.003,3
+Mexican Grand Prix,SOFT,12,0.361,3
+Mexico City Grand Prix,HARD,2,0.0,42
+Mexico City Grand Prix,HARD,3,0.081,43
+Mexico City Grand Prix,HARD,4,0.048,44
+Mexico City Grand Prix,HARD,5,0.358,42
+Mexico City Grand Prix,HARD,6,0.267,48
+Mexico City Grand Prix,HARD,7,0.2125,50
+Mexico City Grand Prix,HARD,8,0.263,51
+Mexico City Grand Prix,HARD,9,0.423,53
+Mexico City Grand Prix,HARD,10,0.175,51
+Mexico City Grand Prix,HARD,11,0.343,49
+Mexico City Grand Prix,HARD,12,0.283,50
+Mexico City Grand Prix,HARD,13,0.3015,52
+Mexico City Grand Prix,HARD,14,0.4465,48
+Mexico City Grand Prix,HARD,15,0.467,46
+Mexico City Grand Prix,HARD,16,0.629,49
+Mexico City Grand Prix,HARD,17,0.603,51
+Mexico City Grand Prix,HARD,18,0.6465,46
+Mexico City Grand Prix,HARD,19,0.802,47
+Mexico City Grand Prix,HARD,20,0.7335,48
+Mexico City Grand Prix,HARD,21,0.77,49
+Mexico City Grand Prix,HARD,22,0.938,47
+Mexico City Grand Prix,HARD,23,0.893,46
+Mexico City Grand Prix,HARD,24,0.9535,44
+Mexico City Grand Prix,HARD,25,0.7245,42
+Mexico City Grand Prix,HARD,26,0.904,42
+Mexico City Grand Prix,HARD,27,1.165,39
+Mexico City Grand Prix,HARD,28,1.007,43
+Mexico City Grand Prix,HARD,29,1.032,45
+Mexico City Grand Prix,HARD,30,1.012,44
+Mexico City Grand Prix,HARD,31,1.1755,42
+Mexico City Grand Prix,HARD,32,1.2515,38
+Mexico City Grand Prix,HARD,33,1.2635,36
+Mexico City Grand Prix,HARD,34,1.363,36
+Mexico City Grand Prix,HARD,35,1.367,37
+Mexico City Grand Prix,HARD,36,1.378,37
+Mexico City Grand Prix,HARD,37,1.499,33
+Mexico City Grand Prix,HARD,38,1.499,30
+Mexico City Grand Prix,HARD,39,1.432,27
+Mexico City Grand Prix,HARD,40,1.473,23
+Mexico City Grand Prix,HARD,41,1.531,19
+Mexico City Grand Prix,HARD,42,1.561,16
+Mexico City Grand Prix,HARD,43,1.529,11
+Mexico City Grand Prix,HARD,44,1.4275,8
+Mexico City Grand Prix,HARD,45,1.7595,8
+Mexico City Grand Prix,MEDIUM,2,0.0,33
+Mexico City Grand Prix,MEDIUM,3,-0.0895,40
+Mexico City Grand Prix,MEDIUM,4,-0.1165,48
+Mexico City Grand Prix,MEDIUM,5,-0.108,34
+Mexico City Grand Prix,MEDIUM,6,-0.4815,50
+Mexico City Grand Prix,MEDIUM,7,-0.0445,62
+Mexico City Grand Prix,MEDIUM,8,-0.1125,68
+Mexico City Grand Prix,MEDIUM,9,-0.2165,66
+Mexico City Grand Prix,MEDIUM,10,0.01,68
+Mexico City Grand Prix,MEDIUM,11,0.096,66
+Mexico City Grand Prix,MEDIUM,12,0.0665,72
+Mexico City Grand Prix,MEDIUM,13,0.189,71
+Mexico City Grand Prix,MEDIUM,14,0.245,69
+Mexico City Grand Prix,MEDIUM,15,0.3345,72
+Mexico City Grand Prix,MEDIUM,16,0.348,71
+Mexico City Grand Prix,MEDIUM,17,0.605,71
+Mexico City Grand Prix,MEDIUM,18,0.753,73
+Mexico City Grand Prix,MEDIUM,19,0.6925,70
+Mexico City Grand Prix,MEDIUM,20,0.629,67
+Mexico City Grand Prix,MEDIUM,21,0.64,65
+Mexico City Grand Prix,MEDIUM,22,0.865,68
+Mexico City Grand Prix,MEDIUM,23,0.6785,60
+Mexico City Grand Prix,MEDIUM,24,0.7505,60
+Mexico City Grand Prix,MEDIUM,25,0.909,57
+Mexico City Grand Prix,MEDIUM,26,0.842,51
+Mexico City Grand Prix,MEDIUM,27,0.822,49
+Mexico City Grand Prix,MEDIUM,28,0.751,47
+Mexico City Grand Prix,MEDIUM,29,0.794,47
+Mexico City Grand Prix,MEDIUM,30,0.691,41
+Mexico City Grand Prix,MEDIUM,31,0.845,37
+Mexico City Grand Prix,MEDIUM,32,0.917,33
+Mexico City Grand Prix,MEDIUM,33,0.9595,32
+Mexico City Grand Prix,MEDIUM,34,1.026,31
+Mexico City Grand Prix,MEDIUM,35,1.047,28
+Mexico City Grand Prix,MEDIUM,36,0.854,23
+Mexico City Grand Prix,MEDIUM,37,1.208,23
+Mexico City Grand Prix,MEDIUM,38,1.288,19
+Mexico City Grand Prix,MEDIUM,39,1.688,15
+Mexico City Grand Prix,MEDIUM,40,1.661,11
+Mexico City Grand Prix,MEDIUM,41,1.907,11
+Mexico City Grand Prix,MEDIUM,42,2.069,10
+Mexico City Grand Prix,MEDIUM,43,1.742,6
+Mexico City Grand Prix,MEDIUM,44,2.519,6
+Mexico City Grand Prix,MEDIUM,45,2.767,5
+Mexico City Grand Prix,SOFT,2,0.0,8
+Mexico City Grand Prix,SOFT,3,0.048,9
+Mexico City Grand Prix,SOFT,4,0.0,12
+Mexico City Grand Prix,SOFT,5,0.0,14
+Mexico City Grand Prix,SOFT,6,-0.0225,14
+Mexico City Grand Prix,SOFT,7,-0.0365,16
+Mexico City Grand Prix,SOFT,8,0.0125,16
+Mexico City Grand Prix,SOFT,9,0.143,15
+Mexico City Grand Prix,SOFT,10,0.0205,16
+Mexico City Grand Prix,SOFT,11,0.314,15
+Mexico City Grand Prix,SOFT,12,0.3895,16
+Mexico City Grand Prix,SOFT,13,0.265,15
+Mexico City Grand Prix,SOFT,14,0.344,15
+Mexico City Grand Prix,SOFT,15,0.737,15
+Mexico City Grand Prix,SOFT,16,0.5295,14
+Mexico City Grand Prix,SOFT,17,0.582,15
+Mexico City Grand Prix,SOFT,18,0.677,15
+Mexico City Grand Prix,SOFT,19,0.673,14
+Mexico City Grand Prix,SOFT,20,0.85,13
+Mexico City Grand Prix,SOFT,21,0.799,11
+Mexico City Grand Prix,SOFT,22,1.117,13
+Mexico City Grand Prix,SOFT,23,1.14,13
+Mexico City Grand Prix,SOFT,24,1.165,9
+Mexico City Grand Prix,SOFT,25,1.3785,12
+Mexico City Grand Prix,SOFT,26,1.385,9
+Mexico City Grand Prix,SOFT,27,1.545,9
+Mexico City Grand Prix,SOFT,28,1.598,8
+Mexico City Grand Prix,SOFT,29,2.3565,6
+Mexico City Grand Prix,SOFT,30,1.821,5
+Mexico City Grand Prix,SOFT,31,1.496,4
+Mexico City Grand Prix,SOFT,32,1.166,3
+Miami Grand Prix,HARD,2,0.0,46
+Miami Grand Prix,HARD,3,0.0,52
+Miami Grand Prix,HARD,4,-0.0705,52
+Miami Grand Prix,HARD,5,0.0045,54
+Miami Grand Prix,HARD,6,0.064,53
+Miami Grand Prix,HARD,7,-0.009,55
+Miami Grand Prix,HARD,8,0.024,55
+Miami Grand Prix,HARD,9,-0.019,55
+Miami Grand Prix,HARD,10,0.0875,52
+Miami Grand Prix,HARD,11,0.074,51
+Miami Grand Prix,HARD,12,-0.005,52
+Miami Grand Prix,HARD,13,-0.0455,52
+Miami Grand Prix,HARD,14,0.1045,52
+Miami Grand Prix,HARD,15,0.008,51
+Miami Grand Prix,HARD,16,0.0415,48
+Miami Grand Prix,HARD,17,0.219,45
+Miami Grand Prix,HARD,18,0.283,43
+Miami Grand Prix,HARD,19,0.224,43
+Miami Grand Prix,HARD,20,0.252,44
+Miami Grand Prix,HARD,21,0.294,47
+Miami Grand Prix,HARD,22,0.3225,44
+Miami Grand Prix,HARD,23,0.585,43
+Miami Grand Prix,HARD,24,0.398,43
+Miami Grand Prix,HARD,25,0.343,45
+Miami Grand Prix,HARD,26,0.287,42
+Miami Grand Prix,HARD,27,0.7295,42
+Miami Grand Prix,HARD,28,0.471,40
+Miami Grand Prix,HARD,29,0.5315,38
+Miami Grand Prix,HARD,30,0.624,37
+Miami Grand Prix,HARD,31,0.963,35
+Miami Grand Prix,HARD,32,0.91,33
+Miami Grand Prix,HARD,33,1.117,34
+Miami Grand Prix,HARD,34,1.015,31
+Miami Grand Prix,HARD,35,0.833,29
+Miami Grand Prix,HARD,36,1.049,25
+Miami Grand Prix,HARD,37,1.135,24
+Miami Grand Prix,HARD,38,1.052,23
+Miami Grand Prix,HARD,39,1.063,21
+Miami Grand Prix,HARD,40,0.777,17
+Miami Grand Prix,HARD,41,1.391,15
+Miami Grand Prix,HARD,42,1.577,12
+Miami Grand Prix,HARD,43,1.4925,6
+Miami Grand Prix,HARD,44,1.723,5
+Miami Grand Prix,HARD,45,2.0,4
+Miami Grand Prix,MEDIUM,1,0.0,5
+Miami Grand Prix,MEDIUM,2,0.0,39
+Miami Grand Prix,MEDIUM,3,-0.363,46
+Miami Grand Prix,MEDIUM,4,-0.4,46
+Miami Grand Prix,MEDIUM,5,-0.34,51
+Miami Grand Prix,MEDIUM,6,-0.24,47
+Miami Grand Prix,MEDIUM,7,-0.296,52
+Miami Grand Prix,MEDIUM,8,-0.25,54
+Miami Grand Prix,MEDIUM,9,-0.256,53
+Miami Grand Prix,MEDIUM,10,-0.173,57
+Miami Grand Prix,MEDIUM,11,-0.237,55
+Miami Grand Prix,MEDIUM,12,-0.2925,52
+Miami Grand Prix,MEDIUM,13,-0.333,53
+Miami Grand Prix,MEDIUM,14,-0.312,51
+Miami Grand Prix,MEDIUM,15,-0.223,42
+Miami Grand Prix,MEDIUM,16,-0.207,41
+Miami Grand Prix,MEDIUM,17,-0.2645,38
+Miami Grand Prix,MEDIUM,18,-0.206,35
+Miami Grand Prix,MEDIUM,19,-0.2605,32
+Miami Grand Prix,MEDIUM,20,0.112,29
+Miami Grand Prix,MEDIUM,21,-0.1055,30
+Miami Grand Prix,MEDIUM,22,-0.024,24
+Miami Grand Prix,MEDIUM,23,0.253,20
+Miami Grand Prix,MEDIUM,24,-0.036,21
+Miami Grand Prix,MEDIUM,25,0.1235,20
+Miami Grand Prix,MEDIUM,26,-0.031,17
+Miami Grand Prix,MEDIUM,27,-0.167,12
+Miami Grand Prix,MEDIUM,28,-0.2975,10
+Miami Grand Prix,MEDIUM,29,0.002,8
+Miami Grand Prix,MEDIUM,30,-0.6045,4
+Miami Grand Prix,MEDIUM,31,-0.5935,4
+Miami Grand Prix,MEDIUM,32,-0.963,4
+Miami Grand Prix,MEDIUM,33,-0.576,4
+Miami Grand Prix,MEDIUM,34,-0.6975,4
+Miami Grand Prix,SOFT,6,-0.143,4
+Miami Grand Prix,SOFT,7,-0.48,5
+Miami Grand Prix,SOFT,8,-0.689,5
+Miami Grand Prix,SOFT,9,-0.726,5
+Miami Grand Prix,SOFT,10,-0.882,5
+Miami Grand Prix,SOFT,11,-1.6985,4
+Miami Grand Prix,SOFT,12,-1.5005,4
+Miami Grand Prix,SOFT,13,-1.651,3
+Miami Grand Prix,SOFT,14,-1.653,4
+Miami Grand Prix,SOFT,15,-1.856,4
+Miami Grand Prix,SOFT,16,-1.116,4
+Monaco Grand Prix,HARD,2,0.0,11
+Monaco Grand Prix,HARD,3,0.0,15
+Monaco Grand Prix,HARD,4,0.0,18
+Monaco Grand Prix,HARD,5,0.0,21
+Monaco Grand Prix,HARD,6,-0.1165,22
+Monaco Grand Prix,HARD,7,0.0195,22
+Monaco Grand Prix,HARD,8,0.105,21
+Monaco Grand Prix,HARD,9,-0.002,21
+Monaco Grand Prix,HARD,10,0.011,20
+Monaco Grand Prix,HARD,11,0.427,23
+Monaco Grand Prix,HARD,12,-0.0405,20
+Monaco Grand Prix,HARD,13,0.478,23
+Monaco Grand Prix,HARD,14,0.305,21
+Monaco Grand Prix,HARD,15,0.168,21
+Monaco Grand Prix,HARD,16,0.005,23
+Monaco Grand Prix,HARD,17,0.3755,24
+Monaco Grand Prix,HARD,18,0.4335,24
+Monaco Grand Prix,HARD,19,0.339,26
+Monaco Grand Prix,HARD,20,0.421,28
+Monaco Grand Prix,HARD,21,0.429,27
+Monaco Grand Prix,HARD,22,0.555,27
+Monaco Grand Prix,HARD,23,0.676,25
+Monaco Grand Prix,HARD,24,0.848,27
+Monaco Grand Prix,HARD,25,0.978,27
+Monaco Grand Prix,HARD,26,1.025,25
+Monaco Grand Prix,HARD,27,0.6915,22
+Monaco Grand Prix,HARD,28,1.069,26
+Monaco Grand Prix,HARD,29,1.097,23
+Monaco Grand Prix,HARD,30,1.3665,22
+Monaco Grand Prix,HARD,31,1.248,25
+Monaco Grand Prix,HARD,32,1.364,25
+Monaco Grand Prix,HARD,33,1.3,25
+Monaco Grand Prix,HARD,34,1.1155,26
+Monaco Grand Prix,HARD,35,1.179,22
+Monaco Grand Prix,HARD,36,1.449,23
+Monaco Grand Prix,HARD,37,1.7255,24
+Monaco Grand Prix,HARD,38,1.6415,22
+Monaco Grand Prix,HARD,39,1.567,22
+Monaco Grand Prix,HARD,40,1.606,23
+Monaco Grand Prix,HARD,41,1.7075,22
+Monaco Grand Prix,HARD,42,1.527,17
+Monaco Grand Prix,HARD,43,1.716,21
+Monaco Grand Prix,HARD,44,1.6665,20
+Monaco Grand Prix,HARD,45,1.7,17
+Monaco Grand Prix,MEDIUM,2,0.0,8
+Monaco Grand Prix,MEDIUM,3,-0.24,9
+Monaco Grand Prix,MEDIUM,4,0.125,10
+Monaco Grand Prix,MEDIUM,5,0.105,9
+Monaco Grand Prix,MEDIUM,6,0.246,9
+Monaco Grand Prix,MEDIUM,7,0.6545,8
+Monaco Grand Prix,MEDIUM,8,0.529,9
+Monaco Grand Prix,MEDIUM,9,0.516,8
+Monaco Grand Prix,MEDIUM,10,1.19,7
+Monaco Grand Prix,MEDIUM,11,0.674,7
+Monaco Grand Prix,MEDIUM,12,1.053,10
+Monaco Grand Prix,MEDIUM,13,0.562,13
+Monaco Grand Prix,MEDIUM,14,0.878,15
+Monaco Grand Prix,MEDIUM,15,1.075,13
+Monaco Grand Prix,MEDIUM,16,0.846,13
+Monaco Grand Prix,MEDIUM,17,0.9025,14
+Monaco Grand Prix,MEDIUM,18,0.974,12
+Monaco Grand Prix,MEDIUM,19,0.968,16
+Monaco Grand Prix,MEDIUM,20,0.4355,14
+Monaco Grand Prix,MEDIUM,21,0.8495,14
+Monaco Grand Prix,MEDIUM,22,0.538,13
+Monaco Grand Prix,MEDIUM,23,0.837,14
+Monaco Grand Prix,MEDIUM,24,0.5585,16
+Monaco Grand Prix,MEDIUM,25,0.7,15
+Monaco Grand Prix,MEDIUM,26,0.781,15
+Monaco Grand Prix,MEDIUM,27,0.412,16
+Monaco Grand Prix,MEDIUM,28,0.521,17
+Monaco Grand Prix,MEDIUM,29,0.582,17
+Monaco Grand Prix,MEDIUM,30,0.943,18
+Monaco Grand Prix,MEDIUM,31,0.891,17
+Monaco Grand Prix,MEDIUM,32,0.7825,16
+Monaco Grand Prix,MEDIUM,33,0.939,13
+Monaco Grand Prix,MEDIUM,34,1.179,10
+Monaco Grand Prix,MEDIUM,35,1.589,9
+Monaco Grand Prix,MEDIUM,36,0.853,13
+Monaco Grand Prix,MEDIUM,37,1.0035,14
+Monaco Grand Prix,MEDIUM,38,0.979,15
+Monaco Grand Prix,MEDIUM,39,0.527,12
+Monaco Grand Prix,MEDIUM,40,0.777,12
+Monaco Grand Prix,MEDIUM,41,0.747,12
+Monaco Grand Prix,MEDIUM,42,0.745,11
+Monaco Grand Prix,MEDIUM,43,0.676,10
+Monaco Grand Prix,MEDIUM,44,0.654,9
+Monaco Grand Prix,MEDIUM,45,0.604,9
+Monaco Grand Prix,SOFT,2,0.0,5
+Monaco Grand Prix,SOFT,3,-0.074,5
+Monaco Grand Prix,SOFT,4,0.191,7
+Monaco Grand Prix,SOFT,5,0.0,8
+Monaco Grand Prix,SOFT,6,0.0125,10
+Monaco Grand Prix,SOFT,7,0.0,12
+Monaco Grand Prix,SOFT,8,-0.061,18
+Monaco Grand Prix,SOFT,9,-0.231,16
+Monaco Grand Prix,SOFT,10,-0.197,17
+Monaco Grand Prix,SOFT,11,-0.406,19
+Monaco Grand Prix,SOFT,12,-0.248,19
+Monaco Grand Prix,SOFT,13,-0.3955,20
+Monaco Grand Prix,SOFT,14,-0.247,17
+Monaco Grand Prix,SOFT,15,-0.0885,18
+Monaco Grand Prix,SOFT,16,-0.549,15
+Monaco Grand Prix,SOFT,17,-0.5375,16
+Monaco Grand Prix,SOFT,18,-0.781,15
+Monaco Grand Prix,SOFT,19,-0.504,16
+Monaco Grand Prix,SOFT,20,-0.835,14
+Monaco Grand Prix,SOFT,21,-0.644,15
+Monaco Grand Prix,SOFT,22,-0.59,17
+Monaco Grand Prix,SOFT,23,-0.315,18
+Monaco Grand Prix,SOFT,24,-0.176,19
+Monaco Grand Prix,SOFT,25,-0.1715,18
+Monaco Grand Prix,SOFT,26,-0.126,19
+Monaco Grand Prix,SOFT,27,-0.0565,18
+Monaco Grand Prix,SOFT,28,0.288,19
+Monaco Grand Prix,SOFT,29,0.279,19
+Monaco Grand Prix,SOFT,30,0.3225,18
+Monaco Grand Prix,SOFT,31,0.332,16
+Monaco Grand Prix,SOFT,32,0.217,16
+Monaco Grand Prix,SOFT,33,0.092,13
+Monaco Grand Prix,SOFT,34,0.02,13
+Monaco Grand Prix,SOFT,35,-0.089,11
+Monaco Grand Prix,SOFT,36,-0.209,8
+Monaco Grand Prix,SOFT,37,0.1905,6
+Monaco Grand Prix,SOFT,38,0.207,5
+Monaco Grand Prix,SOFT,39,0.2325,4
+Monaco Grand Prix,SOFT,40,1.141,3
+Monaco Grand Prix,SOFT,41,0.23,3
+Portuguese Grand Prix,HARD,2,0.0,17
+Portuguese Grand Prix,HARD,3,-0.177,21
+Portuguese Grand Prix,HARD,4,-0.155,23
+Portuguese Grand Prix,HARD,5,-0.224,24
+Portuguese Grand Prix,HARD,6,-0.192,23
+Portuguese Grand Prix,HARD,7,-0.212,22
+Portuguese Grand Prix,HARD,8,-0.0725,24
+Portuguese Grand Prix,HARD,9,-0.02,25
+Portuguese Grand Prix,HARD,10,-0.2035,24
+Portuguese Grand Prix,HARD,11,-0.035,24
+Portuguese Grand Prix,HARD,12,0.0405,22
+Portuguese Grand Prix,HARD,13,0.063,24
+Portuguese Grand Prix,HARD,14,0.3195,22
+Portuguese Grand Prix,HARD,15,0.058,21
+Portuguese Grand Prix,HARD,16,0.241,23
+Portuguese Grand Prix,HARD,17,0.266,23
+Portuguese Grand Prix,HARD,18,0.135,23
+Portuguese Grand Prix,HARD,19,0.084,22
+Portuguese Grand Prix,HARD,20,0.445,22
+Portuguese Grand Prix,HARD,21,0.274,23
+Portuguese Grand Prix,HARD,22,0.521,23
+Portuguese Grand Prix,HARD,23,0.654,23
+Portuguese Grand Prix,HARD,24,0.504,23
+Portuguese Grand Prix,HARD,25,0.442,21
+Portuguese Grand Prix,HARD,26,0.435,19
+Portuguese Grand Prix,HARD,27,0.6435,18
+Portuguese Grand Prix,HARD,28,0.6715,16
+Portuguese Grand Prix,HARD,29,0.511,16
+Portuguese Grand Prix,HARD,30,0.61,13
+Portuguese Grand Prix,HARD,31,0.747,11
+Portuguese Grand Prix,HARD,32,0.544,12
+Portuguese Grand Prix,HARD,33,0.616,9
+Portuguese Grand Prix,HARD,34,0.183,9
+Portuguese Grand Prix,HARD,35,0.5735,10
+Portuguese Grand Prix,HARD,36,0.851,9
+Portuguese Grand Prix,HARD,37,0.637,9
+Portuguese Grand Prix,HARD,38,0.222,7
+Portuguese Grand Prix,HARD,39,0.7145,6
+Portuguese Grand Prix,HARD,40,1.225,6
+Portuguese Grand Prix,HARD,41,1.835,4
+Portuguese Grand Prix,HARD,42,0.575,3
+Portuguese Grand Prix,HARD,43,0.904,3
+Portuguese Grand Prix,MEDIUM,2,0.0,13
+Portuguese Grand Prix,MEDIUM,3,0.028,13
+Portuguese Grand Prix,MEDIUM,4,0.03,13
+Portuguese Grand Prix,MEDIUM,5,0.0,18
+Portuguese Grand Prix,MEDIUM,6,0.122,19
+Portuguese Grand Prix,MEDIUM,7,0.018,20
+Portuguese Grand Prix,MEDIUM,8,0.1205,22
+Portuguese Grand Prix,MEDIUM,9,0.071,25
+Portuguese Grand Prix,MEDIUM,10,0.0,28
+Portuguese Grand Prix,MEDIUM,11,-0.0665,32
+Portuguese Grand Prix,MEDIUM,12,-0.0915,34
+Portuguese Grand Prix,MEDIUM,13,-0.0655,32
+Portuguese Grand Prix,MEDIUM,14,-0.144,32
+Portuguese Grand Prix,MEDIUM,15,0.086,38
+Portuguese Grand Prix,MEDIUM,16,0.165,35
+Portuguese Grand Prix,MEDIUM,17,0.041,37
+Portuguese Grand Prix,MEDIUM,18,-0.2,35
+Portuguese Grand Prix,MEDIUM,19,-0.024,37
+Portuguese Grand Prix,MEDIUM,20,0.1035,36
+Portuguese Grand Prix,MEDIUM,21,0.124,35
+Portuguese Grand Prix,MEDIUM,22,0.18,33
+Portuguese Grand Prix,MEDIUM,23,0.2265,30
+Portuguese Grand Prix,MEDIUM,24,0.41,31
+Portuguese Grand Prix,MEDIUM,25,0.314,30
+Portuguese Grand Prix,MEDIUM,26,0.122,28
+Portuguese Grand Prix,MEDIUM,27,-0.0585,26
+Portuguese Grand Prix,MEDIUM,28,-0.241,26
+Portuguese Grand Prix,MEDIUM,29,-0.168,27
+Portuguese Grand Prix,MEDIUM,30,-0.094,26
+Portuguese Grand Prix,MEDIUM,31,0.164,24
+Portuguese Grand Prix,MEDIUM,32,0.0185,22
+Portuguese Grand Prix,MEDIUM,33,-0.0165,22
+Portuguese Grand Prix,MEDIUM,34,0.245,21
+Portuguese Grand Prix,MEDIUM,35,0.308,21
+Portuguese Grand Prix,MEDIUM,36,0.102,20
+Portuguese Grand Prix,MEDIUM,37,0.2885,20
+Portuguese Grand Prix,MEDIUM,38,0.364,19
+Portuguese Grand Prix,MEDIUM,39,0.2105,18
+Portuguese Grand Prix,MEDIUM,40,0.3225,14
+Portuguese Grand Prix,MEDIUM,41,0.909,12
+Portuguese Grand Prix,MEDIUM,42,0.661,12
+Portuguese Grand Prix,MEDIUM,43,0.56,11
+Portuguese Grand Prix,MEDIUM,44,0.776,7
+Portuguese Grand Prix,MEDIUM,45,0.647,5
+Portuguese Grand Prix,SOFT,3,0.0,4
+Portuguese Grand Prix,SOFT,4,0.0,5
+Portuguese Grand Prix,SOFT,5,-0.072,6
+Portuguese Grand Prix,SOFT,6,0.1555,6
+Portuguese Grand Prix,SOFT,7,-0.04,9
+Portuguese Grand Prix,SOFT,8,-0.0505,10
+Portuguese Grand Prix,SOFT,9,0.0655,12
+Portuguese Grand Prix,SOFT,10,0.115,13
+Portuguese Grand Prix,SOFT,11,0.053,12
+Portuguese Grand Prix,SOFT,12,0.0,15
+Portuguese Grand Prix,SOFT,13,0.057,14
+Portuguese Grand Prix,SOFT,14,-0.031,17
+Portuguese Grand Prix,SOFT,15,-0.0285,16
+Portuguese Grand Prix,SOFT,16,-0.0585,14
+Portuguese Grand Prix,SOFT,17,-0.519,13
+Portuguese Grand Prix,SOFT,18,-0.061,15
+Portuguese Grand Prix,SOFT,19,0.015,13
+Portuguese Grand Prix,SOFT,20,0.049,13
+Portuguese Grand Prix,SOFT,21,0.2925,14
+Portuguese Grand Prix,SOFT,22,0.029,11
+Portuguese Grand Prix,SOFT,23,-0.164,11
+Portuguese Grand Prix,SOFT,24,-0.024,9
+Portuguese Grand Prix,SOFT,25,-0.0385,6
+Portuguese Grand Prix,SOFT,26,-0.31,5
+Portuguese Grand Prix,SOFT,27,-0.1575,4
+Portuguese Grand Prix,SOFT,28,0.054,3
+Portuguese Grand Prix,SOFT,29,0.206,3
+Portuguese Grand Prix,SOFT,30,0.308,3
+Qatar Grand Prix,HARD,2,0.0,33
+Qatar Grand Prix,HARD,3,-0.023,33
+Qatar Grand Prix,HARD,4,-0.2225,36
+Qatar Grand Prix,HARD,5,-0.1405,36
+Qatar Grand Prix,HARD,6,-0.1305,36
+Qatar Grand Prix,HARD,7,-0.042,37
+Qatar Grand Prix,HARD,8,0.0,42
+Qatar Grand Prix,HARD,9,-0.003,44
+Qatar Grand Prix,HARD,10,-0.158,43
+Qatar Grand Prix,HARD,11,-0.104,44
+Qatar Grand Prix,HARD,12,-0.164,43
+Qatar Grand Prix,HARD,13,-0.07,41
+Qatar Grand Prix,HARD,14,-0.045,37
+Qatar Grand Prix,HARD,15,-0.129,38
+Qatar Grand Prix,HARD,16,-0.1835,36
+Qatar Grand Prix,HARD,17,-0.23,34
+Qatar Grand Prix,HARD,18,-0.4335,22
+Qatar Grand Prix,HARD,19,-0.3165,22
+Qatar Grand Prix,HARD,20,-0.2265,20
+Qatar Grand Prix,HARD,21,-0.29,22
+Qatar Grand Prix,HARD,22,-0.264,21
+Qatar Grand Prix,HARD,23,-0.013,15
+Qatar Grand Prix,HARD,24,-0.176,9
+Qatar Grand Prix,HARD,25,0.127,9
+Qatar Grand Prix,HARD,26,0.392,11
+Qatar Grand Prix,HARD,27,0.335,7
+Qatar Grand Prix,HARD,28,0.5585,6
+Qatar Grand Prix,HARD,29,0.58,7
+Qatar Grand Prix,HARD,30,0.531,7
+Qatar Grand Prix,MEDIUM,2,0.0,16
+Qatar Grand Prix,MEDIUM,3,0.0,18
+Qatar Grand Prix,MEDIUM,4,-0.1965,16
+Qatar Grand Prix,MEDIUM,5,-0.068,22
+Qatar Grand Prix,MEDIUM,6,0.0,26
+Qatar Grand Prix,MEDIUM,7,0.0,36
+Qatar Grand Prix,MEDIUM,8,-0.147,41
+Qatar Grand Prix,MEDIUM,9,-0.102,47
+Qatar Grand Prix,MEDIUM,10,-0.223,42
+Qatar Grand Prix,MEDIUM,11,0.002,42
+Qatar Grand Prix,MEDIUM,12,-0.0045,50
+Qatar Grand Prix,MEDIUM,13,-0.032,46
+Qatar Grand Prix,MEDIUM,14,-0.231,43
+Qatar Grand Prix,MEDIUM,15,-0.209,43
+Qatar Grand Prix,MEDIUM,16,-0.285,41
+Qatar Grand Prix,MEDIUM,17,-0.2305,40
+Qatar Grand Prix,MEDIUM,18,-0.368,37
+Qatar Grand Prix,MEDIUM,19,-0.385,36
+Qatar Grand Prix,MEDIUM,20,-0.673,22
+Qatar Grand Prix,MEDIUM,21,-0.775,21
+Qatar Grand Prix,MEDIUM,22,-0.728,21
+Qatar Grand Prix,MEDIUM,23,-0.8085,20
+Qatar Grand Prix,MEDIUM,24,-0.66,17
+Qatar Grand Prix,MEDIUM,25,-0.8035,18
+Qatar Grand Prix,MEDIUM,26,-0.689,19
+Qatar Grand Prix,MEDIUM,27,-0.684,17
+Qatar Grand Prix,MEDIUM,28,-0.7405,16
+Qatar Grand Prix,MEDIUM,29,-0.78,15
+Qatar Grand Prix,MEDIUM,30,-0.8055,16
+Qatar Grand Prix,MEDIUM,31,-0.821,15
+Qatar Grand Prix,MEDIUM,32,-0.877,15
+Qatar Grand Prix,MEDIUM,33,-0.697,14
+Qatar Grand Prix,MEDIUM,34,-0.231,12
+Qatar Grand Prix,SOFT,5,-0.33,3
+Qatar Grand Prix,SOFT,6,-0.701,3
+Qatar Grand Prix,SOFT,7,-0.864,3
+Qatar Grand Prix,SOFT,8,-0.397,4
+Qatar Grand Prix,SOFT,9,-0.5775,4
+Qatar Grand Prix,SOFT,10,-0.2225,4
+Qatar Grand Prix,SOFT,12,0.492,3
+Qatar Grand Prix,SOFT,13,0.461,3
+Qatar Grand Prix,SOFT,14,0.69,3
+Qatar Grand Prix,SOFT,15,0.6,3
+Qatar Grand Prix,SOFT,16,-0.553,3
+Qatar Grand Prix,SOFT,17,0.082,3
+Russian Grand Prix,HARD,2,0.0,13
+Russian Grand Prix,HARD,3,0.177,13
+Russian Grand Prix,HARD,4,0.086,13
+Russian Grand Prix,HARD,5,0.029,13
+Russian Grand Prix,HARD,6,0.1685,14
+Russian Grand Prix,HARD,7,0.445,14
+Russian Grand Prix,HARD,8,0.071,15
+Russian Grand Prix,HARD,9,0.359,15
+Russian Grand Prix,HARD,10,0.1695,16
+Russian Grand Prix,HARD,11,0.0825,18
+Russian Grand Prix,HARD,12,0.003,18
+Russian Grand Prix,HARD,13,-0.04,19
+Russian Grand Prix,HARD,14,0.134,18
+Russian Grand Prix,HARD,15,0.174,17
+Russian Grand Prix,HARD,16,-0.055,19
+Russian Grand Prix,HARD,17,-0.084,18
+Russian Grand Prix,HARD,18,0.062,17
+Russian Grand Prix,HARD,19,0.012,19
+Russian Grand Prix,HARD,20,0.088,19
+Russian Grand Prix,HARD,21,-0.0995,18
+Russian Grand Prix,HARD,22,-0.205,19
+Russian Grand Prix,HARD,23,-0.312,15
+Russian Grand Prix,HARD,24,-0.032,15
+Russian Grand Prix,HARD,25,-0.074,14
+Russian Grand Prix,HARD,26,-0.355,11
+Russian Grand Prix,HARD,27,0.552,11
+Russian Grand Prix,HARD,28,-0.219,10
+Russian Grand Prix,HARD,29,-0.346,9
+Russian Grand Prix,HARD,30,-0.342,9
+Russian Grand Prix,HARD,31,0.006,9
+Russian Grand Prix,HARD,32,0.235,9
+Russian Grand Prix,HARD,33,0.1645,8
+Russian Grand Prix,HARD,34,0.594,7
+Russian Grand Prix,HARD,35,1.351,6
+Russian Grand Prix,HARD,36,-0.0155,4
+Russian Grand Prix,HARD,37,0.463,3
+Russian Grand Prix,MEDIUM,2,0.0,9
+Russian Grand Prix,MEDIUM,3,0.748,9
+Russian Grand Prix,MEDIUM,4,0.184,9
+Russian Grand Prix,MEDIUM,5,0.2585,10
+Russian Grand Prix,MEDIUM,6,0.0,12
+Russian Grand Prix,MEDIUM,7,0.0,16
+Russian Grand Prix,MEDIUM,8,-0.1085,20
+Russian Grand Prix,MEDIUM,9,-0.164,22
+Russian Grand Prix,MEDIUM,10,-0.078,24
+Russian Grand Prix,MEDIUM,11,-0.446,23
+Russian Grand Prix,MEDIUM,12,-0.2,22
+Russian Grand Prix,MEDIUM,13,-0.174,24
+Russian Grand Prix,MEDIUM,14,-0.215,24
+Russian Grand Prix,MEDIUM,15,-0.468,22
+Russian Grand Prix,MEDIUM,16,-0.112,22
+Russian Grand Prix,MEDIUM,17,-0.334,23
+Russian Grand Prix,MEDIUM,18,-0.309,21
+Russian Grand Prix,MEDIUM,19,-0.243,21
+Russian Grand Prix,MEDIUM,20,-0.533,20
+Russian Grand Prix,MEDIUM,21,-0.607,21
+Russian Grand Prix,MEDIUM,22,-0.6745,20
+Russian Grand Prix,MEDIUM,23,-0.5065,20
+Russian Grand Prix,MEDIUM,24,-0.557,18
+Russian Grand Prix,MEDIUM,25,-0.314,19
+Russian Grand Prix,MEDIUM,26,-0.781,17
+Russian Grand Prix,MEDIUM,27,-0.454,9
+Russian Grand Prix,MEDIUM,28,-0.0585,8
+Russian Grand Prix,MEDIUM,29,-0.312,7
+Russian Grand Prix,MEDIUM,30,-0.489,5
+Russian Grand Prix,MEDIUM,32,-0.402,3
+Russian Grand Prix,SOFT,4,0.0,3
+Russian Grand Prix,SOFT,5,-0.362,3
+Russian Grand Prix,SOFT,6,0.0,5
+Russian Grand Prix,SOFT,7,0.0,10
+Russian Grand Prix,SOFT,8,-0.137,14
+Russian Grand Prix,SOFT,9,-0.1645,22
+Russian Grand Prix,SOFT,10,-0.234,21
+Russian Grand Prix,SOFT,11,-0.519,22
+Russian Grand Prix,SOFT,12,-0.438,22
+Russian Grand Prix,SOFT,13,-0.568,22
+Russian Grand Prix,SOFT,14,-0.4935,22
+Russian Grand Prix,SOFT,15,-0.45,21
+Russian Grand Prix,SOFT,16,-0.6045,22
+Russian Grand Prix,SOFT,17,-0.665,22
+Russian Grand Prix,SOFT,18,-0.823,21
+Russian Grand Prix,SOFT,19,-0.785,19
+Russian Grand Prix,SOFT,20,-0.858,18
+Russian Grand Prix,SOFT,21,-0.918,17
+Russian Grand Prix,SOFT,22,-0.755,17
+Russian Grand Prix,SOFT,23,-0.83,14
+Russian Grand Prix,SOFT,24,-0.875,12
+Russian Grand Prix,SOFT,25,-1.294,9
+Russian Grand Prix,SOFT,26,-0.991,9
+Russian Grand Prix,SOFT,27,-0.429,6
+Russian Grand Prix,SOFT,28,0.4405,4
+Sakhir Grand Prix,HARD,2,0.0,11
+Sakhir Grand Prix,HARD,3,0.0,11
+Sakhir Grand Prix,HARD,4,0.218,11
+Sakhir Grand Prix,HARD,5,0.205,12
+Sakhir Grand Prix,HARD,6,0.34,10
+Sakhir Grand Prix,HARD,7,0.553,9
+Sakhir Grand Prix,HARD,8,0.698,8
+Sakhir Grand Prix,HARD,9,0.763,10
+Sakhir Grand Prix,HARD,10,0.6485,8
+Sakhir Grand Prix,HARD,11,0.644,8
+Sakhir Grand Prix,HARD,12,0.832,9
+Sakhir Grand Prix,HARD,13,0.922,8
+Sakhir Grand Prix,HARD,14,1.0255,6
+Sakhir Grand Prix,HARD,15,1.0875,6
+Sakhir Grand Prix,HARD,16,1.2465,8
+Sakhir Grand Prix,HARD,17,1.298,7
+Sakhir Grand Prix,HARD,18,1.39,8
+Sakhir Grand Prix,HARD,19,1.583,7
+Sakhir Grand Prix,HARD,20,1.515,8
+Sakhir Grand Prix,HARD,21,1.3935,8
+Sakhir Grand Prix,HARD,22,1.512,9
+Sakhir Grand Prix,HARD,23,1.517,7
+Sakhir Grand Prix,HARD,24,1.533,7
+Sakhir Grand Prix,HARD,25,1.533,6
+Sakhir Grand Prix,HARD,26,1.518,7
+Sakhir Grand Prix,HARD,27,1.748,7
+Sakhir Grand Prix,HARD,28,1.683,6
+Sakhir Grand Prix,HARD,29,1.465,7
+Sakhir Grand Prix,HARD,30,1.822,7
+Sakhir Grand Prix,HARD,31,1.5785,6
+Sakhir Grand Prix,HARD,32,1.913,6
+Sakhir Grand Prix,HARD,33,1.655,5
+Sakhir Grand Prix,HARD,34,1.571,5
+Sakhir Grand Prix,HARD,35,2.0315,4
+Sakhir Grand Prix,HARD,36,1.8575,4
+Sakhir Grand Prix,HARD,37,2.129,3
+Sakhir Grand Prix,HARD,38,2.011,3
+Sakhir Grand Prix,MEDIUM,2,0.0,10
+Sakhir Grand Prix,MEDIUM,3,0.123,9
+Sakhir Grand Prix,MEDIUM,4,0.0,11
+Sakhir Grand Prix,MEDIUM,5,0.336,11
+Sakhir Grand Prix,MEDIUM,6,0.478,9
+Sakhir Grand Prix,MEDIUM,7,0.532,8
+Sakhir Grand Prix,MEDIUM,8,0.581,10
+Sakhir Grand Prix,MEDIUM,9,0.589,9
+Sakhir Grand Prix,MEDIUM,10,0.6015,10
+Sakhir Grand Prix,MEDIUM,11,0.36,15
+Sakhir Grand Prix,MEDIUM,12,0.4105,16
+Sakhir Grand Prix,MEDIUM,13,0.296,13
+Sakhir Grand Prix,MEDIUM,14,0.7175,16
+Sakhir Grand Prix,MEDIUM,15,0.707,17
+Sakhir Grand Prix,MEDIUM,16,0.8585,18
+Sakhir Grand Prix,MEDIUM,17,0.831,17
+Sakhir Grand Prix,MEDIUM,18,1.019,17
+Sakhir Grand Prix,MEDIUM,19,1.186,17
+Sakhir Grand Prix,MEDIUM,20,1.0945,18
+Sakhir Grand Prix,MEDIUM,21,0.972,15
+Sakhir Grand Prix,MEDIUM,22,1.097,15
+Sakhir Grand Prix,MEDIUM,23,0.9385,14
+Sakhir Grand Prix,MEDIUM,24,1.1965,14
+Sakhir Grand Prix,MEDIUM,25,1.102,13
+Sakhir Grand Prix,MEDIUM,26,0.996,13
+Sakhir Grand Prix,MEDIUM,27,1.394,14
+Sakhir Grand Prix,MEDIUM,28,1.208,11
+Sakhir Grand Prix,MEDIUM,29,1.1005,10
+Sakhir Grand Prix,MEDIUM,30,1.184,11
+Sakhir Grand Prix,MEDIUM,31,1.1975,10
+Sakhir Grand Prix,MEDIUM,32,1.5805,10
+Sakhir Grand Prix,MEDIUM,33,1.305,9
+Sakhir Grand Prix,MEDIUM,34,1.3495,6
+Sakhir Grand Prix,MEDIUM,35,1.508,6
+Sakhir Grand Prix,MEDIUM,36,1.453,6
+Sakhir Grand Prix,MEDIUM,37,1.4485,6
+Sakhir Grand Prix,MEDIUM,38,1.5175,6
+Sakhir Grand Prix,MEDIUM,39,1.517,6
+Sakhir Grand Prix,MEDIUM,40,1.618,6
+Sakhir Grand Prix,MEDIUM,41,1.813,5
+Sakhir Grand Prix,MEDIUM,42,1.775,5
+Sakhir Grand Prix,MEDIUM,43,1.513,5
+Sakhir Grand Prix,MEDIUM,44,1.845,5
+Sakhir Grand Prix,MEDIUM,45,1.736,5
+Sakhir Grand Prix,SOFT,6,0.0,3
+Sakhir Grand Prix,SOFT,7,-0.0305,4
+Sakhir Grand Prix,SOFT,8,0.3135,6
+Sakhir Grand Prix,SOFT,9,0.1185,6
+Sakhir Grand Prix,SOFT,10,-0.156,8
+Sakhir Grand Prix,SOFT,11,-0.016,11
+Sakhir Grand Prix,SOFT,12,-0.284,11
+Sakhir Grand Prix,SOFT,13,-0.084,11
+Sakhir Grand Prix,SOFT,14,-0.146,11
+Sakhir Grand Prix,SOFT,15,-0.087,11
+Sakhir Grand Prix,SOFT,16,0.119,11
+Sakhir Grand Prix,SOFT,17,0.253,11
+Sakhir Grand Prix,SOFT,18,0.344,11
+Sakhir Grand Prix,SOFT,19,0.33,10
+Sakhir Grand Prix,SOFT,20,0.224,11
+Sakhir Grand Prix,SOFT,21,0.366,11
+Sakhir Grand Prix,SOFT,22,0.4355,10
+Sakhir Grand Prix,SOFT,23,0.43,11
+Sakhir Grand Prix,SOFT,24,0.512,11
+Sakhir Grand Prix,SOFT,25,0.571,11
+Sakhir Grand Prix,SOFT,26,0.793,9
+Sakhir Grand Prix,SOFT,27,0.799,9
+Sakhir Grand Prix,SOFT,28,1.006,7
+Sakhir Grand Prix,SOFT,29,0.9985,6
+Sakhir Grand Prix,SOFT,30,1.001,5
+Sakhir Grand Prix,SOFT,31,0.813,3
+Saudi Arabian Grand Prix,HARD,2,0.0,10
+Saudi Arabian Grand Prix,HARD,3,0.0,19
+Saudi Arabian Grand Prix,HARD,4,0.0,34
+Saudi Arabian Grand Prix,HARD,5,-0.377,45
+Saudi Arabian Grand Prix,HARD,6,-0.854,51
+Saudi Arabian Grand Prix,HARD,7,-1.045,50
+Saudi Arabian Grand Prix,HARD,8,-0.978,53
+Saudi Arabian Grand Prix,HARD,9,-1.072,55
+Saudi Arabian Grand Prix,HARD,10,-0.7935,46
+Saudi Arabian Grand Prix,HARD,11,-1.092,47
+Saudi Arabian Grand Prix,HARD,12,-1.277,51
+Saudi Arabian Grand Prix,HARD,13,-1.0575,48
+Saudi Arabian Grand Prix,HARD,14,-0.812,45
+Saudi Arabian Grand Prix,HARD,15,-1.0525,48
+Saudi Arabian Grand Prix,HARD,16,-1.0715,48
+Saudi Arabian Grand Prix,HARD,17,-1.104,41
+Saudi Arabian Grand Prix,HARD,18,-1.365,41
+Saudi Arabian Grand Prix,HARD,19,-1.503,37
+Saudi Arabian Grand Prix,HARD,20,-1.3155,40
+Saudi Arabian Grand Prix,HARD,21,-0.911,40
+Saudi Arabian Grand Prix,HARD,22,-0.635,33
+Saudi Arabian Grand Prix,HARD,23,-0.6235,36
+Saudi Arabian Grand Prix,HARD,24,-0.965,37
+Saudi Arabian Grand Prix,HARD,25,-0.668,42
+Saudi Arabian Grand Prix,HARD,26,-1.34,46
+Saudi Arabian Grand Prix,HARD,27,-0.973,45
+Saudi Arabian Grand Prix,HARD,28,-1.292,45
+Saudi Arabian Grand Prix,HARD,29,-1.143,44
+Saudi Arabian Grand Prix,HARD,30,-1.104,43
+Saudi Arabian Grand Prix,HARD,31,-1.3475,44
+Saudi Arabian Grand Prix,HARD,32,-1.323,45
+Saudi Arabian Grand Prix,HARD,33,-1.2985,42
+Saudi Arabian Grand Prix,HARD,34,-0.958,38
+Saudi Arabian Grand Prix,HARD,35,-1.378,29
+Saudi Arabian Grand Prix,HARD,36,-0.784,25
+Saudi Arabian Grand Prix,HARD,37,-0.761,25
+Saudi Arabian Grand Prix,HARD,38,-1.148,20
+Saudi Arabian Grand Prix,HARD,39,-0.96,18
+Saudi Arabian Grand Prix,HARD,40,-0.902,17
+Saudi Arabian Grand Prix,HARD,41,-0.6515,14
+Saudi Arabian Grand Prix,HARD,42,-0.636,15
+Saudi Arabian Grand Prix,HARD,43,-0.985,10
+Saudi Arabian Grand Prix,HARD,44,-1.599,3
+Saudi Arabian Grand Prix,MEDIUM,2,0.0,34
+Saudi Arabian Grand Prix,MEDIUM,3,-0.296,48
+Saudi Arabian Grand Prix,MEDIUM,4,-0.398,51
+Saudi Arabian Grand Prix,MEDIUM,5,-0.511,53
+Saudi Arabian Grand Prix,MEDIUM,6,-0.525,58
+Saudi Arabian Grand Prix,MEDIUM,7,-0.5865,46
+Saudi Arabian Grand Prix,MEDIUM,8,-0.402,38
+Saudi Arabian Grand Prix,MEDIUM,9,-0.195,45
+Saudi Arabian Grand Prix,MEDIUM,10,-0.393,49
+Saudi Arabian Grand Prix,MEDIUM,11,-0.501,45
+Saudi Arabian Grand Prix,MEDIUM,12,-0.274,46
+Saudi Arabian Grand Prix,MEDIUM,13,-0.369,45
+Saudi Arabian Grand Prix,MEDIUM,14,-0.252,38
+Saudi Arabian Grand Prix,MEDIUM,15,-0.3105,36
+Saudi Arabian Grand Prix,MEDIUM,16,-0.6465,24
+Saudi Arabian Grand Prix,MEDIUM,17,-0.807,15
+Saudi Arabian Grand Prix,MEDIUM,18,-0.818,14
+Saudi Arabian Grand Prix,MEDIUM,19,-0.974,13
+Saudi Arabian Grand Prix,MEDIUM,20,-0.917,11
+Saudi Arabian Grand Prix,MEDIUM,21,-0.4035,12
+Saudi Arabian Grand Prix,MEDIUM,22,-0.731,13
+Saudi Arabian Grand Prix,MEDIUM,23,-0.5125,14
+Saudi Arabian Grand Prix,MEDIUM,24,-0.5495,14
+Saudi Arabian Grand Prix,MEDIUM,25,-0.748,13
+Saudi Arabian Grand Prix,MEDIUM,26,-0.885,15
+Saudi Arabian Grand Prix,MEDIUM,27,-0.695,14
+Saudi Arabian Grand Prix,MEDIUM,28,-1.101,15
+Saudi Arabian Grand Prix,MEDIUM,29,-0.762,13
+Saudi Arabian Grand Prix,MEDIUM,30,-1.44,13
+Saudi Arabian Grand Prix,MEDIUM,31,-1.021,13
+Saudi Arabian Grand Prix,MEDIUM,32,-1.2335,12
+Saudi Arabian Grand Prix,MEDIUM,33,-0.405,8
+Saudi Arabian Grand Prix,MEDIUM,34,-0.2555,8
+Saudi Arabian Grand Prix,MEDIUM,35,-0.0495,8
+Saudi Arabian Grand Prix,MEDIUM,36,-0.3015,4
+Saudi Arabian Grand Prix,MEDIUM,37,-1.06,3
+Saudi Arabian Grand Prix,SOFT,2,0.0,5
+Saudi Arabian Grand Prix,SOFT,3,-0.217,5
+Saudi Arabian Grand Prix,SOFT,4,-0.07,5
+Saudi Arabian Grand Prix,SOFT,5,0.0035,6
+Saudi Arabian Grand Prix,SOFT,6,0.354,7
+Saudi Arabian Grand Prix,SOFT,7,0.115,6
+Saudi Arabian Grand Prix,SOFT,8,0.0,7
+Saudi Arabian Grand Prix,SOFT,9,0.2095,6
+Saudi Arabian Grand Prix,SOFT,10,0.206,6
+Saudi Arabian Grand Prix,SOFT,11,0.342,6
+Saudi Arabian Grand Prix,SOFT,12,0.4525,6
+Saudi Arabian Grand Prix,SOFT,13,0.437,6
+Saudi Arabian Grand Prix,SOFT,14,0.459,5
+Saudi Arabian Grand Prix,SOFT,15,0.816,3
+Singapore Grand Prix,HARD,2,0.0,31
+Singapore Grand Prix,HARD,3,0.0,35
+Singapore Grand Prix,HARD,4,0.0,42
+Singapore Grand Prix,HARD,5,0.0,48
+Singapore Grand Prix,HARD,6,0.165,46
+Singapore Grand Prix,HARD,7,0.011,47
+Singapore Grand Prix,HARD,8,0.331,49
+Singapore Grand Prix,HARD,9,0.398,51
+Singapore Grand Prix,HARD,10,-0.208,46
+Singapore Grand Prix,HARD,11,0.03,47
+Singapore Grand Prix,HARD,12,0.0245,48
+Singapore Grand Prix,HARD,13,0.1755,46
+Singapore Grand Prix,HARD,14,0.099,44
+Singapore Grand Prix,HARD,15,0.537,46
+Singapore Grand Prix,HARD,16,0.19,41
+Singapore Grand Prix,HARD,17,0.298,37
+Singapore Grand Prix,HARD,18,0.298,37
+Singapore Grand Prix,HARD,19,0.496,35
+Singapore Grand Prix,HARD,20,0.681,37
+Singapore Grand Prix,HARD,21,0.578,39
+Singapore Grand Prix,HARD,22,0.757,41
+Singapore Grand Prix,HARD,23,0.9345,34
+Singapore Grand Prix,HARD,24,1.245,25
+Singapore Grand Prix,HARD,25,1.0215,24
+Singapore Grand Prix,HARD,26,0.832,30
+Singapore Grand Prix,HARD,27,0.9945,28
+Singapore Grand Prix,HARD,28,1.1105,30
+Singapore Grand Prix,HARD,29,1.0295,32
+Singapore Grand Prix,HARD,30,0.915,28
+Singapore Grand Prix,HARD,31,1.2815,28
+Singapore Grand Prix,HARD,32,1.1435,28
+Singapore Grand Prix,HARD,33,1.4205,24
+Singapore Grand Prix,HARD,34,1.311,22
+Singapore Grand Prix,HARD,35,1.124,21
+Singapore Grand Prix,HARD,36,1.434,19
+Singapore Grand Prix,HARD,37,1.384,17
+Singapore Grand Prix,HARD,38,1.323,18
+Singapore Grand Prix,HARD,39,1.797,17
+Singapore Grand Prix,HARD,40,1.483,12
+Singapore Grand Prix,HARD,41,1.721,13
+Singapore Grand Prix,HARD,42,2.455,10
+Singapore Grand Prix,MEDIUM,2,0.0,35
+Singapore Grand Prix,MEDIUM,3,-0.099,37
+Singapore Grand Prix,MEDIUM,4,-0.309,37
+Singapore Grand Prix,MEDIUM,5,-0.546,40
+Singapore Grand Prix,MEDIUM,6,-0.313,43
+Singapore Grand Prix,MEDIUM,7,-0.464,44
+Singapore Grand Prix,MEDIUM,8,-0.5615,44
+Singapore Grand Prix,MEDIUM,9,-0.48,43
+Singapore Grand Prix,MEDIUM,10,-0.534,41
+Singapore Grand Prix,MEDIUM,11,-0.364,44
+Singapore Grand Prix,MEDIUM,12,-0.35,41
+Singapore Grand Prix,MEDIUM,13,-0.1985,42
+Singapore Grand Prix,MEDIUM,14,-0.18,42
+Singapore Grand Prix,MEDIUM,15,-0.024,40
+Singapore Grand Prix,MEDIUM,16,0.035,43
+Singapore Grand Prix,MEDIUM,17,0.1715,44
+Singapore Grand Prix,MEDIUM,18,0.1925,40
+Singapore Grand Prix,MEDIUM,19,0.207,38
+Singapore Grand Prix,MEDIUM,20,0.551,26
+Singapore Grand Prix,MEDIUM,21,0.6265,24
+Singapore Grand Prix,MEDIUM,22,0.6125,24
+Singapore Grand Prix,MEDIUM,23,0.796,23
+Singapore Grand Prix,MEDIUM,24,0.777,22
+Singapore Grand Prix,MEDIUM,25,1.268,21
+Singapore Grand Prix,MEDIUM,26,1.215,20
+Singapore Grand Prix,MEDIUM,27,1.314,16
+Singapore Grand Prix,MEDIUM,28,1.166,16
+Singapore Grand Prix,MEDIUM,29,1.156,9
+Singapore Grand Prix,MEDIUM,30,1.2395,8
+Singapore Grand Prix,MEDIUM,31,1.031,5
+Singapore Grand Prix,MEDIUM,32,1.221,6
+Singapore Grand Prix,MEDIUM,33,1.191,6
+Singapore Grand Prix,MEDIUM,34,1.948,6
+Singapore Grand Prix,MEDIUM,35,1.469,5
+Singapore Grand Prix,MEDIUM,36,1.729,3
+Singapore Grand Prix,SOFT,2,0.0,4
+Singapore Grand Prix,SOFT,3,0.1575,4
+Singapore Grand Prix,SOFT,4,0.0,5
+Singapore Grand Prix,SOFT,5,0.0,13
+Singapore Grand Prix,SOFT,6,0.0,18
+Singapore Grand Prix,SOFT,7,0.271,19
+Singapore Grand Prix,SOFT,8,-0.225,14
+Singapore Grand Prix,SOFT,9,-0.4275,10
+Singapore Grand Prix,SOFT,10,0.531,11
+Singapore Grand Prix,SOFT,11,0.0205,12
+Singapore Grand Prix,SOFT,12,-0.064,7
+Singapore Grand Prix,SOFT,13,-0.068,7
+Singapore Grand Prix,SOFT,14,0.795,8
+Singapore Grand Prix,SOFT,15,0.5495,10
+Singapore Grand Prix,SOFT,16,0.82,13
+Singapore Grand Prix,SOFT,17,1.004,13
+Singapore Grand Prix,SOFT,18,0.567,15
+Singapore Grand Prix,SOFT,19,0.772,15
+Singapore Grand Prix,SOFT,20,-0.242,13
+Singapore Grand Prix,SOFT,21,0.651,11
+Singapore Grand Prix,SOFT,22,0.1355,8
+Singapore Grand Prix,SOFT,23,-0.18,7
+Singapore Grand Prix,SOFT,24,-0.441,7
+Singapore Grand Prix,SOFT,25,-0.16,5
+Spanish Grand Prix,HARD,2,0.0,34
+Spanish Grand Prix,HARD,3,0.0195,38
+Spanish Grand Prix,HARD,4,0.276,36
+Spanish Grand Prix,HARD,5,0.341,35
+Spanish Grand Prix,HARD,6,0.476,36
+Spanish Grand Prix,HARD,7,0.6385,38
+Spanish Grand Prix,HARD,8,0.5385,36
+Spanish Grand Prix,HARD,9,0.737,34
+Spanish Grand Prix,HARD,10,0.7995,34
+Spanish Grand Prix,HARD,11,0.7,35
+Spanish Grand Prix,HARD,12,1.021,35
+Spanish Grand Prix,HARD,13,1.183,35
+Spanish Grand Prix,HARD,14,1.139,35
+Spanish Grand Prix,HARD,15,1.1595,34
+Spanish Grand Prix,HARD,16,1.529,30
+Spanish Grand Prix,HARD,17,1.367,31
+Spanish Grand Prix,HARD,18,1.264,31
+Spanish Grand Prix,HARD,19,1.393,31
+Spanish Grand Prix,HARD,20,1.309,32
+Spanish Grand Prix,HARD,21,1.542,27
+Spanish Grand Prix,HARD,22,1.237,23
+Spanish Grand Prix,HARD,23,1.218,20
+Spanish Grand Prix,HARD,24,1.591,21
+Spanish Grand Prix,HARD,25,1.598,19
+Spanish Grand Prix,HARD,26,1.955,17
+Spanish Grand Prix,HARD,27,1.978,17
+Spanish Grand Prix,HARD,28,2.222,17
+Spanish Grand Prix,HARD,29,2.004,11
+Spanish Grand Prix,HARD,30,2.431,9
+Spanish Grand Prix,HARD,31,1.516,5
+Spanish Grand Prix,HARD,32,1.82,3
+Spanish Grand Prix,HARD,33,2.809,3
+Spanish Grand Prix,HARD,34,2.601,3
+Spanish Grand Prix,HARD,35,2.532,3
+Spanish Grand Prix,HARD,36,3.17,3
+Spanish Grand Prix,MEDIUM,2,0.0,82
+Spanish Grand Prix,MEDIUM,3,0.218,81
+Spanish Grand Prix,MEDIUM,4,0.441,85
+Spanish Grand Prix,MEDIUM,5,0.436,86
+Spanish Grand Prix,MEDIUM,6,0.548,81
+Spanish Grand Prix,MEDIUM,7,0.735,85
+Spanish Grand Prix,MEDIUM,8,0.755,82
+Spanish Grand Prix,MEDIUM,9,0.8315,84
+Spanish Grand Prix,MEDIUM,10,0.903,84
+Spanish Grand Prix,MEDIUM,11,0.942,88
+Spanish Grand Prix,MEDIUM,12,1.118,90
+Spanish Grand Prix,MEDIUM,13,1.093,83
+Spanish Grand Prix,MEDIUM,14,0.9935,88
+Spanish Grand Prix,MEDIUM,15,1.069,83
+Spanish Grand Prix,MEDIUM,16,1.107,80
+Spanish Grand Prix,MEDIUM,17,1.181,79
+Spanish Grand Prix,MEDIUM,18,1.069,74
+Spanish Grand Prix,MEDIUM,19,1.2095,74
+Spanish Grand Prix,MEDIUM,20,1.244,62
+Spanish Grand Prix,MEDIUM,21,1.2235,54
+Spanish Grand Prix,MEDIUM,22,1.36,43
+Spanish Grand Prix,MEDIUM,23,1.352,39
+Spanish Grand Prix,MEDIUM,24,1.546,32
+Spanish Grand Prix,MEDIUM,25,1.352,29
+Spanish Grand Prix,MEDIUM,26,1.626,21
+Spanish Grand Prix,MEDIUM,27,2.149,12
+Spanish Grand Prix,MEDIUM,28,2.2065,10
+Spanish Grand Prix,MEDIUM,29,2.4235,8
+Spanish Grand Prix,MEDIUM,30,2.6935,8
+Spanish Grand Prix,MEDIUM,31,2.664,6
+Spanish Grand Prix,MEDIUM,32,1.961,3
+Spanish Grand Prix,MEDIUM,33,3.003,3
+Spanish Grand Prix,SOFT,2,0.0,25
+Spanish Grand Prix,SOFT,3,0.0,32
+Spanish Grand Prix,SOFT,4,0.08,37
+Spanish Grand Prix,SOFT,5,0.0,95
+Spanish Grand Prix,SOFT,6,0.093,99
+Spanish Grand Prix,SOFT,7,0.1455,98
+Spanish Grand Prix,SOFT,8,0.206,101
+Spanish Grand Prix,SOFT,9,0.285,103
+Spanish Grand Prix,SOFT,10,0.403,100
+Spanish Grand Prix,SOFT,11,0.412,93
+Spanish Grand Prix,SOFT,12,0.63,96
+Spanish Grand Prix,SOFT,13,0.488,97
+Spanish Grand Prix,SOFT,14,0.572,96
+Spanish Grand Prix,SOFT,15,0.717,93
+Spanish Grand Prix,SOFT,16,0.737,96
+Spanish Grand Prix,SOFT,17,0.678,83
+Spanish Grand Prix,SOFT,18,0.768,72
+Spanish Grand Prix,SOFT,19,0.698,66
+Spanish Grand Prix,SOFT,20,0.728,63
+Spanish Grand Prix,SOFT,21,0.698,56
+Spanish Grand Prix,SOFT,22,0.8,46
+Spanish Grand Prix,SOFT,23,0.78,37
+Spanish Grand Prix,SOFT,24,0.599,25
+Spanish Grand Prix,SOFT,25,0.7915,18
+Spanish Grand Prix,SOFT,26,0.85,14
+Spanish Grand Prix,SOFT,27,1.064,10
+Spanish Grand Prix,SOFT,28,1.0885,10
+Spanish Grand Prix,SOFT,29,0.709,5
+Spanish Grand Prix,SOFT,30,0.383,3
+Spanish Grand Prix,SOFT,31,0.688,4
+Styrian Grand Prix,HARD,2,0.0,16
+Styrian Grand Prix,HARD,3,0.0,18
+Styrian Grand Prix,HARD,4,0.0,21
+Styrian Grand Prix,HARD,5,-0.079,17
+Styrian Grand Prix,HARD,6,0.012,19
+Styrian Grand Prix,HARD,7,0.088,20
+Styrian Grand Prix,HARD,8,0.067,20
+Styrian Grand Prix,HARD,9,0.0705,20
+Styrian Grand Prix,HARD,10,0.178,21
+Styrian Grand Prix,HARD,11,0.097,17
+Styrian Grand Prix,HARD,12,0.2555,18
+Styrian Grand Prix,HARD,13,0.269,19
+Styrian Grand Prix,HARD,14,0.4775,18
+Styrian Grand Prix,HARD,15,0.54,19
+Styrian Grand Prix,HARD,16,0.388,15
+Styrian Grand Prix,HARD,17,0.45,19
+Styrian Grand Prix,HARD,18,0.658,19
+Styrian Grand Prix,HARD,19,0.693,17
+Styrian Grand Prix,HARD,20,0.754,18
+Styrian Grand Prix,HARD,21,0.8945,18
+Styrian Grand Prix,HARD,22,0.8165,20
+Styrian Grand Prix,HARD,23,0.945,19
+Styrian Grand Prix,HARD,24,0.954,19
+Styrian Grand Prix,HARD,25,1.1435,18
+Styrian Grand Prix,HARD,26,1.27,18
+Styrian Grand Prix,HARD,27,1.361,18
+Styrian Grand Prix,HARD,28,1.383,15
+Styrian Grand Prix,HARD,29,1.249,17
+Styrian Grand Prix,HARD,30,1.292,15
+Styrian Grand Prix,HARD,31,1.3895,14
+Styrian Grand Prix,HARD,32,1.7725,14
+Styrian Grand Prix,HARD,33,1.664,15
+Styrian Grand Prix,HARD,34,1.74,15
+Styrian Grand Prix,HARD,35,1.905,12
+Styrian Grand Prix,HARD,36,1.84,9
+Styrian Grand Prix,HARD,37,1.737,10
+Styrian Grand Prix,HARD,38,2.0625,10
+Styrian Grand Prix,HARD,39,1.891,9
+Styrian Grand Prix,HARD,40,2.406,9
+Styrian Grand Prix,HARD,41,2.8865,6
+Styrian Grand Prix,HARD,42,2.109,7
+Styrian Grand Prix,HARD,43,2.37,6
+Styrian Grand Prix,HARD,44,2.226,3
+Styrian Grand Prix,MEDIUM,2,0.0,14
+Styrian Grand Prix,MEDIUM,3,0.084,14
+Styrian Grand Prix,MEDIUM,4,0.03,16
+Styrian Grand Prix,MEDIUM,5,0.001,17
+Styrian Grand Prix,MEDIUM,6,0.115,20
+Styrian Grand Prix,MEDIUM,7,0.353,18
+Styrian Grand Prix,MEDIUM,8,0.226,20
+Styrian Grand Prix,MEDIUM,9,0.281,18
+Styrian Grand Prix,MEDIUM,10,0.381,22
+Styrian Grand Prix,MEDIUM,11,0.216,24
+Styrian Grand Prix,MEDIUM,12,0.388,23
+Styrian Grand Prix,MEDIUM,13,0.607,25
+Styrian Grand Prix,MEDIUM,14,0.489,25
+Styrian Grand Prix,MEDIUM,15,0.791,23
+Styrian Grand Prix,MEDIUM,16,0.697,23
+Styrian Grand Prix,MEDIUM,17,0.8,17
+Styrian Grand Prix,MEDIUM,18,0.5585,20
+Styrian Grand Prix,MEDIUM,19,0.785,23
+Styrian Grand Prix,MEDIUM,20,0.785,25
+Styrian Grand Prix,MEDIUM,21,0.686,25
+Styrian Grand Prix,MEDIUM,22,0.7165,22
+Styrian Grand Prix,MEDIUM,23,0.7475,24
+Styrian Grand Prix,MEDIUM,24,0.914,23
+Styrian Grand Prix,MEDIUM,25,0.945,23
+Styrian Grand Prix,MEDIUM,26,0.936,23
+Styrian Grand Prix,MEDIUM,27,0.827,23
+Styrian Grand Prix,MEDIUM,28,0.9185,22
+Styrian Grand Prix,MEDIUM,29,1.022,23
+Styrian Grand Prix,MEDIUM,30,0.917,21
+Styrian Grand Prix,MEDIUM,31,1.188,21
+Styrian Grand Prix,MEDIUM,32,1.115,19
+Styrian Grand Prix,MEDIUM,33,1.327,19
+Styrian Grand Prix,MEDIUM,34,1.1585,14
+Styrian Grand Prix,MEDIUM,35,1.3105,14
+Styrian Grand Prix,MEDIUM,36,1.562,10
+Styrian Grand Prix,MEDIUM,37,1.948,6
+Styrian Grand Prix,MEDIUM,38,1.088,7
+Styrian Grand Prix,MEDIUM,39,1.4695,6
+Styrian Grand Prix,MEDIUM,40,1.632,5
+Styrian Grand Prix,MEDIUM,41,1.201,3
+Styrian Grand Prix,MEDIUM,42,2.661,3
+Styrian Grand Prix,SOFT,2,0.0,6
+Styrian Grand Prix,SOFT,3,0.2015,6
+Styrian Grand Prix,SOFT,4,0.1125,6
+Styrian Grand Prix,SOFT,5,0.166,11
+Styrian Grand Prix,SOFT,6,0.0,12
+Styrian Grand Prix,SOFT,7,0.159,11
+Styrian Grand Prix,SOFT,8,0.0,13
+Styrian Grand Prix,SOFT,9,0.0095,14
+Styrian Grand Prix,SOFT,10,0.1895,14
+Styrian Grand Prix,SOFT,11,0.305,15
+Styrian Grand Prix,SOFT,12,0.183,19
+Styrian Grand Prix,SOFT,13,0.1435,20
+Styrian Grand Prix,SOFT,14,0.368,18
+Styrian Grand Prix,SOFT,15,0.634,19
+Styrian Grand Prix,SOFT,16,0.6395,18
+Styrian Grand Prix,SOFT,17,0.48,15
+Styrian Grand Prix,SOFT,18,0.645,19
+Styrian Grand Prix,SOFT,19,0.662,19
+Styrian Grand Prix,SOFT,20,0.619,21
+Styrian Grand Prix,SOFT,21,0.7005,20
+Styrian Grand Prix,SOFT,22,0.64,17
+Styrian Grand Prix,SOFT,23,0.647,19
+Styrian Grand Prix,SOFT,24,0.608,19
+Styrian Grand Prix,SOFT,25,0.8385,18
+Styrian Grand Prix,SOFT,26,0.773,17
+Styrian Grand Prix,SOFT,27,0.763,16
+Styrian Grand Prix,SOFT,28,0.8555,16
+Styrian Grand Prix,SOFT,29,0.616,12
+Styrian Grand Prix,SOFT,30,0.7755,12
+Styrian Grand Prix,SOFT,31,0.687,9
+Styrian Grand Prix,SOFT,32,0.85,8
+Styrian Grand Prix,SOFT,33,0.879,7
+Styrian Grand Prix,SOFT,34,0.871,5
+Styrian Grand Prix,SOFT,35,0.9925,4
+Styrian Grand Prix,SOFT,36,1.1555,4
+Styrian Grand Prix,SOFT,37,1.221,3
+São Paulo Grand Prix,HARD,2,0.0,19
+São Paulo Grand Prix,HARD,3,0.071,19
+São Paulo Grand Prix,HARD,4,0.3995,20
+São Paulo Grand Prix,HARD,5,0.2895,20
+São Paulo Grand Prix,HARD,6,0.39,20
+São Paulo Grand Prix,HARD,7,0.365,21
+São Paulo Grand Prix,HARD,8,0.487,21
+São Paulo Grand Prix,HARD,9,0.505,23
+São Paulo Grand Prix,HARD,10,0.631,21
+São Paulo Grand Prix,HARD,11,0.514,21
+São Paulo Grand Prix,HARD,12,0.668,18
+São Paulo Grand Prix,HARD,13,0.762,19
+São Paulo Grand Prix,HARD,14,0.606,18
+São Paulo Grand Prix,HARD,15,0.932,19
+São Paulo Grand Prix,HARD,16,0.937,19
+São Paulo Grand Prix,HARD,17,0.8205,18
+São Paulo Grand Prix,HARD,18,1.046,15
+São Paulo Grand Prix,HARD,19,1.581,15
+São Paulo Grand Prix,HARD,20,1.171,12
+São Paulo Grand Prix,HARD,21,1.546,11
+São Paulo Grand Prix,HARD,22,1.616,11
+São Paulo Grand Prix,HARD,23,1.5815,14
+São Paulo Grand Prix,HARD,24,1.8355,12
+São Paulo Grand Prix,HARD,25,1.9495,10
+São Paulo Grand Prix,HARD,26,2.005,11
+São Paulo Grand Prix,HARD,27,1.94,9
+São Paulo Grand Prix,HARD,28,1.826,10
+São Paulo Grand Prix,HARD,29,1.924,7
+São Paulo Grand Prix,HARD,30,2.584,5
+São Paulo Grand Prix,HARD,31,2.0835,4
+São Paulo Grand Prix,HARD,32,1.935,3
+São Paulo Grand Prix,HARD,34,2.009,3
+São Paulo Grand Prix,HARD,35,2.365,3
+São Paulo Grand Prix,MEDIUM,2,0.0,36
+São Paulo Grand Prix,MEDIUM,3,0.331,39
+São Paulo Grand Prix,MEDIUM,4,0.415,39
+São Paulo Grand Prix,MEDIUM,5,0.406,40
+São Paulo Grand Prix,MEDIUM,6,0.602,41
+São Paulo Grand Prix,MEDIUM,7,0.604,41
+São Paulo Grand Prix,MEDIUM,8,0.575,44
+São Paulo Grand Prix,MEDIUM,9,0.75,44
+São Paulo Grand Prix,MEDIUM,10,0.509,49
+São Paulo Grand Prix,MEDIUM,11,0.3305,52
+São Paulo Grand Prix,MEDIUM,12,0.732,44
+São Paulo Grand Prix,MEDIUM,13,0.917,45
+São Paulo Grand Prix,MEDIUM,14,0.873,45
+São Paulo Grand Prix,MEDIUM,15,0.764,56
+São Paulo Grand Prix,MEDIUM,16,0.9925,54
+São Paulo Grand Prix,MEDIUM,17,1.155,48
+São Paulo Grand Prix,MEDIUM,18,1.129,47
+São Paulo Grand Prix,MEDIUM,19,1.148,43
+São Paulo Grand Prix,MEDIUM,20,1.2225,36
+São Paulo Grand Prix,MEDIUM,21,1.229,31
+São Paulo Grand Prix,MEDIUM,22,1.161,30
+São Paulo Grand Prix,MEDIUM,23,1.2685,28
+São Paulo Grand Prix,MEDIUM,24,1.327,25
+São Paulo Grand Prix,MEDIUM,25,1.103,19
+São Paulo Grand Prix,MEDIUM,26,1.179,16
+São Paulo Grand Prix,MEDIUM,27,1.519,12
+São Paulo Grand Prix,MEDIUM,28,1.7025,8
+São Paulo Grand Prix,MEDIUM,29,1.638,5
+São Paulo Grand Prix,SOFT,2,0.0,16
+São Paulo Grand Prix,SOFT,3,0.175,19
+São Paulo Grand Prix,SOFT,4,0.0,21
+São Paulo Grand Prix,SOFT,5,0.0,31
+São Paulo Grand Prix,SOFT,6,0.0,43
+São Paulo Grand Prix,SOFT,7,0.0,51
+São Paulo Grand Prix,SOFT,8,-0.017,56
+São Paulo Grand Prix,SOFT,9,-0.0695,56
+São Paulo Grand Prix,SOFT,10,-0.02,52
+São Paulo Grand Prix,SOFT,11,0.1,53
+São Paulo Grand Prix,SOFT,12,0.372,53
+São Paulo Grand Prix,SOFT,13,0.504,53
+São Paulo Grand Prix,SOFT,14,0.421,51
+São Paulo Grand Prix,SOFT,15,0.483,49
+São Paulo Grand Prix,SOFT,16,0.655,47
+São Paulo Grand Prix,SOFT,17,0.622,47
+São Paulo Grand Prix,SOFT,18,0.8195,48
+São Paulo Grand Prix,SOFT,19,0.812,47
+São Paulo Grand Prix,SOFT,20,0.8305,40
+São Paulo Grand Prix,SOFT,21,0.905,41
+São Paulo Grand Prix,SOFT,22,0.9495,38
+São Paulo Grand Prix,SOFT,23,0.9475,34
+São Paulo Grand Prix,SOFT,24,1.1205,26
+São Paulo Grand Prix,SOFT,25,1.154,23
+São Paulo Grand Prix,SOFT,26,1.09,18
+São Paulo Grand Prix,SOFT,27,1.297,15
+São Paulo Grand Prix,SOFT,28,1.4225,10
+São Paulo Grand Prix,SOFT,29,1.78,6
+São Paulo Grand Prix,SOFT,30,1.4475,4
+São Paulo Grand Prix,SOFT,31,2.082,3
+Tuscan Grand Prix,HARD,2,0.0,6
+Tuscan Grand Prix,HARD,3,0.217,5
+Tuscan Grand Prix,HARD,4,0.162,5
+Tuscan Grand Prix,HARD,5,0.221,5
+Tuscan Grand Prix,HARD,6,0.2785,6
+Tuscan Grand Prix,HARD,7,0.501,5
+Tuscan Grand Prix,HARD,8,0.755,5
+Tuscan Grand Prix,HARD,9,0.617,5
+Tuscan Grand Prix,HARD,10,0.727,6
+Tuscan Grand Prix,HARD,11,0.401,5
+Tuscan Grand Prix,HARD,12,0.677,3
+Tuscan Grand Prix,HARD,13,0.55,3
+Tuscan Grand Prix,MEDIUM,2,0.0,5
+Tuscan Grand Prix,MEDIUM,3,0.096,7
+Tuscan Grand Prix,MEDIUM,4,0.315,7
+Tuscan Grand Prix,MEDIUM,5,0.084,7
+Tuscan Grand Prix,MEDIUM,6,0.337,7
+Tuscan Grand Prix,MEDIUM,7,0.161,7
+Tuscan Grand Prix,MEDIUM,8,0.256,7
+Tuscan Grand Prix,MEDIUM,9,0.24,7
+Tuscan Grand Prix,MEDIUM,10,0.2815,8
+Tuscan Grand Prix,MEDIUM,11,-0.021,7
+Tuscan Grand Prix,MEDIUM,12,0.276,7
+Tuscan Grand Prix,MEDIUM,13,0.132,6
+Tuscan Grand Prix,MEDIUM,14,1.018,5
+Tuscan Grand Prix,MEDIUM,15,0.134,4
+Tuscan Grand Prix,MEDIUM,17,0.813,3
+Tuscan Grand Prix,MEDIUM,18,1.015,3
+Tuscan Grand Prix,MEDIUM,19,0.966,3
+Tuscan Grand Prix,MEDIUM,20,0.822,3
+Tuscan Grand Prix,SOFT,5,0.0,6
+Tuscan Grand Prix,SOFT,6,0.0,12
+Tuscan Grand Prix,SOFT,7,-0.0035,16
+Tuscan Grand Prix,SOFT,8,-0.3175,16
+Tuscan Grand Prix,SOFT,9,0.073,15
+Tuscan Grand Prix,SOFT,10,-0.131,15
+Tuscan Grand Prix,SOFT,11,0.029,17
+Tuscan Grand Prix,SOFT,12,-0.244,17
+Tuscan Grand Prix,SOFT,13,-0.421,13
+Tuscan Grand Prix,SOFT,14,-0.2675,16
+Tuscan Grand Prix,SOFT,15,-0.108,14
+Tuscan Grand Prix,SOFT,16,-0.163,14
+Tuscan Grand Prix,SOFT,17,0.171,13
+Tuscan Grand Prix,SOFT,18,0.044,7
+Tuscan Grand Prix,SOFT,19,0.7155,4
+Tuscan Grand Prix,SOFT,20,0.852,4
+Tuscan Grand Prix,SOFT,21,0.833,3
+Tuscan Grand Prix,SOFT,22,0.641,3
+United States Grand Prix,HARD,2,0.0,92
+United States Grand Prix,HARD,3,0.021,101
+United States Grand Prix,HARD,4,0.0565,96
+United States Grand Prix,HARD,5,0.177,98
+United States Grand Prix,HARD,6,0.251,98
+United States Grand Prix,HARD,7,0.211,99
+United States Grand Prix,HARD,8,0.232,101
+United States Grand Prix,HARD,9,0.292,101
+United States Grand Prix,HARD,10,0.4805,100
+United States Grand Prix,HARD,11,0.373,99
+United States Grand Prix,HARD,12,0.546,100
+United States Grand Prix,HARD,13,0.718,101
+United States Grand Prix,HARD,14,0.527,104
+United States Grand Prix,HARD,15,0.609,102
+United States Grand Prix,HARD,16,0.596,99
+United States Grand Prix,HARD,17,0.6075,102
+United States Grand Prix,HARD,18,0.618,89
+United States Grand Prix,HARD,19,0.597,83
+United States Grand Prix,HARD,20,0.744,72
+United States Grand Prix,HARD,21,0.949,67
+United States Grand Prix,HARD,22,0.869,55
+United States Grand Prix,HARD,23,0.972,46
+United States Grand Prix,HARD,24,0.731,41
+United States Grand Prix,HARD,25,0.592,35
+United States Grand Prix,HARD,26,0.915,33
+United States Grand Prix,HARD,27,0.947,28
+United States Grand Prix,HARD,28,0.721,25
+United States Grand Prix,HARD,29,1.06,25
+United States Grand Prix,HARD,30,1.1725,22
+United States Grand Prix,HARD,31,0.1225,16
+United States Grand Prix,HARD,32,0.159,15
+United States Grand Prix,HARD,33,0.183,13
+United States Grand Prix,HARD,34,-0.236,11
+United States Grand Prix,HARD,35,1.083,11
+United States Grand Prix,HARD,36,-0.513,7
+United States Grand Prix,HARD,37,0.092,7
+United States Grand Prix,HARD,38,-0.2925,6
+United States Grand Prix,MEDIUM,1,0.0,12
+United States Grand Prix,MEDIUM,2,0.0,74
+United States Grand Prix,MEDIUM,3,0.0,66
+United States Grand Prix,MEDIUM,4,0.0,76
+United States Grand Prix,MEDIUM,5,0.0,86
+United States Grand Prix,MEDIUM,6,0.0,105
+United States Grand Prix,MEDIUM,7,-0.0435,104
+United States Grand Prix,MEDIUM,8,0.002,106
+United States Grand Prix,MEDIUM,9,0.142,103
+United States Grand Prix,MEDIUM,10,0.194,95
+United States Grand Prix,MEDIUM,11,0.222,95
+United States Grand Prix,MEDIUM,12,0.106,89
+United States Grand Prix,MEDIUM,13,0.262,81
+United States Grand Prix,MEDIUM,14,0.324,80
+United States Grand Prix,MEDIUM,15,0.4695,70
+United States Grand Prix,MEDIUM,16,0.419,70
+United States Grand Prix,MEDIUM,17,0.257,61
+United States Grand Prix,MEDIUM,18,0.5845,50
+United States Grand Prix,MEDIUM,19,0.5095,36
+United States Grand Prix,MEDIUM,20,0.909,33
+United States Grand Prix,MEDIUM,21,0.7495,26
+United States Grand Prix,MEDIUM,22,0.64,24
+United States Grand Prix,MEDIUM,23,0.49,17
+United States Grand Prix,MEDIUM,24,0.757,16
+United States Grand Prix,MEDIUM,25,0.7235,12
+United States Grand Prix,MEDIUM,26,1.0095,10
+United States Grand Prix,MEDIUM,27,0.599,7
+United States Grand Prix,MEDIUM,28,0.83,8
+United States Grand Prix,MEDIUM,29,-0.0785,6
+United States Grand Prix,MEDIUM,30,0.863,5
+United States Grand Prix,MEDIUM,31,1.348,3
+United States Grand Prix,SOFT,2,0.0,8
+United States Grand Prix,SOFT,3,0.729,8
+United States Grand Prix,SOFT,4,0.982,8
+United States Grand Prix,SOFT,5,0.778,10
+United States Grand Prix,SOFT,6,0.943,11
+United States Grand Prix,SOFT,7,0.725,13
+United States Grand Prix,SOFT,8,0.67,12
+United States Grand Prix,SOFT,9,0.4535,12
+United States Grand Prix,SOFT,10,0.7385,12
+United States Grand Prix,SOFT,11,0.812,9
+United States Grand Prix,SOFT,12,1.248,10
+United States Grand Prix,SOFT,13,0.646,9
+United States Grand Prix,SOFT,14,1.502,7
+United States Grand Prix,SOFT,15,0.968,7
+United States Grand Prix,SOFT,16,1.238,6
+United States Grand Prix,SOFT,17,1.079,4
+United States Grand Prix,SOFT,18,1.068,4
+United States Grand Prix,SOFT,19,1.099,3
+United States Grand Prix,SOFT,20,1.276,3

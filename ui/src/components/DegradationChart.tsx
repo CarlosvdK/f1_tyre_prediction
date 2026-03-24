@@ -121,36 +121,48 @@ export default function DegradationChart({
   const lapTimes = best.lap_times ?? [];
   const hasLapData = lapTimes.length > 0;
 
-  const stintGroups: Map<number, typeof lapTimes> = new Map();
-  for (const lt of lapTimes) {
+  // Apply fuel effect to get realistic predicted lap times.
+  // Cars burn ~1.5 kg/lap; each kg costs ~0.035s → ~0.055s/lap.
+  // Early laps are slower (heavy car), later laps faster (lighter).
+  // Combined with tyre degradation this creates the classic F1 "bathtub"
+  // curve within each stint, with a clear drop at each pit stop.
+  const FUEL_EFFECT_PER_LAP = 0.055;
+  const predictedLaps = lapTimes.map((l) => ({
+    ...l,
+    predicted: Number((l.time + FUEL_EFFECT_PER_LAP * (totalLaps - l.lap)).toFixed(3)),
+  }));
+
+  const allTimes = predictedLaps.map((l) => l.predicted);
+  const yMin = Math.min(...allTimes);
+  const yMax = Math.max(...allTimes);
+  const yPad = (yMax - yMin) * 0.12;
+
+  // Group by stint for per-stint traces
+  const stintGroups: Map<number, typeof predictedLaps> = new Map();
+  for (const lt of predictedLaps) {
     const group = stintGroups.get(lt.stint) ?? [];
     group.push(lt);
     stintGroups.set(lt.stint, group);
   }
 
-  const firstLapTime = lapTimes.length > 0 ? lapTimes[0].time : 0;
-
   const lineTraces: Plotly.Data[] = [];
   for (const [, laps] of stintGroups.entries()) {
     const compound = laps[0]?.compound ?? 'MEDIUM';
     const col = COMPOUND_COLORS[compound] ?? COMPOUND_COLORS[compound.toLowerCase()] ?? '#ffd400';
-    const colDim = COMPOUND_COLORS_DIM[compound] ?? COMPOUND_COLORS_DIM[compound.toLowerCase()] ?? col;
 
     const xVals = laps.map((l) => l.lap);
-    const yVals = laps.map((l) => Number((l.time - firstLapTime).toFixed(3)));
+    const yVals = laps.map((l) => l.predicted);
 
     lineTraces.push({
       x: xVals,
       y: yVals,
       type: 'scatter',
       mode: 'lines',
-      fill: 'tozeroy',
-      fillcolor: colDim.replace('0.55', '0.15'),
       line: { color: col, width: 2.5 },
       name: formatCompound(compound),
-      hovertemplate: laps.map((l, i) =>
+      hovertemplate: laps.map((l) =>
         `<b>${formatCompound(compound)}</b> · Lap ${l.lap}<br>` +
-        `${l.time.toFixed(2)}s (${yVals[i] >= 0 ? '+' : ''}${yVals[i].toFixed(2)}s vs L1)<br>` +
+        `Predicted: ${l.predicted.toFixed(2)}s<br>` +
         `Tyre age: ${l.tyre_life} laps<extra></extra>`
       ),
     } as Plotly.Data);
@@ -158,12 +170,9 @@ export default function DegradationChart({
 
   // Pit lap vertical lines
   for (const pitLap of best.pit_laps) {
-    const maxDelta = lapTimes.length > 0
-      ? Math.max(...lapTimes.map((l) => l.time - firstLapTime)) * 1.1
-      : 5;
     lineTraces.push({
       x: [pitLap, pitLap],
-      y: [0, Math.max(maxDelta, 1)],
+      y: [yMin - yPad, yMax + yPad],
       type: 'scatter',
       mode: 'lines',
       line: { color: 'rgba(255,255,255,0.35)', width: 1.5, dash: 'dash' },
@@ -256,28 +265,29 @@ export default function DegradationChart({
               data={lineTraces}
               layout={{
                 autosize: true,
-                margin: { l: 36, r: 8, t: 4, b: 24 },
+                margin: { l: 48, r: 8, t: 4, b: 24 },
                 paper_bgcolor: 'rgba(0,0,0,0)',
                 plot_bgcolor: 'rgba(0,0,0,0)',
-                font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 13 },
+                font: { color: 'rgba(255,255,255,0.5)', family: 'Barlow Condensed, sans-serif', size: 15 },
                 xaxis: {
-                  title: { text: 'Lap', font: { size: 12, color: 'rgba(255,255,255,0.4)' } },
+                  title: { text: 'Lap', font: { size: 14, color: 'rgba(255,255,255,0.4)' } },
                   gridcolor: 'rgba(255,255,255,0.06)',
                   zerolinecolor: 'rgba(255,255,255,0.06)',
-                  tickfont: { size: 11 },
+                  tickfont: { size: 13 },
                   range: [0, totalLaps + 1],
                   fixedrange: true,
                 },
                 yaxis: {
-                  title: { text: 'Pace delta vs L1 (s)', font: { size: 12, color: 'rgba(255,255,255,0.4)' } },
+                  title: { text: 'Lap time (s)', font: { size: 14, color: 'rgba(255,255,255,0.4)' } },
                   gridcolor: 'rgba(255,255,255,0.06)',
                   zerolinecolor: 'rgba(255,255,255,0.06)',
-                  tickfont: { size: 11 },
+                  tickfont: { size: 13 },
                   fixedrange: true,
+                  range: [yMin - yPad, yMax + yPad],
                 },
                 legend: {
                   orientation: 'h', y: 1.18, x: 0.5, xanchor: 'center',
-                  font: { size: 12, color: 'rgba(255,255,255,0.55)' },
+                  font: { size: 14, color: 'rgba(255,255,255,0.55)' },
                   bgcolor: 'rgba(0,0,0,0)',
                 },
                 showlegend: true,
@@ -286,13 +296,13 @@ export default function DegradationChart({
                 hoverlabel: {
                   bgcolor: 'rgba(14,14,18,0.95)',
                   bordercolor: 'rgba(255,255,255,0.15)',
-                  font: { size: 14, family: 'Barlow Condensed', color: '#f5f5f7' },
+                  font: { size: 16, family: 'Barlow Condensed', color: '#f5f5f7' },
                 },
                 annotations: best.pit_laps.map((pitLap) => ({
                   x: pitLap, y: 1, yref: 'paper' as const,
                   text: `PIT L${pitLap}`,
                   showarrow: false,
-                  font: { size: 12, color: 'rgba(255,255,255,0.65)', family: 'Barlow Condensed' },
+                  font: { size: 14, color: 'rgba(255,255,255,0.65)', family: 'Barlow Condensed' },
                   yanchor: 'bottom' as const,
                 })),
               }}

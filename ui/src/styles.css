@@ -395,7 +395,7 @@ body {
 
 .ctrl-lap-value {
   font-family: var(--ff-display);
-  font-size: 0.8rem;
+  font-size: 1.0rem;
   font-weight: 700;
   color: var(--white);
   white-space: nowrap;
@@ -408,7 +408,7 @@ body {
   outline: none;
   cursor: pointer;
   font-family: var(--ff-display);
-  font-size: 0.68rem;
+  font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -433,7 +433,7 @@ input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
   flex: 1;
-  height: 1px;
+  height: 2px;
   background: var(--div);
   border: none;
   outline: none;
@@ -442,8 +442,8 @@ input[type='range'] {
 
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
@@ -551,7 +551,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .scene-card-title {
   font-family: var(--ff-display);
-  font-size: 1.3rem;
+  font-size: 1.5rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -560,7 +560,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .scene-card-sub {
   font-family: var(--ff-display);
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
@@ -590,11 +590,11 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .scene-chart-card .deg-chart-title {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .scene-chart-card .deg-chart-sub {
-  font-size: 0.75rem;
+  font-size: 0.92rem;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -971,9 +971,9 @@ input[type='range']::-webkit-slider-thumb:hover {
 .feature-legend-item {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-family: var(--ff-display);
-  font-size: 0.72rem;
+  font-size: 0.88rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -981,8 +981,8 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .feature-legend-dot {
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -1155,7 +1155,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-title {
   font-family: var(--ff-display);
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1165,7 +1165,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .deg-chart-sub {
   font-family: var(--ff-display);
-  font-size: 0.88rem;
+  font-size: 1.0rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--white-35);
@@ -1219,7 +1219,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 .strat-compare-rank {
   flex: 0 0 48px;
   font-family: var(--ff-display);
-  font-size: 0.9rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1233,7 +1233,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 .strat-compare-bar {
   flex: 1;
   display: flex;
-  height: 36px;
+  height: 40px;
   border-radius: 4px;
   overflow: hidden;
   gap: 1px;
@@ -1248,7 +1248,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .strat-compare-label {
   font-family: var(--ff-display);
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.75);
   letter-spacing: 0.05em;
@@ -1264,9 +1264,9 @@ input[type='range']::-webkit-slider-thumb:hover {
 }
 
 .strat-compare-delta {
-  flex: 0 0 56px;
+  flex: 0 0 60px;
   font-family: var(--ff-display);
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--white-35);
@@ -1293,14 +1293,14 @@ input[type='range']::-webkit-slider-thumb:hover {
   align-items: center;
   gap: 10px;
   font-family: var(--ff-display);
-  font-size: 0.85rem;
+  font-size: 1.0rem;
   letter-spacing: 0.04em;
   color: var(--white-55);
 }
 
 .strat-breakdown-dot {
-  width: 9px;
-  height: 9px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -1322,7 +1322,7 @@ input[type='range']::-webkit-slider-thumb:hover {
 
 .strat-breakdown-total {
   font-family: var(--ff-display);
-  font-size: 0.78rem;
+  font-size: 0.92rem;
   letter-spacing: 0.06em;
   color: var(--white-35);
   margin-top: 4px;
