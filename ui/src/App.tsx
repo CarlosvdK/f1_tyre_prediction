@@ -18,6 +18,7 @@ import {
   type Track,
   type TrackCondition,
   COMPOUND_COLORS,
+  DRIVER_TEAM_MAP,
 } from './data/api';
 
 /* ── Animated number hook ─────────────────────────────────────── */
@@ -97,7 +98,7 @@ export default function App() {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [laps, setLaps] = useState<number[]>([]);
   const [track, setTrack] = useState('');
-  const [driver, setDriver] = useState('');
+  const [driver, setDriver] = useState('VER');
   const [lap, setLap] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -157,12 +158,13 @@ export default function App() {
     return () => { alive = false; };
   }, [track, driver]);
 
-  // Fetch strategy when track changes (pre-race prediction, not lap-dependent)
+  // Fetch strategy when track or driver changes
   useEffect(() => {
-    if (!track) return;
+    if (!track || !driver) return;
     let alive = true;
     const totalLaps = defaultLapCount(track);
-    getOptimalStrategy(track, totalLaps)
+    const team = DRIVER_TEAM_MAP[driver] ?? 'Red Bull Racing';
+    getOptimalStrategy(track, totalLaps, driver, team)
       .then((result) => {
         if (!alive) return;
         setStrategyData(result);
@@ -171,7 +173,7 @@ export default function App() {
         if (alive) setStrategyData(null);
       });
     return () => { alive = false; };
-  }, [track]);
+  }, [track, driver]);
 
   useEffect(() => {
     if (!track || !driver || !lap) return;
@@ -484,6 +486,19 @@ export default function App() {
             onChange={(e) => setTrack(e.target.value)}
           >
             {tracks.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+          </select>
+        </div>
+
+        <div className="telem-item circuit-picker">
+          <div className="telem-label">Driver</div>
+          <select
+            className="circuit-select"
+            value={driver}
+            onChange={(e) => setDriver(e.target.value)}
+          >
+            {Object.keys(DRIVER_TEAM_MAP).map((d) => (
+              <option key={d} value={d}>{d} — {DRIVER_TEAM_MAP[d]}</option>
+            ))}
           </select>
         </div>
       </div>

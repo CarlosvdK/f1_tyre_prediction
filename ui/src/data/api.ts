@@ -80,6 +80,20 @@ const DEFAULT_DRIVERS = [
   'GAS', 'OCO', 'ALB', 'TSU', 'RIC', 'HUL', 'MAG', 'BOT', 'ZHO', 'SAR',
 ];
 
+/** Maps driver abbreviation → team name (2024 season). */
+export const DRIVER_TEAM_MAP: Record<string, string> = {
+  VER: 'Red Bull Racing', PER: 'Red Bull Racing',
+  NOR: 'McLaren', PIA: 'McLaren',
+  LEC: 'Ferrari', SAI: 'Ferrari',
+  HAM: 'Mercedes', RUS: 'Mercedes',
+  ALO: 'Aston Martin', STR: 'Aston Martin',
+  GAS: 'Alpine', OCO: 'Alpine',
+  ALB: 'Williams', SAR: 'Williams',
+  TSU: 'RB', RIC: 'RB',
+  HUL: 'Haas F1 Team', MAG: 'Haas F1 Team',
+  BOT: 'Kick Sauber', ZHO: 'Kick Sauber',
+};
+
 interface SeasonTrackDefinition {
   id: string;
   name: string;
